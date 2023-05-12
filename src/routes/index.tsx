@@ -13,6 +13,7 @@ export default component$(() => {
 
   // FUCK: https://qwik.builder.io/docs/components/events/#synchronous-event-handling
   useVisibleTask$(({ cleanup }) => {
+    // FUCK: 需要设置fileDropEnabled： false 才能在app里拖拽， 不能染callback不执行
     const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
