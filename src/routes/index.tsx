@@ -21,13 +21,13 @@ export default component$(() => {
     const handleDrop = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      
       const type = e.dataTransfer?.getData('text');
       if (type) {
         // FUCK: 数组不能push 
         const item = componentList.find(comp => comp.type == type)
         if (item) {
           renderComponents.value = [...renderComponents.value, item];
-
         }
       }
     }
