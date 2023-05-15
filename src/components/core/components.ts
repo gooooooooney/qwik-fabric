@@ -1,13 +1,39 @@
 import { ComponentType } from "~/constants/enum";
-import Text from "./Text";
+import type * as CSS from 'csstype';
+export type BlockInfo = typeof blockInfoList[number];
+export type CSSProperties = CSS.Properties<string | number>;
 
-export const componentList = [
+// 公共样式
+export const commonStyle = {
+  rotate: 0,
+  opacity: 1,
+}
+ const list = [
   {
     name: 'Text',
     type: ComponentType.Text,
-    component$: Text,
+    id: '',
+    style: {
+      width: 200,
+      height: 28,
+      fontSize: '',
+      fontWeight: 400,
+      lineHeight: '',
+      letterSpacing: 0,
+      textAlign: 'center',
+      color: '',
+    } as CSSProperties,
+    isLock: false,
     props: {
       text: 'Hello World'
     }
   }
 ]
+
+export const blockInfoList = list.map(item => ({
+  ...item,
+  style: {
+    ...commonStyle,
+    ...item.style
+  }
+}))

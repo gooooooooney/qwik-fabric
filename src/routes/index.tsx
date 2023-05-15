@@ -1,18 +1,25 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { useVisibleTask$ } from '@builder.io/qwik';
+import { useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useSignal } from '@builder.io/qwik';
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import Aside from '~/components/Aside';
-import { componentList } from '~/components/core/components';
+import Editor from '~/components/Editor';
+import { blockInfoList } from '~/components/core/components';
+import type { GlobalState} from '~/store/context';
+import { globalState } from '~/store/context';
+import { GLOBAL_CONTEXT } from '~/store/context';
+import { uid } from '~/utils/common';
 
 
 export default component$(() => {
-  const draggableRef = useSignal<HTMLDivElement>();
-  const renderComponents = useSignal<typeof componentList>([]);
+  const state = useStore<GlobalState>(globalState)
+  useContextProvider(GLOBAL_CONTEXT, state)
+  const canvasContainerRef = useSignal<HTMLDivElement>();
 
   // FUCK: https://qwik.builder.io/docs/components/events/#synchronous-event-handling
   useVisibleTask$(({ cleanup }) => {
+    const containerRef = canvasContainerRef.value
     // FUCK: 需要设置fileDropEnabled： false 才能在app里拖拽， 不能染callback不执行
     const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
@@ -22,21 +29,25 @@ export default component$(() => {
     const handleDrop = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      
-      const type = e.dataTransfer?.getData('text');
+      e.clientX
+
+      const type = e.dataTransfer?.getData('type');
       if (type) {
-        // FUCK: 数组不能push 
-        const item = componentList.find(comp => comp.type == type)
+        const item = blockInfoList.find(block => block.type == type)
         if (item) {
-          renderComponents.value = [...renderComponents.value, item];
+          item.id = uid()
+          const rect = containerRef?.getBoundingClientRect()
+          item.style.top = e.clientY - (rect?.y ?? 0)
+          item.style.left = e.clientX - (rect?.x ?? 0)
+          state.blocks.push(JSON.parse(JSON.stringify(item)))
         }
       }
     }
-    draggableRef.value?.addEventListener('dragover', handleDragOver)
-    draggableRef.value?.addEventListener('drop', handleDrop)
+    containerRef?.addEventListener('dragover', handleDragOver)
+    containerRef?.addEventListener('drop', handleDrop)
     cleanup(() => {
-      draggableRef.value?.removeEventListener('dragover', handleDragOver)
-      draggableRef.value?.removeEventListener('drop', handleDrop)
+      containerRef?.removeEventListener('dragover', handleDragOver)
+      containerRef?.removeEventListener('drop', handleDrop)
     })
   })
   return (
@@ -45,18 +56,14 @@ export default component$(() => {
         <Aside />
       </div>
       <div
-        ref={draggableRef}
-        class="w-1/2 h-screen border border-solid border-coolgray">
-        {
-          renderComponents.value.map((comp, i) => (
-            <div key={comp.type + i}>
-              <comp.component$ text={comp.props.text} />
-            </div>
-          ))
-        }
+        ref={canvasContainerRef}
+        class=" bg-[#f5f5f5] p-6 h-full  overflow-auto">
+        <div class="overflow-auto w-full h-full">
+          <Editor parentState={state} />
+        </div>
       </div>
       <div class="w-1/4">
-        <p>ComponentList</p>
+        <p>{state.blocks.map(v => v.name)}</p>
       </div>
     </div>
   );
