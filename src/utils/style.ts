@@ -17,7 +17,6 @@ export function getCanvasStyle(canvasStyleData: CanvasStyleData) {
 
 export function getShapeStyle(style: BlockInfo['style']) {
   const result: any = {};
-  console.log(style);
   ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
       if (attr != 'rotate') {
           result[attr] = (style as any)[attr] + 'px'

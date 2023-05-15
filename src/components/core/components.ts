@@ -22,7 +22,9 @@ export const commonStyle = {
       letterSpacing: 0,
       textAlign: 'center',
       color: '',
-    } as CSSProperties,
+      top: 0,
+      left: 0,
+    },
     isLock: false,
     props: {
       text: 'Hello World'

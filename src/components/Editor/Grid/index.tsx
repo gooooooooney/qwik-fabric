@@ -60,6 +60,6 @@ export default component$(({width = 1200, height = 740}: GridProps) => {
       // canvas!.width = window.innerWidth;
     }
   })
-  return <canvas class="absolute top-0 left-0 block"  width ={width}
+  return <canvas id="canvas" class="absolute top-0 left-0 block"  width ={width}
   height={height}ref={canvasRef} ></canvas>
 })

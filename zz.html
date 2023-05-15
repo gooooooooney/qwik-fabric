@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding:0;
+        }
+        body{
+            position: relative;
+
+        }
+        div{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 50px;
+            padding: 10px;
+            background-color: aqua;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        const container = document.getElementById('container');
+        console.log('container.clientWidth = ',container.clientWidth)
+        console.log('container.offsetWidth = ',container.offsetWidth)
+        container.addEventListener("mousedown", function(e) {
+            let x = e.clientX;
+            let y = e.clientY;
+            console.log('x = ',x)
+            console.log('y = ',y)
+            const move = function(e) {
+                let nx = e.clientX;
+                let ny = e.clientY;
+                console.log('nx = ',nx)
+                console.log('ny = ',ny)
+                let left = nx - x;
+                let top = ny - y;
+                console.log('left = ',left)
+                console.log('top = ',top)
+                container.style.left = left + 'px';
+                container.style.top = top + 'px';
+            }
+            const up = function(e) {
+                document.removeEventListener("mousemove", move);
+                document.removeEventListener("mouseup", up);
+            }
+            document.addEventListener("mousemove", move);
+            document.addEventListener("mouseup", up);
+        })
+    </script>
+</body>
+</html>
