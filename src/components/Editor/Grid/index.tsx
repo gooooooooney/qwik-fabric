@@ -1,6 +1,4 @@
-import { component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
-import { GLOBAL_CONTEXT } from "~/store/context";
-import { changeStyleWithScale } from "~/utils/translate";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 
 interface GridProps {
   width: number;

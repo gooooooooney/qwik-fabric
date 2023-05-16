@@ -1,12 +1,10 @@
-import { HTMLAttributes, QwikMouseEvent, useStyles$, useStylesScoped$ } from "@builder.io/qwik";
-import { useTask$ } from "@builder.io/qwik";
+import type { HTMLAttributes, QwikMouseEvent } from "@builder.io/qwik";
+import { useStylesScoped$ } from "@builder.io/qwik";
 import { useContext } from "@builder.io/qwik";
-import { Slot, component$, useComputed$, $, useStore } from "@builder.io/qwik";
+import { Slot, component$, $ } from "@builder.io/qwik";
 import type { BlockInfo } from "~/components/core/components";
-import { ComponentType } from "~/constants/enum";
 import { GLOBAL_CONTEXT } from "~/store/context";
 import { cx } from "~/utils/common";
-import { mod360 } from "~/utils/translate";
 
 interface ShapeProps extends HTMLAttributes<HTMLDivElement> {
   active: boolean,
@@ -34,15 +32,15 @@ export default component$(({ active, element, ...rest }: ShapeProps) => {
       transform: translate(50%, 50%);
     }
   }`)
-  
+
 
   const dotList: IDot[] = [
     { side: 'top', cursor: 'n-resize' },
-    { side: 'bottom', cursor: 'n-resize' },
-    { side: 'left', cursor: 'e-resize' },
+    { side: 'bottom', cursor: 's-resize' },
+    { side: 'left', cursor: 'w-resize' },
     { side: 'right', cursor: 'e-resize' },
-    { side: 'top-left', cursor: 'se-resize' },
-    { side: 'top-right', cursor: 'sw-resize' },
+    { side: 'top-left', cursor: 'nw-resize' },
+    { side: 'top-right', cursor: 'ne-resize' },
     { side: 'bottom-left', cursor: 'sw-resize' },
     { side: 'bottom-right', cursor: 'se-resize' }
   ]
@@ -56,7 +54,7 @@ export default component$(({ active, element, ...rest }: ShapeProps) => {
     } else {
       style[position] = '0%'
     }
-  
+
     return style
   }
 
@@ -90,16 +88,88 @@ export default component$(({ active, element, ...rest }: ShapeProps) => {
 
   })
 
-  const handleMouseDownOnPoint = $((point: IDot, e: QwikMouseEvent<HTMLDivElement, MouseEvent>, target: HTMLDivElement) => {
+  const handleMouseDownOnPoint = $((point: IDot, e: QwikMouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
     const { clientX, clientY } = e
     const { style } = element
+    const { width, height, top, left } = style
+    const parentRef = document.getElementById('canvas')
+    const move = (e: MouseEvent) => {
+      const handleTop = () => {
+          style.height = e.clientY < parentRef!.getBoundingClientRect().top + 4 ? style.height : height - (e.clientY - clientY)
+          const positionTop = top - style.height + height
+          style.top = positionTop < 0 ? 0 : positionTop
+          if (style.height < 0) {
+            style.height = -style.height
+            style.top = top + height
+          }
+      }
+      const handleBottom = () => {
+        style.height = e.clientY - clientY + height
+        if (style.height + style.top > parentRef!.getBoundingClientRect().height) {
+          style.height = parentRef!.getBoundingClientRect().height - style.top - 8
+        }
+        // if (style.height < 0) {
+        //   style.height = -style.height
+        // }
+      }
+      switch (point.side) {
+        case 'top':
+          handleTop()
+          break;
+        case 'bottom':
+          handleBottom()
+          break;
+        case 'left':
+          style.width = width - (e.clientX - clientX)
+          style.left = left - style.width + width
+          break;
+        case 'right':
+          style.width = e.clientX - clientX + width
+          break;
+        case 'top-left':
+          // style.top = e.clientY - clientY + style.top
+          style.height = height - (e.clientY - clientY)
+          style.width = width - (e.clientX - clientX)
+          style.left = left - style.width + width
+          style.top = top - style.height + height
+          break;
+        case 'top-right':
+          // style.top = e.clientY - clientY + style.top
+          style.height = height - (e.clientY - clientY)
+          style.width = e.clientX - clientX + width
+          style.top = top - style.height + height
+          style.left = left
+          break;
+        case 'bottom-left':
+          // style.left = e.clientX - clientX + style.left
+          style.width = width - (e.clientX - clientX)
+          style.height = e.clientY - clientY + height
+          style.left = left - style.width + width
+          style.top = top
+          break;
+        case 'bottom-right':
+          style.width = e.clientX - clientX + width
+          style.height = e.clientY - clientY + height
+          break;
+        default:
+          break;
+      }
+      // style.width = e.clientX - clientX + width
+      // style.height = e.clientY - clientY + height
+    }
+    const up = () => {
+      document.removeEventListener('mousemove', move)
+      document.removeEventListener('mouseup', up)
+    }
+    document.addEventListener('mousemove', move)
+    document.addEventListener('mouseup', up)
   })
 
   return <div
     preventdefault:click
     preventdefault:mousedown
-    onClick$={(e) => {e.stopPropagation();}}
+    onClick$={(e) => { e.stopPropagation(); }}
     onMouseDown$={handleMouseDown}
     {...rest}
     class={cx({ "outline outline-yellow outline-1 select-none": active }, "absolute hover:cursor-move")}>
@@ -110,7 +180,7 @@ export default component$(({ active, element, ...rest }: ShapeProps) => {
           data-side={point.side}
           style={{ ...getDotStyle(point) }}
           preventdefault:mousedown
-          onMouseDown$={(e, target) => handleMouseDownOnPoint(point, e, target)}
+          onMouseDown$={(e) => handleMouseDownOnPoint(point, e)}
           class="absolute bg-white border border-solid border-rose w-[4px] h-[4px] rounded-[999px] z-1 dot" />
       })
     }

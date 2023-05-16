@@ -1,4 +1,3 @@
-/* eslint-disable qwik/valid-lexical-scope */
 import { useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useSignal } from '@builder.io/qwik';
 import { component$ } from '@builder.io/qwik';
@@ -6,7 +5,7 @@ import type { DocumentHead } from '@builder.io/qwik-city';
 import Aside from '~/components/Aside';
 import Editor from '~/components/Editor';
 import { blockInfoList } from '~/components/core/components';
-import type { GlobalState} from '~/store/context';
+import type { GlobalState } from '~/store/context';
 import { globalState } from '~/store/context';
 import { GLOBAL_CONTEXT } from '~/store/context';
 import { uid } from '~/utils/common';
@@ -36,9 +35,11 @@ export default component$(() => {
         const item = blockInfoList.find(block => block.type == type)
         if (item) {
           item.id = uid()
-          const rect = containerRef?.getBoundingClientRect()
-          item.style.top = e.clientY - (rect?.y ?? 0)
-          item.style.left = e.clientX - (rect?.x ?? 0)
+          const rect = containerRef!.getBoundingClientRect()
+          const { top, left } = rect
+          console.log(e)
+          item.style.top = e.clientY - top
+          item.style.left = e.clientX - left
           state.blocks.push(JSON.parse(JSON.stringify(item)))
         }
       }
@@ -49,10 +50,11 @@ export default component$(() => {
       containerRef?.removeEventListener('dragover', handleDragOver)
       containerRef?.removeEventListener('drop', handleDrop)
     })
+    
   })
   return (
     <div class="flex flex-row">
-      <div class="w-1/4">
+      <div id="test" class="w-1/4">
         <Aside />
       </div>
       <div
@@ -62,10 +64,10 @@ export default component$(() => {
           <Editor parentState={state} />
         </div>
       </div>
-      <div class="w-1/4">
+      <div class="w-1/4" >
         <p>{state.blocks.map(v => v.name)}</p>
       </div>
-    </div>
+    </div >
   );
 });
 

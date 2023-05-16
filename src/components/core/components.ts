@@ -20,7 +20,7 @@ export const commonStyle = {
       fontWeight: 400,
       lineHeight: '',
       letterSpacing: 0,
-      textAlign: 'center',
+      textAlign: 'left',
       color: '',
       top: 0,
       left: 0,
