@@ -8,34 +8,64 @@ export const commonStyle = {
   rotate: 0,
   opacity: 1,
 }
- const list = [
-  {
-    name: 'Text',
-    type: ComponentType.Text,
-    id: '',
-    style: {
-      width: 200,
-      height: 28,
-      fontSize: '',
-      fontWeight: 400,
-      lineHeight: '',
-      letterSpacing: 0,
-      textAlign: 'left',
-      color: '',
-      top: 0,
-      left: 0,
-    },
-    isLock: false,
-    props: {
-      text: 'Hello World'
-    }
-  }
+export const TextCanvasStyle = {
+  width: 200,
+  height: 28,
+  fontSize: 16,
+  fontWeight: 400,
+  letterSpacing: 0,
+  color: '',
+  top: 0,
+  left: 0,
+  // textDecoration
+  underline: false,
+  overline: false,
+  linethrough: false,
+  // shadow
+  shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+  // fontStyle
+  fontStyle: 'normal',
+  fontFamily: 'sans-serif',
+  // stroke and strokeWidth
+  stroke: '#181818',
+  strokeWidth: 1,
+  // textAlignment
+  textAlign: 'left',
+  lineHeight: 1.5,
+  // textBackgroundColor
+  textBackgroundColor: 'transparent',
+
+}
+const textBlock = {
+  type: ComponentType.Text,
+  id: '',
+  isLock: false,
+  name: 'Text',
+  props: {
+    text: 'Hello World'
+  },
+  style: {
+    width: 200,
+    height: 28,
+    fontSize: 16,
+    fontWeight: 400,
+    lineHeight: '',
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '',
+    top: 0,
+    left: 0,
+  },
+  canvasStyle: {
+    ...TextCanvasStyle,
+  },
+}
+const list = [
+  textBlock,
 ]
 
 export const blockInfoList = list.map(item => ({
   ...item,
-  style: {
-    ...commonStyle,
-    ...item.style
-  }
 }))
+
+export type TextBlock = typeof textBlock;

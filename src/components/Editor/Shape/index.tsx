@@ -19,7 +19,7 @@ type IDot = {
 }
 
 export default component$(({ active, element, ...rest }: ShapeProps) => {
-  const state = useContext(GLOBAL_CONTEXT)
+  const { updateCurrentBlock } = useContext(GLOBAL_CONTEXT)
   useStylesScoped$(`.dot {
     transform: translate(-50%, -50%);
     &[data-side*="right"] {
@@ -63,7 +63,7 @@ export default component$(({ active, element, ...rest }: ShapeProps) => {
     const { clientX, clientY } = e
     const { style } = element
     const { left, top } = style
-    state.setCurrentBlock(element)
+    updateCurrentBlock(element)
     let maxX = 0, maxY = 0
     const parentRef = document.getElementById('canvas')
     if (parentRef) {
@@ -96,13 +96,13 @@ export default component$(({ active, element, ...rest }: ShapeProps) => {
     const parentRef = document.getElementById('canvas')
     const move = (e: MouseEvent) => {
       const handleTop = () => {
-          style.height = e.clientY < parentRef!.getBoundingClientRect().top + 4 ? style.height : height - (e.clientY - clientY)
-          const positionTop = top - style.height + height
-          style.top = positionTop < 0 ? 0 : positionTop
-          if (style.height < 0) {
-            style.height = -style.height
-            style.top = top + height
-          }
+        style.height = e.clientY < parentRef!.getBoundingClientRect().top + 4 ? style.height : height - (e.clientY - clientY)
+        const positionTop = top - style.height + height
+        style.top = positionTop < 0 ? 0 : positionTop
+        if (style.height < 0) {
+          style.height = -style.height
+          style.top = top + height
+        }
       }
       const handleBottom = () => {
         style.height = e.clientY - clientY + height

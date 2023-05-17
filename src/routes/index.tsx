@@ -5,16 +5,36 @@ import type { DocumentHead } from '@builder.io/qwik-city';
 import Aside from '~/components/Aside';
 import Editor from '~/components/Editor';
 import { blockInfoList } from '~/components/core/components';
+import type { ComponentType } from '~/constants/enum';
 import type { GlobalState } from '~/store/context';
 import { globalState } from '~/store/context';
 import { GLOBAL_CONTEXT } from '~/store/context';
 import { uid } from '~/utils/common';
-
+import { fabric, renderElement } from '~/element'
+import Attr from '~/components/Attr';
+import { canvasEvent } from '~/utils/event';
+import { changeStyleWithScale } from '~/utils/translate';
 
 export default component$(() => {
   const state = useStore<GlobalState>(globalState)
   useContextProvider(GLOBAL_CONTEXT, state)
   const canvasContainerRef = useSignal<HTMLDivElement>();
+  const canvasRef = useSignal<HTMLCanvasElement>()
+  const width = changeStyleWithScale(state.canvasStyleData.width, state.canvasStyleData.scale)
+  const height = changeStyleWithScale(state.canvasStyleData.height, state.canvasStyleData.scale)
+
+  useVisibleTask$(() => {
+    const canvas = new fabric.Canvas(canvasRef.value!)
+    const { listener, removeListener } = canvasEvent(canvas)
+
+    listener()
+    state.updateCanvasContext(canvas)
+    return () => {
+      state.updateCanvasContext(undefined)
+      canvas.dispose()
+      removeListener()
+    }
+  })
 
   // FUCK: https://qwik.builder.io/docs/components/events/#synchronous-event-handling
   useVisibleTask$(({ cleanup }) => {
@@ -30,17 +50,22 @@ export default component$(() => {
       e.stopPropagation();
       e.clientX
 
-      const type = e.dataTransfer?.getData('type');
+      const type = e.dataTransfer?.getData('type') as ComponentType;
       if (type) {
         const item = blockInfoList.find(block => block.type == type)
         if (item) {
           item.id = uid()
           const rect = containerRef!.getBoundingClientRect()
           const { top, left } = rect
-          console.log(e)
-          item.style.top = e.clientY - top
-          item.style.left = e.clientX - left
+          item.canvasStyle.top = item.style.top = e.clientY - top
+          item.canvasStyle.left = item.style.left = e.clientX - left
           state.blocks.push(JSON.parse(JSON.stringify(item)))
+          const block = renderElement({
+            canvas: state.canvas!,
+            block: item,
+          })
+          block.id = item.id
+          state.canvas?.setActiveObject(block)
         }
       }
     }
@@ -50,7 +75,7 @@ export default component$(() => {
       containerRef?.removeEventListener('dragover', handleDragOver)
       containerRef?.removeEventListener('drop', handleDrop)
     })
-    
+
   })
   return (
     <div class="flex flex-row">
@@ -61,11 +86,14 @@ export default component$(() => {
         ref={canvasContainerRef}
         class=" bg-[#f5f5f5] p-6 h-full  overflow-auto">
         <div class="overflow-auto w-full h-full">
-          <Editor parentState={state} />
+          <Editor parentState={state} >
+            <canvas ref={canvasRef} id="canvas" width={width} height={height} />
+          </Editor>
+
         </div>
       </div>
       <div class="w-1/4" >
-        <p>{state.blocks.map(v => v.name)}</p>
+        <Attr />
       </div>
     </div >
   );

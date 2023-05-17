@@ -1,10 +1,9 @@
-import { component$ } from "@builder.io/qwik";
-import Grid from "./Grid";
+import { Slot, component$ } from "@builder.io/qwik";
 import type { GlobalState } from "~/store/context";
-import Block from "./Block";
-import { getCanvasStyle, getShapeStyle } from "~/utils/style";
+// import Block from "./Block";
+// import { getCanvasStyle, getShapeStyle } from "~/utils/style";
 import { changeStyleWithScale } from "~/utils/translate";
-import Shape from "./Shape";
+// import Shape from "./Shape";
 
 interface EditorProps {
   parentState: GlobalState
@@ -17,14 +16,13 @@ export default component$(({ parentState }: EditorProps) => {
     id="editor"
       style={
         {
-          ...getCanvasStyle(parentState.canvasStyleData),
           width: width + 'px',
           height: height+ 'px',
         }
       }
       class="relative bg-white m-a">
-      <Grid width={width} height={height} />
-      {
+      {/* <Grid width={width} height={height} /> */}
+      {/* {
         parentState.blocks.map((block) => (
           <Shape
             style={{...getShapeStyle(block.style)}}
@@ -34,7 +32,8 @@ export default component$(({ parentState }: EditorProps) => {
             <Block block={block} />
           </Shape>
         ))
-      }
+      } */}
+      <Slot />
     </div>
   );
 })

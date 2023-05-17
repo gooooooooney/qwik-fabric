@@ -51,6 +51,8 @@
     "@radix-ui/react-navigation-menu": "^1.1.2",
     "clsx": "^1.2.1",
     "dom-to-image": "^2.6.0",
+    "events": "^3.3.0",
+    "fabric": "6.0.0-beta5",
     "mathjs": "^11.8.0",
     "nanoid": "^4.0.2"
   }

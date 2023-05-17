@@ -15,15 +15,15 @@ export function getCanvasStyle(canvasStyleData: CanvasStyleData) {
   return result
 }
 
-export function getShapeStyle(style: BlockInfo['style']) {
-  const result: any = {};
-  ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
-      if (attr != 'rotate') {
-          result[attr] = (style as any)[attr] + 'px'
-      } else {
-          result.transform = 'rotate(' + style[attr] + 'deg)'
-      }
-  })
+// export function getShapeStyle(style: BlockInfo['style']) {
+//   const result: any = {};
+//   ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
+//       if (attr != 'rotate') {
+//           result[attr] = (style as any)[attr] + 'px'
+//       } else {
+//           result.transform = 'rotate(' + style[attr] + 'deg)'
+//       }
+//   })
 
-  return result as CSSProperties
-}
+//   return result as CSSProperties
+// }
