@@ -1,4 +1,4 @@
-import { component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useContext, useVisibleTask$ } from "@builder.io/qwik";
 import { CANVAS_EVENT_SELECTED, ComponentType } from "~/constants/enum";
 import { GLOBAL_CONTEXT } from "~/store/context";
 import TextAttr from "./TextAttr";
@@ -12,7 +12,7 @@ export default component$(() => {
   useVisibleTask$(() => {
     emitter.on(CANVAS_EVENT_SELECTED.ONE, () => {
       const active = state.canvas?.getActiveObject()
-      if (active instanceof fabric.IText) {
+      if (active instanceof fabric.Textbox) {
         const block = state.blocks.find(block => block.id == active.get('id'))
         if (block) {
           state.updateCurrentBlock(block)

@@ -7,7 +7,7 @@ interface TextRenderEleArgs extends RenderEleArgs {
 }
 
 export const renderText = ({ canvas, block}: TextRenderEleArgs) => {
-  const textElement = new fabric.IText(block.props.text, {
+  const textElement = new fabric.Textbox(block.props.text, {
     ...block.canvasStyle,
   })
   canvas.add(textElement)

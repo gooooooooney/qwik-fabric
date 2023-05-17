@@ -14,7 +14,7 @@ export const TextCanvasStyle = {
   fontSize: 16,
   fontWeight: 400,
   letterSpacing: 0,
-  color: '',
+  color: '#181818',
   top: 0,
   left: 0,
   // textDecoration
@@ -27,7 +27,7 @@ export const TextCanvasStyle = {
   fontStyle: 'normal',
   fontFamily: 'sans-serif',
   // stroke and strokeWidth
-  stroke: '#181818',
+  stroke: null,
   strokeWidth: 1,
   // textAlignment
   textAlign: 'left',

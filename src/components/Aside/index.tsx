@@ -25,7 +25,7 @@ export default component$(() => {
         {
             blockInfoList.map((comp) => (
                 <div draggable id={comp.type} key={comp.type} data-type={comp.type} class="active-cursor-grabbing cursor-grab text-center rounded-md p-3 w-[80px] h-[40px] border border-solid border-coolGray flex justify-center items-center">
-                    <p class="text-2xl font-bold">{comp.name}</p>
+                    <p  class="text-2xl font-bold">{comp.name}</p>
                 </div>
             ))
         }

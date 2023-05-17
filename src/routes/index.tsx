@@ -14,6 +14,7 @@ import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
 import { canvasEvent } from '~/utils/event';
 import { changeStyleWithScale } from '~/utils/translate';
+import Toolbar from '~/integrations/react/radix-ui/Toolbar';
 
 export default component$(() => {
   const state = useStore<GlobalState>(globalState)
@@ -79,20 +80,24 @@ export default component$(() => {
   })
   return (
     <div class="flex flex-row">
-      <div id="test" class="w-1/4">
+      <div id="test" class="w-1/8">
         <Aside />
       </div>
-      <div
-        ref={canvasContainerRef}
-        class=" bg-[#f5f5f5] p-6 h-full  overflow-auto">
-        <div class="overflow-auto w-full h-full">
-          <Editor parentState={state} >
-            <canvas ref={canvasRef} id="canvas" width={width} height={height} />
-          </Editor>
 
+      <div class="px-2 flex-1">
+        <Toolbar />
+        <div
+          ref={canvasContainerRef}
+          class=" bg-[#f5f5f5] p-6 h-full  overflow-auto">
+          <div class="overflow-auto w-full h-full">
+            <Editor parentState={state} >
+              <canvas ref={canvasRef} id="canvas" width={width} height={height} />
+            </Editor>
+
+          </div>
         </div>
       </div>
-      <div class="w-1/4" >
+      <div class="w-1/8" >
         <Attr />
       </div>
     </div >
