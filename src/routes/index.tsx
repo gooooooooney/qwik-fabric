@@ -1,4 +1,4 @@
-import { useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { $, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useSignal } from '@builder.io/qwik';
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
@@ -82,9 +82,14 @@ export default component$(() => {
     })
 
   })
+
+  const handleChangeFontStyle = $((value: string[]) => {
+    console.log(value)
+  })
   return (
     <div class="flex flex-col p-4">
-      <div class="py-2 m-auto box-border"> <Toolbar /></div>
+      <div class="py-2 m-auto box-border"> 
+      <Toolbar onChange$={handleChangeFontStyle} /></div>
       <div class="flex flex-row">
         <div class="w-1/8">
           <Aside />

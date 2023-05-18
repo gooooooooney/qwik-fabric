@@ -4,6 +4,8 @@ import { GLOBAL_CONTEXT } from "~/store/context";
 import ColorPicker from "~/integrations/react/ColorPicker";
 import Label from "../Label";
 import { KEY_CODE } from "~/constants/enum";
+import Icons from "~/integrations/react/radix-ui/Icons";
+import { IconName } from "~/integrations/react/radix-ui/Icons/names";
 interface TextAttrProps {
   block: TextBlock,
 }
@@ -19,7 +21,7 @@ export default component$(({ block }: TextAttrProps) => {
   })
   return <div>
     <div class="flex flex-col">
-      <Label label="text">
+      <Label label="Text">
         <input class=" text-base w-full p-1 rounded-md focus:(border-blue) m-0 shadow-radio outline-0 border-gray-3 border-1 border-solid" type="text" onBlur$={(_, el) => {
           block.props.text = el.value
           active?.set('text', block.props.text)
@@ -27,7 +29,7 @@ export default component$(({ block }: TextAttrProps) => {
         }}
           value={block.props.text} />
       </Label>
-      <Label class="mt-4" label="stroke">
+      <Label class="mt-4" label="Stroke">
         <div class="flex items-center justify-between">
           <div class="w-[50px] h-[50px] rounded-md shadow-radio" onClick$={() => displayColorPicker.value = true} style={{ 'background-color': block.canvasStyle.fill }}></div>
           <div class="flex border border-solid border-gray-3 text-xl items-center w-3/5 h-[50px]  rounded-md shadow-radio">
@@ -37,6 +39,19 @@ export default component$(({ block }: TextAttrProps) => {
                 handleChangeColor("#" + el.value)
               }
             }} />
+          </div>
+        </div>
+      </Label>
+      <Label class="mt-4" label="Text align">
+        <div class="flex items-center">
+          <div class="border-shape p-2 mr-2">
+            <Icons icon={IconName.TextAlignLeftIcon} />
+          </div>
+          <div class="border-shape p-2 mr-2">
+            <Icons icon={IconName.TextAlignCenterIcon} />
+          </div>
+          <div class="border-shape p-2 mr-2">
+            <Icons icon={IconName.TextAlignRightIcon} />
           </div>
         </div>
       </Label>

@@ -9,26 +9,38 @@ import {
   FontBoldIcon,
   FontItalicIcon,
   TextIcon,
-  ImageIcon
+  ImageIcon,
+  UnderlineIcon
 } from '@radix-ui/react-icons';
 import './styles.css';
 import { qwikify$ } from '@builder.io/qwik-react';
+import { CanvasTextStyle } from '~/constants/enum';
 
-const ToolbarKit = () => (
+interface ToolbarKitProps {
+  onChange: (value: string[]) => void;
+}
+const ToolbarKit = ({onChange}: ToolbarKitProps) => (
   <Toolbar.Root className="ToolbarRoot" aria-label="Formatting options">
-    <Toolbar.ToggleGroup type="multiple" aria-label="Text formatting">
-      <Toolbar.ToggleItem className="ToolbarToggleItem" value="bold" aria-label="Bold">
+    <Toolbar.ToggleGroup onValueChange={onChange} type="multiple" aria-label="Text formatting">
+      <Toolbar.ToggleItem className="ToolbarToggleItem" value={CanvasTextStyle.Bold} aria-label="Bold">
         <FontBoldIcon />
       </Toolbar.ToggleItem>
-      <Toolbar.ToggleItem className="ToolbarToggleItem" value="italic" aria-label="Italic">
+      <Toolbar.ToggleItem className="ToolbarToggleItem" value={CanvasTextStyle.FontStyle} aria-label="Italic">
         <FontItalicIcon />
       </Toolbar.ToggleItem>
       <Toolbar.ToggleItem
         className="ToolbarToggleItem"
-        value="strikethrough"
+        value={CanvasTextStyle.Strikethrough}
         aria-label="Strike through"
       >
         <StrikethroughIcon />
+      </Toolbar.ToggleItem>
+      <Toolbar.ToggleItem
+        className="ToolbarToggleItem"
+        value={CanvasTextStyle.Underline}
+        aria-label="Strike through"
+      >
+        <UnderlineIcon />
       </Toolbar.ToggleItem>
     </Toolbar.ToggleGroup>
     <Toolbar.Separator className="ToolbarSeparator" />

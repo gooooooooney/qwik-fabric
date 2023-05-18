@@ -54,3 +54,10 @@ export const enum KEY_CODE {
   ARROW_DOWN = 'ArrowDown',
   SPACE = ' ',
 }
+
+export const enum CanvasTextStyle {
+  Bold = 'bold',
+  Underline = 'underline',
+  Strikethrough = 'strikethrough',
+  FontStyle = 'italic',
+}
