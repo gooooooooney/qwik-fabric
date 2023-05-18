@@ -14,7 +14,7 @@ export const TextCanvasStyle = {
   fontSize: 16,
   fontWeight: 400,
   letterSpacing: 0,
-  color: '#181818',
+  fill: '#181818',
   top: 0,
   left: 0,
   // textDecoration
@@ -22,7 +22,7 @@ export const TextCanvasStyle = {
   overline: false,
   linethrough: false,
   // shadow
-  shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+  shadow: null,
   // fontStyle
   fontStyle: 'normal',
   fontFamily: 'sans-serif',
@@ -37,7 +37,7 @@ export const TextCanvasStyle = {
 
 }
 const textBlock = {
-  type: ComponentType.Text,
+  type: ComponentType.TextBox,
   id: '',
   isLock: false,
   name: 'Text',

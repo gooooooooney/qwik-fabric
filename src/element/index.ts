@@ -1,5 +1,5 @@
 import * as fabric from "fabric"
-import type { FabricObject } from "fabric/dist/src/shapes/Object/FabricObject"
+import type { Object } from "fabric/dist/src/shapes/Object/FabricObject"
 import type { BlockInfo } from "~/components/core/components"
 import { ComponentType } from "~/constants/enum"
 import {renderText} from "~/element/TextElement"
@@ -14,9 +14,9 @@ export interface RenderEleArgs {
 export const renderElement = ({
   canvas,
   block,
-}: RenderEleArgs): FabricObject => {
+}: RenderEleArgs): Object | null => {
   switch (block.type) {
-    case ComponentType.Text:
+    case ComponentType.TextBox:
       return renderText({canvas, block})
     default:
       return null

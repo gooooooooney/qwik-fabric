@@ -1,4 +1,4 @@
-import type { BlockInfo, CSSProperties } from "~/components/core/components"
+// import type { BlockInfo, CSSProperties } from "~/components/core/components"
 import type { CanvasStyleData } from "~/store/context"
 
 const filterKeys = ['width', 'height', 'scale']

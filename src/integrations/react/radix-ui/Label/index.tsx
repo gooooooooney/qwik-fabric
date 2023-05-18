@@ -10,7 +10,7 @@ interface LabelField extends PropsWithChildren {
 
 const LabelField = ({label, children}: LabelField) => (
     <div
-        className='flex px-4 flex-wrap gap-4 items-center'
+        className='flex px-4 flex-wrap gap-4 flex-col'
     >
         <Label.Root className="LabelRoot" htmlFor={label}>
             {label}

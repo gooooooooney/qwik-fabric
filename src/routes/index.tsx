@@ -49,7 +49,7 @@ export default component$(() => {
     const handleDrop = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      e.clientX
+      console.log(e.clientX)
 
       const type = e.dataTransfer?.getData('type') as ComponentType;
       if (type) {
@@ -57,16 +57,20 @@ export default component$(() => {
         if (item) {
           item.id = uid()
           const rect = containerRef!.getBoundingClientRect()
+          console.log(rect)
           const { top, left } = rect
           item.canvasStyle.top = item.style.top = e.clientY - top
           item.canvasStyle.left = item.style.left = e.clientX - left
+          console.log(e, left)
           state.blocks.push(JSON.parse(JSON.stringify(item)))
           const block = renderElement({
             canvas: state.canvas!,
             block: item,
           })
-          block.id = item.id
-          state.canvas?.setActiveObject(block)
+          if (block) {
+            block.set('id', item.id)
+            state.canvas?.setActiveObject(block)
+          }
         }
       }
     }
@@ -79,28 +83,32 @@ export default component$(() => {
 
   })
   return (
-    <div class="flex flex-row">
-      <div id="test" class="w-1/8">
-        <Aside />
-      </div>
+    <div class="flex flex-col p-4">
+      <div class="py-2 m-auto box-border"> <Toolbar /></div>
+      <div class="flex flex-row">
+        <div class="w-1/8">
+          <Aside />
+        </div>
 
-      <div class="px-2 flex-1">
-        <Toolbar />
-        <div
-          ref={canvasContainerRef}
-          class=" bg-[#f5f5f5] p-6 h-full  overflow-auto">
-          <div class="overflow-auto w-full h-full">
-            <Editor parentState={state} >
-              <canvas ref={canvasRef} id="canvas" width={width} height={height} />
-            </Editor>
+        <div class="px-2 flex-1 flex justify-center">
+         
+          <div
+            ref={canvasContainerRef}
+            style={{width: `${width}px`, height: `${height}px`}}
+            class=" bg-[#f5f5f5] h-full  ">
+            <div class=" w-full h-full">
+              <Editor parentState={state} >
+                <canvas ref={canvasRef} id="canvas" width={width} height={height} />
+              </Editor>
 
+            </div>
           </div>
         </div>
-      </div>
-      <div class="w-1/8" >
-        <Attr />
-      </div>
-    </div >
+        <div class="w-1/6" >
+          <Attr />
+        </div>
+      </div >
+    </div>
   );
 });
 

@@ -2,6 +2,7 @@ import { useSignal, useVisibleTask$} from "@builder.io/qwik";
 import { component$ } from "@builder.io/qwik";
 import { ComponentType } from "~/constants/enum";
 import { blockInfoList } from "../core/components";
+import Icons from "~/integrations/react/radix-ui/Icons";
 
 export default component$(() => {
     const draggableRef = useSignal<HTMLDivElement>();
@@ -21,11 +22,11 @@ export default component$(() => {
     })
     
     return (
-        <div ref={draggableRef} class="flex-1 grid p-3 gap-10 grid-cols-[repeat(auto-fill,100px)] border border-solid border-dark">
+        <div ref={draggableRef} class="flex-1 min-h-xl grid p-3 gap-10 grid-cols-[repeat(auto-fill,100px)] shadow-radio bg-white rounded-md">
         {
             blockInfoList.map((comp) => (
-                <div draggable id={comp.type} key={comp.type} data-type={comp.type} class="active-cursor-grabbing cursor-grab text-center rounded-md p-3 w-[80px] h-[40px] border border-solid border-coolGray flex justify-center items-center">
-                    <p  class="text-2xl font-bold">{comp.name}</p>
+                <div draggable id={comp.type} key={comp.type} data-type={comp.type} class="active-cursor-grabbing cursor-grab text-center rounded-md p-3 w-[10px] h-[10px] border border-solid border-coolGray flex justify-center items-center">
+                    <Icons name={comp.type} />
                 </div>
             ))
         }
