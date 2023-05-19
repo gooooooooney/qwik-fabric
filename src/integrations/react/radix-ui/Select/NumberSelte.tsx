@@ -10,8 +10,10 @@ import { qwikify$ } from '@builder.io/qwik-react';
 
 interface SelectItemProps extends PropsWithChildren, HtmlHTMLAttributes<HTMLDivElement>, Select.SelectItemProps {
 }
-interface SelectProps extends Select.SelectProps {}
-const FontSizeSelect = ({onValueChange, ...props}: SelectProps) => (
+interface SelectProps extends Select.SelectProps {
+  range: number[]
+}
+const NumberSelte = ({onValueChange, range, ...props}: SelectProps) => (
   <Select.Root onValueChange={onValueChange} {...props}>
     <Select.Trigger
       className="border-shape inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white  hover:bg-violet-1 focus:shadow-[0_0_0_1px] focus:shadow-violet data-[placeholder]:text-violet9 outline-none"
@@ -34,10 +36,10 @@ const FontSizeSelect = ({onValueChange, ...props}: SelectProps) => (
             </Select.Label>
             <Select.Separator className="h-[.5px] bg-gray-3 m-[5px]" />
             {
-              Array.from({ length: 28 }).map((_, i) => (
+              range.map((n) => (
 
-                <Fragment key={i}>
-                  <SelectItem  value={`${i + 12}`}> {i + 12} </SelectItem>
+                <Fragment key={n}>
+                  <SelectItem  value={`${n}`}> {n} </SelectItem>
                 </Fragment>
               ))
             }
@@ -65,4 +67,4 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(({ children
 });
 
 
-export default qwikify$(FontSizeSelect, { eagerness: "visible" });
+export default qwikify$(NumberSelte, { eagerness: "visible" });

@@ -1,24 +1,37 @@
 /** @jsxImportSource react */
 
-import { SketchPicker} from 'react-color';
-import type {Color, ColorChangeHandler} from 'react-color';
+import { SketchPicker, ChromePicker } from 'react-color';
+import type { Color, ColorChangeHandler } from 'react-color';
 import { qwikify$ } from '@builder.io/qwik-react';
 
 interface ColorPickerProps {
-    color: Color,
-    onChangeComplete: ColorChangeHandler
+  color: Color,
+  onChangeComplete: ColorChangeHandler
 }
 
-function ColorPicker({color, onChangeComplete}: ColorPickerProps) {
+function ColorSketchPicker({ color, onChangeComplete }: ColorPickerProps) {
 
-    return (
-      <div>
-        <SketchPicker
-          color={color}
-          onChangeComplete={ onChangeComplete}
-        />
-      </div>
-    )   
+  return (
+    <div>
+      <SketchPicker
+        color={color}
+        onChangeComplete={onChangeComplete}
+      />
+    </div>
+  )
 }
 
-export default qwikify$(ColorPicker,  { eagerness: 'hover' })
+
+export const ColorChromePicker = qwikify$(function ColorChromePicker({ color, onChangeComplete }: ColorPickerProps) {
+
+  return (
+    <div>
+      <ChromePicker
+        color={color}
+        onChangeComplete={onChangeComplete}
+      />
+    </div>
+  )
+}, { eagerness: "visible" })
+
+export default qwikify$(ColorSketchPicker, { eagerness: "visible" })

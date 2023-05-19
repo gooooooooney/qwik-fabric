@@ -6,7 +6,7 @@ import Label from "../Label";
 import { KEY_CODE } from "~/constants/enum";
 import Toolbar from "~/integrations/react/radix-ui/Toolbar";
 import type { FontWeight, TextAlign } from "~/constants/enum/style";
-import SelectArea from "~/integrations/react/radix-ui/Select/FontSizeSelect";
+import NumberSelte from "~/integrations/react/radix-ui/Select/NumberSelte";
 import FontFamilySelect from "~/integrations/react/radix-ui/Select/FontFamilySelect";
 import Toggle from "../Toggle";
 interface TextAttrProps {
@@ -17,9 +17,16 @@ export default component$(({ block }: TextAttrProps) => {
   const state = useContext(GLOBAL_CONTEXT)
   const active = noSerialize(state.canvas?.getActiveObject())
   const displayColorPicker = useSignal(false)
+  const displayStrokeColorPicker = useSignal(false)
   const handleChangeColor = $((color: string) => {
     block.canvasStyle.fill = color
     active?.set('fill', block.canvasStyle.fill)
+    state.canvas?.renderAll()
+  })
+  const handleChangeStrokeColor = $((color: string) => {
+    block.canvasStyle.stroke = color
+    
+    active?.set('stroke', block.canvasStyle.stroke)
     state.canvas?.renderAll()
   })
   const handleChangeFontStyle = $((value: string[]) => {
@@ -52,6 +59,9 @@ export default component$(({ block }: TextAttrProps) => {
     { label: 'L', value: 20, size: 'text-[20px]' },
     { label: 'XL', value: 24, size: 'text-[24px]' },
   ]
+  const fontSizeRange = Array.from({ length: 28 }, (_, i) => i + 12)
+
+  const strokeWidthRange = Array.from({ length: 10 }, (_, i) => i + 1)
 
 
   return <div class="w-full relative">
@@ -70,9 +80,9 @@ export default component$(({ block }: TextAttrProps) => {
           }}
             value={block.props.text} />
         </Label>
-        <Label class="mt-4 relative" label="Stroke">
+        <Label class="mt-4 relative" label="Fill">
           <div class="flex items-center justify-between">
-            <div class="w-[45px] h-[45px] rounded-xl shadow-radio" onClick$={() => displayColorPicker.value = true} style={{ 'background-color': block.canvasStyle.fill }}></div>
+            <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayColorPicker.value = true} style={{ 'background-color': block.canvasStyle.fill }}></div>
             <div class="flex border border-solid border-gray-3 text-xl items-center w-3/5 h-[45px]  rounded-xl shadow-radio">
               <div class="pl-2">#</div>
               <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={block.canvasStyle.fill.slice(1)} onKeyUp$={(e, el) => {
@@ -89,6 +99,65 @@ export default component$(({ block }: TextAttrProps) => {
                 <ColorPicker
                   onChangeComplete$={({ hex }) => handleChangeColor(hex)}
                   color={block.canvasStyle.fill} />
+              </div>
+
+            </div> : null
+          }
+        </Label>
+
+        <Label class="mt-4" label="Stroke width">
+          <div class="flex items-center relative">
+            {
+              [1, 2, 3, 4, 5].map(size => {
+                return <Fragment key={size}>
+                  <Toggle active={size === block.canvasStyle.strokeWidth}>
+                    <input
+                      onChange$={(_, el) => {
+                        block.canvasStyle.strokeWidth = Number(el.value)
+                        active?.set('strokeWidth', block.canvasStyle.strokeWidth)
+                        state.canvas?.renderAll()
+                      }}
+                      class="absolute opacity-0 pointer-events-none"
+                      value={size}
+                      checked={block.canvasStyle.strokeWidth === size}
+                      type="radio"
+                      name="Stroke" />
+                    <span>{size}
+                    </span>
+                  </Toggle>
+                </Fragment>
+              })
+            }
+          </div>
+          <NumberSelte
+           range={strokeWidthRange}
+           value={block.canvasStyle.strokeWidth.toString()}
+            onValueChange$={size => {
+              block.canvasStyle.strokeWidth = Number(size)
+              active?.set('strokeWidth', block.canvasStyle.strokeWidth)
+              state.canvas?.renderAll()
+            }}
+            />
+        </Label>
+        <Label class="mt-4 relative" label="Stroke">
+          <div class="flex items-center justify-between">
+            <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': block.canvasStyle.stroke }}></div>
+            <div class="flex border border-solid border-gray-3 text-xl items-center w-3/5 h-[45px]  rounded-xl shadow-radio">
+              <div class="pl-2">#</div>
+              <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={(block.canvasStyle.stroke as string)?.slice(1)} onKeyUp$={(e, el) => {
+                if (e.key == KEY_CODE.ENTER) {
+                  handleChangeStrokeColor("#" + el.value)
+                }
+              }} />
+            </div>
+          </div>
+          {displayStrokeColorPicker.value ?
+            <div >
+              <div class="fixed top-0 right-0 left-0 bottom-0" onClick$={() => displayStrokeColorPicker.value = false} />
+              <div class="absolute z-2 top-full left-1/2 -translate-x-[50%]">
+                <ColorPicker
+                  onChangeComplete$={({ hex }) => handleChangeStrokeColor(hex)}
+                  color={block.canvasStyle.stroke ?? 'none'} />
               </div>
 
             </div> : null
@@ -119,7 +188,8 @@ export default component$(({ block }: TextAttrProps) => {
               })
             }
           </div>
-          <SelectArea
+          <NumberSelte
+            range={fontSizeRange}
             value={block.canvasStyle.fontSize.toString()}
             onValueChange$={size => {
               block.canvasStyle.fontSize = Number(size)

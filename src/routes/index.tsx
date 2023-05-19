@@ -55,11 +55,9 @@ export default component$(() => {
         if (item) {
           item.id = uid()
           const rect = containerRef!.getBoundingClientRect()
-          console.log(rect)
           const { top, left } = rect
           item.canvasStyle.top = item.style.top = e.clientY - top
           item.canvasStyle.left = item.style.left = e.clientX - left
-          console.log(e, left)
           state.blocks.push(JSON.parse(JSON.stringify(item)))
           const block = renderElement({
             canvas: state.canvas!,

@@ -28,7 +28,7 @@ export const TextCanvasStyle = {
   fontStyle: 'normal',
   fontFamily: 'Arial',
   // stroke and strokeWidth
-  stroke: null,
+  stroke: '',
   strokeWidth: 1,
   // textAlignment
   textAlign: 'left' as TextAlign,

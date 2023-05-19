@@ -20,7 +20,6 @@ interface IconsProps {
 }
 
 const Icons = ({ name,icon}: IconsProps) => {
-  console.log(TextAlignCenterIcon.name)
   return (
     <>
       {name === ComponentType.TextBox && <TextIcon />}
