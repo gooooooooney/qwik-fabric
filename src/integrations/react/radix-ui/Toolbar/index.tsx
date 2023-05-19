@@ -8,43 +8,49 @@ import {
   TextAlignRightIcon,
   FontBoldIcon,
   FontItalicIcon,
-  TextIcon,
-  ImageIcon,
+  // TextIcon,
+  // ImageIcon,
   UnderlineIcon
 } from '@radix-ui/react-icons';
 import './styles.css';
 import { qwikify$ } from '@builder.io/qwik-react';
-import { CanvasTextStyle } from '~/constants/enum';
+import type { TextAlign} from '~/constants/enum/style';
+import { FontStyle, FontWeight, TextDecoration } from '~/constants/enum/style';
+import { cx } from '~/utils/common';
 
 interface ToolbarKitProps {
-  onChange: (value: string[]) => void;
+  onChangeTextStyle: (value: string[]) => void;
+  onChangeAlignment: (value: TextAlign) => void;
+  alignmentDefaultValue?: TextAlign;
+  textStyleDefaultValue?: string[];
+  class?: string
 }
-const ToolbarKit = ({onChange}: ToolbarKitProps) => (
-  <Toolbar.Root className="ToolbarRoot" aria-label="Formatting options">
-    <Toolbar.ToggleGroup onValueChange={onChange} type="multiple" aria-label="Text formatting">
-      <Toolbar.ToggleItem className="ToolbarToggleItem" value={CanvasTextStyle.Bold} aria-label="Bold">
+const ToolbarKit = ({onChangeTextStyle, onChangeAlignment, alignmentDefaultValue, textStyleDefaultValue, class: className}: ToolbarKitProps) => (
+  <Toolbar.Root orientation='vertical' className={cx('ToolbarRoot', className)} aria-label="Formatting options">
+    <Toolbar.ToggleGroup defaultValue={textStyleDefaultValue} onValueChange={onChangeTextStyle} type="multiple" aria-label="Text formatting">
+      <Toolbar.ToggleItem className="ToolbarToggleItem" value={FontWeight.Bold} aria-label="Bold">
         <FontBoldIcon />
       </Toolbar.ToggleItem>
-      <Toolbar.ToggleItem className="ToolbarToggleItem" value={CanvasTextStyle.FontStyle} aria-label="Italic">
+      <Toolbar.ToggleItem className="ToolbarToggleItem" value={FontStyle.Italic} aria-label="Italic">
         <FontItalicIcon />
       </Toolbar.ToggleItem>
       <Toolbar.ToggleItem
         className="ToolbarToggleItem"
-        value={CanvasTextStyle.Strikethrough}
+        value={TextDecoration.LineThrough}
         aria-label="Strike through"
       >
         <StrikethroughIcon />
       </Toolbar.ToggleItem>
       <Toolbar.ToggleItem
         className="ToolbarToggleItem"
-        value={CanvasTextStyle.Underline}
+        value={TextDecoration.Underline}
         aria-label="Strike through"
       >
         <UnderlineIcon />
       </Toolbar.ToggleItem>
     </Toolbar.ToggleGroup>
     <Toolbar.Separator className="ToolbarSeparator" />
-    <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
+    <Toolbar.ToggleGroup onValueChange={onChangeAlignment} type="single" defaultValue={alignmentDefaultValue} aria-label="Text alignment">
       <Toolbar.ToggleItem className="ToolbarToggleItem" value="left" aria-label="Left aligned">
         <TextAlignLeftIcon />
       </Toolbar.ToggleItem>
@@ -54,20 +60,20 @@ const ToolbarKit = ({onChange}: ToolbarKitProps) => (
       <Toolbar.ToggleItem className="ToolbarToggleItem" value="right" aria-label="Right aligned">
         <TextAlignRightIcon />
       </Toolbar.ToggleItem>
-      <Toolbar.ToggleItem className="ToolbarToggleItem" value="text" aria-label="Text">
+      {/* <Toolbar.ToggleItem className="ToolbarToggleItem" value="text" aria-label="Text">
         <TextIcon />
       </Toolbar.ToggleItem>
       <Toolbar.ToggleItem className="ToolbarToggleItem" value="image" aria-label="Image">
         <ImageIcon />
-      </Toolbar.ToggleItem>
+      </Toolbar.ToggleItem> */}
     </Toolbar.ToggleGroup>
-    {/* <Toolbar.Separator className="ToolbarSeparator" />
-    <Toolbar.Link className="ToolbarLink" href="#" target="_blank" style={{ marginRight: 10 }}>
+    {/* <Toolbar.Separator className="ToolbarSeparator" /> */}
+    {/* <Toolbar.Link className="ToolbarLink" href="#" target="_blank" style={{ marginRight: 10 }}>
       Edited 2 hours ago
     </Toolbar.Link> */}
-    <Toolbar.Button className="ToolbarButton" style={{ marginLeft: 'auto' }}>
+    {/* <Toolbar.Button className="ToolbarButton" style={{ marginLeft: 'auto' }}>
       Share
-    </Toolbar.Button>
+    </Toolbar.Button> */}
   </Toolbar.Root>
 );
 

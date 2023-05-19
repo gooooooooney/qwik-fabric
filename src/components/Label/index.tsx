@@ -4,12 +4,13 @@ import { cx } from "~/utils/common";
 
 interface LabelField extends HTMLAttributes<HTMLDivElement> {
   label: string;
+  forLabel?: string
 }
-const Label = component$(({ label, class: className }: LabelField) => {
+const Label = component$(({ label, forLabel, class: className }: LabelField) => {
   return <div
     class={cx('flex px-4 flex-wrap gap-4 flex-col', className)}
   >
-    <label for={label}>
+    <label for={forLabel}>
       {label}
     </label>
     <Slot />

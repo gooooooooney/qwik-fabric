@@ -1,5 +1,6 @@
 import { ComponentType } from "~/constants/enum";
 import type * as CSS from 'csstype';
+import type { FontWeight, TextAlign } from "~/constants/enum/style";
 export type BlockInfo = typeof blockInfoList[number];
 export type CSSProperties = CSS.Properties<string | number>;
 
@@ -12,7 +13,7 @@ export const TextCanvasStyle = {
   width: 200,
   height: 28,
   fontSize: 16,
-  fontWeight: 400,
+  fontWeight: 'normal' as FontWeight,
   letterSpacing: 0,
   fill: '#181818',
   top: 0,
@@ -25,12 +26,12 @@ export const TextCanvasStyle = {
   shadow: null,
   // fontStyle
   fontStyle: 'normal',
-  fontFamily: 'sans-serif',
+  fontFamily: 'Arial',
   // stroke and strokeWidth
   stroke: null,
   strokeWidth: 1,
   // textAlignment
-  textAlign: 'left',
+  textAlign: 'left' as TextAlign,
   lineHeight: 1.5,
   // textBackgroundColor
   textBackgroundColor: 'transparent',

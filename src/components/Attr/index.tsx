@@ -29,7 +29,7 @@ export default component$(() => {
         属性
       </div>
   }}
-  return <div class="p-3 min-h-xl shadow-radio bg-white rounded-md">
+  return <div >
     {element()}
   </div>
 })

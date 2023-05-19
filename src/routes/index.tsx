@@ -1,4 +1,4 @@
-import { $, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useSignal } from '@builder.io/qwik';
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
@@ -14,7 +14,6 @@ import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
 import { canvasEvent } from '~/utils/event';
 import { changeStyleWithScale } from '~/utils/translate';
-import Toolbar from '~/integrations/react/radix-ui/Toolbar';
 
 export default component$(() => {
   const state = useStore<GlobalState>(globalState)
@@ -49,7 +48,6 @@ export default component$(() => {
     const handleDrop = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log(e.clientX)
 
       const type = e.dataTransfer?.getData('type') as ComponentType;
       if (type) {
@@ -83,23 +81,21 @@ export default component$(() => {
 
   })
 
-  const handleChangeFontStyle = $((value: string[]) => {
-    console.log(value)
-  })
+  
   return (
     <div class="flex flex-col p-4">
-      <div class="py-2 m-auto box-border"> 
-      <Toolbar onChange$={handleChangeFontStyle} /></div>
+      <div class="py-2 m-auto box-border">
+        </div>
       <div class="flex flex-row">
         <div class="w-1/8">
           <Aside />
         </div>
 
         <div class="px-2 flex-1 flex justify-center">
-         
+
           <div
             ref={canvasContainerRef}
-            style={{width: `${width}px`, height: `${height}px`}}
+            style={{ width: `${width}px`, height: `${height}px` }}
             class=" bg-[#f5f5f5] h-full  ">
             <div class=" w-full h-full">
               <Editor parentState={state} >
