@@ -14,6 +14,7 @@ import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
 import { canvasEvent } from '~/utils/event';
 import { changeStyleWithScale } from '~/utils/translate';
+import CommonAttr from '~/integrations/react/radix-ui/CommonAttr';
 
 export default component$(() => {
   const state = useStore<GlobalState>(globalState)
@@ -39,7 +40,7 @@ export default component$(() => {
   // FUCK: https://qwik.builder.io/docs/components/events/#synchronous-event-handling
   useVisibleTask$(({ cleanup }) => {
     const containerRef = canvasContainerRef.value
-    // FUCK: 需要设置fileDropEnabled： false 才能在app里拖拽， 不能染callback不执行
+    // FUCK: 需要设置fileDropEnabled： false 才能在app里拖拽， 不然callback不执行
     const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
@@ -59,13 +60,13 @@ export default component$(() => {
           item.canvasStyle.top = item.style.top = e.clientY - top
           item.canvasStyle.left = item.style.left = e.clientX - left
           state.blocks.push(JSON.parse(JSON.stringify(item)))
-          const block = renderElement({
+          const element = renderElement({
             canvas: state.canvas!,
             block: item,
           })
-          if (block) {
-            block.set('id', item.id)
-            state.canvas?.setActiveObject(block)
+          if (element) {
+            element.set('id', item.id)
+            state.canvas?.setActiveObject(element)
           }
         }
       }
@@ -79,22 +80,23 @@ export default component$(() => {
 
   })
 
-  
+
   return (
-    <div class="flex flex-col p-4">
-      <div class="py-2 m-auto box-border">
-        </div>
+    <div >
+      {/* <div class="py-2 m-auto box-border">
+      </div> */}
       <div class="flex flex-row">
         <div class="w-1/8">
           <Aside />
         </div>
 
-        <div class="px-2 flex-1 flex justify-center">
+        <div class="px-2 flex-1 flex justify-center items-center flex-col">
+          <CommonAttr />
 
           <div
             ref={canvasContainerRef}
             style={{ width: `${width}px`, height: `${height}px` }}
-            class=" bg-[#f5f5f5] h-full  ">
+            class=" bg-[#f5f5f5] h-full mt-3  ">
             <div class=" w-full h-full">
               <Editor parentState={state} >
                 <canvas ref={canvasRef} id="canvas" width={width} height={height} />

@@ -15,18 +15,18 @@ interface TextAttrProps {
 
 export default component$(({ block }: TextAttrProps) => {
   const state = useContext(GLOBAL_CONTEXT)
-  const active = noSerialize(state.canvas?.getActiveObject())
+  const element = noSerialize(state.canvas?.getActiveObject())
   const displayColorPicker = useSignal(false)
   const displayStrokeColorPicker = useSignal(false)
   const handleChangeColor = $((color: string) => {
     block.canvasStyle.fill = color
-    active?.set('fill', block.canvasStyle.fill)
+    element?.set('fill', block.canvasStyle.fill)
     state.canvas?.renderAll()
   })
-  const handleChangeStrokeColor = $((color: string) => {
+  const handleChangeStrokeColor = $((color: string | null) => {
     block.canvasStyle.stroke = color
     
-    active?.set('stroke', block.canvasStyle.stroke)
+    element?.set('stroke', block.canvasStyle.stroke)
     state.canvas?.renderAll()
   })
   const handleChangeFontStyle = $((value: string[]) => {
@@ -34,15 +34,15 @@ export default component$(({ block }: TextAttrProps) => {
     block.canvasStyle.underline = !!value.find(item => item == 'underline')
     block.canvasStyle.linethrough = !!value.find(item => item == 'line-through')
     block.canvasStyle.fontStyle = value.find(item => item == 'italic') ? 'italic' : 'normal'
-    active?.set('fontWeight', block.canvasStyle.fontWeight)
-    active?.set('underline', block.canvasStyle.underline)
-    active?.set('linethrough', block.canvasStyle.linethrough)
-    active?.set('fontStyle', block.canvasStyle.fontStyle)
+    element?.set('fontWeight', block.canvasStyle.fontWeight)
+    element?.set('underline', block.canvasStyle.underline)
+    element?.set('linethrough', block.canvasStyle.linethrough)
+    element?.set('fontStyle', block.canvasStyle.fontStyle)
     state.canvas?.renderAll()
   })
   const handleChangeAlignment = $((value: TextAlign) => {
     block.canvasStyle.textAlign = value
-    active?.set('textAlign', block.canvasStyle.textAlign)
+    element?.set('textAlign', block.canvasStyle.textAlign)
     state.canvas?.renderAll()
   })
   const textStyleDefaultValue = useComputed$(() => {
@@ -75,7 +75,7 @@ export default component$(({ block }: TextAttrProps) => {
         <Label label="Text">
           <input class=" text-base w-full p-1 rounded-md focus:(border-blue) m-0 shadow-radio outline-0 border-gray-3 border-1 border-solid" type="text" onBlur$={(_, el) => {
             block.props.text = el.value
-            active?.set('text', block.props.text)
+            element?.set('text', block.props.text)
             state.canvas?.renderAll()
           }}
             value={block.props.text} />
@@ -114,7 +114,7 @@ export default component$(({ block }: TextAttrProps) => {
                     <input
                       onChange$={(_, el) => {
                         block.canvasStyle.strokeWidth = Number(el.value)
-                        active?.set('strokeWidth', block.canvasStyle.strokeWidth)
+                        element?.set('strokeWidth', block.canvasStyle.strokeWidth)
                         state.canvas?.renderAll()
                       }}
                       class="absolute opacity-0 pointer-events-none"
@@ -134,17 +134,18 @@ export default component$(({ block }: TextAttrProps) => {
            value={block.canvasStyle.strokeWidth.toString()}
             onValueChange$={size => {
               block.canvasStyle.strokeWidth = Number(size)
-              active?.set('strokeWidth', block.canvasStyle.strokeWidth)
+              element?.set('strokeWidth', block.canvasStyle.strokeWidth)
               state.canvas?.renderAll()
             }}
             />
         </Label>
         <Label class="mt-4 relative" label="Stroke">
           <div class="flex items-center justify-between">
-            <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': block.canvasStyle.stroke }}></div>
-            <div class="flex border border-solid border-gray-3 text-xl items-center w-3/5 h-[45px]  rounded-xl shadow-radio">
+            <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': block.canvasStyle.stroke ?? 'black'  }}></div>
+            <div class=" h-[45px] w-[50px] flex justify-center items-center rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => handleChangeStrokeColor(null)}>reset</div>
+            <div class="flex border border-solid border-gray-3 text-xl items-center w-2/5 h-[45px]  rounded-xl shadow-radio">
               <div class="pl-2">#</div>
-              <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={(block.canvasStyle.stroke as string)?.slice(1)} onKeyUp$={(e, el) => {
+              <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={block.canvasStyle.stroke?.slice(1)} onKeyUp$={(e, el) => {
                 if (e.key == KEY_CODE.ENTER) {
                   handleChangeStrokeColor("#" + el.value)
                 }
@@ -173,7 +174,7 @@ export default component$(({ block }: TextAttrProps) => {
                     <input
                       onChange$={(_, el) => {
                         block.canvasStyle.fontSize = Number(el.value)
-                        active?.set('fontSize', block.canvasStyle.fontSize)
+                        element?.set('fontSize', block.canvasStyle.fontSize)
                         state.canvas?.renderAll()
                       }}
                       class="absolute opacity-0 pointer-events-none"
@@ -193,7 +194,7 @@ export default component$(({ block }: TextAttrProps) => {
             value={block.canvasStyle.fontSize.toString()}
             onValueChange$={size => {
               block.canvasStyle.fontSize = Number(size)
-              active?.set('fontSize', block.canvasStyle.fontSize)
+              element?.set('fontSize', block.canvasStyle.fontSize)
               state.canvas?.renderAll()
             }} />
         </Label>
@@ -203,7 +204,7 @@ export default component$(({ block }: TextAttrProps) => {
             value={block.canvasStyle.fontFamily}
             onValueChange$={fontFamily => {
               block.canvasStyle.fontFamily = fontFamily
-              active?.set('fontFamily', block.canvasStyle.fontFamily)
+              element?.set('fontFamily', block.canvasStyle.fontFamily)
               state.canvas?.renderAll()
             }}
           />
