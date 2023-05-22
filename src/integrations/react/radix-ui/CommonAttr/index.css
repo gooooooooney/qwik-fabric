@@ -11,8 +11,8 @@ button {
   padding: 10px 15px;
   font-size: 15px;
   line-height: 1;
-  color: var(--violet11);
-  background-color: white;
+  color: white;
+  background-color: black;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   user-select: none;
   animation-duration: 400ms;
@@ -33,7 +33,7 @@ button {
 }
 
 .TooltipArrow {
-  fill: white;
+  fill: black;
 }
 
 .IconButton {

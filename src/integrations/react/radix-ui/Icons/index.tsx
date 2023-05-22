@@ -23,13 +23,13 @@ const Icons = ({ name,icon}: IconsProps) => {
   return (
     <>
       {name === ComponentType.TextBox && <TextIcon />}
+      {icon === IconName.ImageIcon || name === ComponentType.Img && <ImageIcon />}
       {icon === IconName.FontBoldIcon && <FontBoldIcon />}
       {icon === IconName.FontItalicIcon && <FontItalicIcon />}
       {icon === IconName.StrikethroughIcon && <StrikethroughIcon />}
       {icon === IconName.TextAlignLeftIcon && <TextAlignLeftIcon />}
       {icon === IconName.TextAlignCenterIcon && <TextAlignCenterIcon />}
       {icon === IconName.TextAlignRightIcon && <TextAlignRightIcon />}
-      {icon === IconName.ImageIcon && <ImageIcon />}
 
     </>
   )

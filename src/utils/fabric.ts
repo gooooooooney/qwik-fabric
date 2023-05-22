@@ -3,7 +3,7 @@ type GradientOption = ConstructorParameters<typeof fabric.Gradient>[0]
 
 export function setGradient(element: fabric.Object, {
     type ='linear',
-    coords = { x1: 0, y1: 0, x2: 100, y2: 0 },
+    coords,
     gradientUnits = 'pixels',
     colorStops = [
         { offset: 0, color: 'red', opacity: 1 },
@@ -12,7 +12,7 @@ export function setGradient(element: fabric.Object, {
 }: GradientOption) {
     const gradientEle = new fabric.Gradient({
         type,
-        coords,
+        coords: coords || { x1: 0, y1: 0, x2: element.width, y2: 0 },
         gradientUnits,
         colorStops
     })

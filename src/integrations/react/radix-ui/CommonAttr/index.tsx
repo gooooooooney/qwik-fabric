@@ -1,15 +1,19 @@
 /** @jsxImportSource react */
-import React, { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useEffect } from 'react';
+import { Fragment } from 'react';
+import React from 'react';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import { qwikify$ } from '@builder.io/qwik-react';
 import { ColorWheelIcon, PlusIcon } from '@radix-ui/react-icons'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import * as Tooltip from '@radix-ui/react-tooltip';
+import * as TooltipCom from '@radix-ui/react-tooltip';
 import { ChromePicker } from 'react-color'
 import "./index.css"
 
 interface CommonAttrProps {
-    fill?: string;
+    fill: string[];
+    onChangeColor: (value: string[]) => void;
 }
 
 interface TooltipTriggerProps extends PropsWithChildren {
@@ -17,45 +21,56 @@ interface TooltipTriggerProps extends PropsWithChildren {
 }
 function TooltipTrigger({ children, tip }: TooltipTriggerProps) {
     return (
-        <Tooltip.Provider>
-            <Tooltip.Root>
-                <Tooltip.Trigger>
+        <TooltipCom.Provider>
+            <TooltipCom.Root>
+                <TooltipCom.Trigger>
                     {children}
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                    <Tooltip.Content
+                </TooltipCom.Trigger>
+                <TooltipCom.Portal>
+                    <TooltipCom.Content
                         className="TooltipContent"
                         sideOffset={5}
                         side='bottom'
                     >
                         {tip}
-                        <Tooltip.Arrow className="fill-white" />
-                    </Tooltip.Content>
-                </Tooltip.Portal>
-            </Tooltip.Root>
-        </Tooltip.Provider>
+                        <TooltipCom.Arrow className="fill-black" />
+                    </TooltipCom.Content>
+                </TooltipCom.Portal>
+            </TooltipCom.Root>
+        </TooltipCom.Provider>
     );
 }
 
 
-const CommonAttr = ({ fill = "black" }: CommonAttrProps) => {
+const CommonAttr = ({ fill, onChangeColor }: CommonAttrProps) => {
     const [displayColorPicker, setDisplayColorPicker] = React.useState(false)
+    const [currentColor, setCurrentColor] = React.useState(fill[0])
+    const [currentColorIndex, setCurrentColorIndex] = React.useState(0)
+    const [colors, setColors] = React.useState(fill)
+    useEffect(() => {
+        onChangeColor(colors)
+    }, [colors])
     return (
         <Toolbar.Root
-            className="flex p-2 w-full min-w-max rounded-md bg-white shadow-[0_2px_10px] shadow-radio"
+            className="flex p-2 min-w-max rounded-md bg-white shadow-[0_2px_10px] shadow-radio"
             aria-label="Formatting options"
         >
 
             <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
 
                 <DropdownMenu.Root>
-                    <DropdownMenu.Trigger >
+                    <DropdownMenu.Trigger>
 
+
+                        {/* <TooltipTrigger tip="change color"> */}
                         <span
-                            className="h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
-                            style={{ backgroundColor: fill }}
+                            className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                            style={{ background: fill.length > 1 ? 'linear-gradient(to right,' + fill.join(",") + ')' : fill[0] }}
                         >
                         </span>
+                        {/* </TooltipTrigger> */}
+
+
 
                     </DropdownMenu.Trigger>
 
@@ -64,29 +79,76 @@ const CommonAttr = ({ fill = "black" }: CommonAttrProps) => {
                             className="min-w-[250px] bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
                             sideOffset={5}
                         >
-                            <div className='pb-2'>
+                            <div className='pb-2' onClick={e => {
+                                const color = (e.target as HTMLDivElement).getAttribute('data-color')
+                                if (color) {
+                                    setColors(color.split(","))
+                                }
+                            }}>
                                 <div>
 
 
                                 </div>
                                 <div className='px-4 py-2 relative'>
-                                    <TooltipTrigger tip='add a new color'>
-                                        <div
-                                            onClick={() => setDisplayColorPicker(true)}
-                                            className="h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
-                                        >
-                                            <PlusIcon className='text-black' />
-                                        </div>
-                                    </TooltipTrigger>
-                                    {
-                                        displayColorPicker ? <div >
-                                            <div className="fixed top-0 right-0 left-0 bottom-0" onClick={() => setDisplayColorPicker(false)} />
-                                            <div className="absolute z-2 top-full left-1/2 -translate-x-[50%]">
-                                                <ChromePicker
-                                                    color={fill} />
+                                <div className='flex pb-2 items-center '>
+                                        Current color</div>
+                                    
+                                    <div className="flex items-center gap-x-2">
+                                        <TooltipTrigger tip='add a new color'>
+                                            <div
+                                                onClick={() => {
+                                                    setCurrentColor(fill[0])
+                                                    setCurrentColorIndex(-1)
+                                                    setDisplayColorPicker(true)}}
+                                                className="h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                            >
+                                                <PlusIcon className='text-black' />
                                             </div>
+                                        </TooltipTrigger>
+                                        {
+                                            colors.map((color, index) => <Fragment key={color + index}>
+                                                <TooltipTrigger tip={color}>
+                                                    <div
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            e.preventDefault()
+                                                            setCurrentColorIndex(index)
+                                                            setCurrentColor(color)
+                                                            setDisplayColorPicker(true)
+                                                        }}
+                                                        data-color={color}
+                                                        style={{ background: color }}
+                                                        className="h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                                    >
+                                                    </div>
+                                                </TooltipTrigger>
+                                            </Fragment>
+                                            )
+                                        }
+                                    </div>
+                                    {
+                                        displayColorPicker ?
+                                            <div >
+                                                <div className="fixed top-0 right-0 left-0 bottom-0" onClick={() => setDisplayColorPicker(false)} />
+                                                <div className="absolute z-2 top-full left-1/2 -translate-x-[50%]">
+                                                    <ChromePicker
+                                                        onChangeComplete={(color) => {
+                                                            const hexColor = color.hex
+                                                            setCurrentColor(hexColor)
+                                                            if (currentColorIndex == -1) {
+                                                                setColors([...colors, hexColor])
+                                                                setCurrentColorIndex(colors.length)
+                                                                console.log(colors)
+                                                            } else {
+                                                                colors[currentColorIndex] = hexColor
+                                                                setColors([...colors])
+                                                            }
+                                                            
+                                                        }}
+                                                        color={currentColor} />
+                                                </div>
 
-                                        </div>
+                                            </div>
                                             :
                                             null
                                     }
@@ -181,7 +243,7 @@ const CommonAttr = ({ fill = "black" }: CommonAttrProps) => {
                                         </div>
                                     </div>
                                     <div
-                                        className="flex px-4 flex-wrap gap-x-4 gap-y-1 flex-col"
+                                        className="flex px-4 py-2 flex-wrap gap-x-4 gap-y-1 flex-col"
                                     >
                                         <label className='text-[#0d1216b3] text-xs'>
                                             Gradients
@@ -263,3 +325,4 @@ const CommonAttr = ({ fill = "black" }: CommonAttrProps) => {
 };
 
 export default qwikify$(CommonAttr, { eagerness: 'idle' });
+export const Tooltip = qwikify$(TooltipTrigger, { eagerness: 'idle' });

@@ -1,14 +1,16 @@
-import { $, Fragment, component$, noSerialize, useComputed$, useContext, useSignal } from "@builder.io/qwik";
+import { $, Fragment, component$, noSerialize, useComputed$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import type { TextBlock } from "../core/components";
 import { GLOBAL_CONTEXT } from "~/store/context";
 import ColorPicker from "~/integrations/react/ColorPicker";
 import Label from "../Label";
-import { KEY_CODE } from "~/constants/enum";
+import { Canvas_Event_Object, KEY_CODE } from "~/constants/enum";
 import Toolbar from "~/integrations/react/radix-ui/Toolbar";
 import type { FontWeight, TextAlign } from "~/constants/enum/style";
 import NumberSelte from "~/integrations/react/radix-ui/Select/NumberSelte";
 import FontFamilySelect from "~/integrations/react/radix-ui/Select/FontFamilySelect";
 import Toggle from "../Toggle";
+import type { fabric } from "~/element";
+import { emitter } from "~/utils/event";
 interface TextAttrProps {
   block: TextBlock,
 }
@@ -16,16 +18,29 @@ interface TextAttrProps {
 export default component$(({ block }: TextAttrProps) => {
   const state = useContext(GLOBAL_CONTEXT)
   const element = noSerialize(state.canvas?.getActiveObject())
-  const displayColorPicker = useSignal(false)
+  // const displayColorPicker = useSignal(false)
   const displayStrokeColorPicker = useSignal(false)
-  const handleChangeColor = $((color: string) => {
-    block.canvasStyle.fill = color
-    element?.set('fill', block.canvasStyle.fill)
-    state.canvas?.renderAll()
+  // const handleChangeColor = $((color: string) => {
+  //   block.canvasStyle.fill = color
+  //   element?.set('fill', block.canvasStyle.fill)
+  //   state.canvas?.renderAll()
+  // })
+
+  useVisibleTask$(() => {
+    emitter.on(Canvas_Event_Object.TEXT_MODIFIED, (target: fabric.Textbox) => {
+      
+      block.canvasStyle.top = target.top
+      block.canvasStyle.left = target.left
+      block.canvasStyle.width = target.width
+      block.canvasStyle.height = target.height
+      block.canvasStyle.zoomX = target.zoomX || 1
+      block.canvasStyle.zoomY = target.zoomY || 1
+      block.props.text = target.text
+    })
   })
   const handleChangeStrokeColor = $((color: string | null) => {
     block.canvasStyle.stroke = color
-    
+
     element?.set('stroke', block.canvasStyle.stroke)
     state.canvas?.renderAll()
   })
@@ -64,7 +79,7 @@ export default component$(({ block }: TextAttrProps) => {
   const strokeWidthRange = Array.from({ length: 10 }, (_, i) => i + 1)
 
 
-  return <div class="w-full relative">
+  return <div class="w-full relative animate-wobble">
     <Toolbar
       alignmentDefaultValue={block?.canvasStyle.textAlign}
       textStyleDefaultValue={textStyleDefaultValue.value}
@@ -80,7 +95,7 @@ export default component$(({ block }: TextAttrProps) => {
           }}
             value={block.props.text} />
         </Label>
-        <Label class="mt-4 relative" label="Fill">
+        {/* <Label class="mt-4 relative" label="Fill">
           <div class="flex items-center justify-between">
             <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayColorPicker.value = true} style={{ 'background-color': block.canvasStyle.fill }}></div>
             <div class="flex border border-solid border-gray-3 text-xl items-center w-3/5 h-[45px]  rounded-xl shadow-radio">
@@ -103,7 +118,7 @@ export default component$(({ block }: TextAttrProps) => {
 
             </div> : null
           }
-        </Label>
+        </Label> */}
 
         <Label class="mt-4" label="Stroke width">
           <div class="flex items-center relative">
@@ -130,18 +145,18 @@ export default component$(({ block }: TextAttrProps) => {
             }
           </div>
           <NumberSelte
-           range={strokeWidthRange}
-           value={block.canvasStyle.strokeWidth.toString()}
+            range={strokeWidthRange}
+            value={block.canvasStyle.strokeWidth.toString()}
             onValueChange$={size => {
               block.canvasStyle.strokeWidth = Number(size)
               element?.set('strokeWidth', block.canvasStyle.strokeWidth)
               state.canvas?.renderAll()
             }}
-            />
+          />
         </Label>
         <Label class="mt-4 relative" label="Stroke">
           <div class="flex items-center justify-between">
-            <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': block.canvasStyle.stroke ?? 'black'  }}></div>
+            <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': block.canvasStyle.stroke ?? 'black' }}></div>
             <div class=" h-[45px] w-[50px] flex justify-center items-center rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => handleChangeStrokeColor(null)}>reset</div>
             <div class="flex border border-solid border-gray-3 text-xl items-center w-2/5 h-[45px]  rounded-xl shadow-radio">
               <div class="pl-2">#</div>

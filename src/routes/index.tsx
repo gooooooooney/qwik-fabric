@@ -14,7 +14,6 @@ import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
 import { canvasEvent } from '~/utils/event';
 import { changeStyleWithScale } from '~/utils/translate';
-import CommonAttr from '~/integrations/react/radix-ui/CommonAttr';
 
 export default component$(() => {
   const state = useStore<GlobalState>(globalState)
@@ -91,8 +90,6 @@ export default component$(() => {
         </div>
 
         <div class="px-2 flex-1 flex justify-center items-center flex-col">
-          <CommonAttr />
-
           <div
             ref={canvasContainerRef}
             style={{ width: `${width}px`, height: `${height}px` }}

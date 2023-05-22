@@ -15,6 +15,10 @@ export const enum CANVAS_EVENT_SELECTED {
   NONE = 'selected:none',
 }
 
+export const enum Canvas_Event_Object {
+  TEXT_MODIFIED = 'text:modified',
+}
+
 export const enum KEY_CODE {
   DELETE = 'Delete',
   BACKSPACE = 'Backspace',
