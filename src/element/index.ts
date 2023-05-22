@@ -2,10 +2,11 @@ import * as fabric from "fabric"
 import type { Object } from "fabric/dist/src/shapes/Object/FabricObject"
 import type { BlockInfo } from "~/components/core/components"
 import { ComponentType } from "~/constants/enum"
-import {renderText} from "~/element/TextElement"
-import {renderImage} from "~/element/ImageElement"
+import { renderText } from "~/element/TextElement"
+import { renderImage } from "~/element/ImageElement"
+import { renderCircle } from "./Circle"
 
-export {fabric}
+export { fabric }
 
 export interface RenderEleArgs {
   canvas: fabric.Canvas,
@@ -18,9 +19,11 @@ export const renderElement = ({
 }: RenderEleArgs): Object | null => {
   switch (block.type) {
     case ComponentType.TextBox:
-      return renderText({canvas, block})
+      return renderText({ canvas, block })
     case ComponentType.Img:
-      return renderImage({canvas, block})
+      return renderImage({ canvas, block })
+    case ComponentType.Circle:
+      return renderCircle({ canvas, block })
     default:
       return null
   }

@@ -3,6 +3,7 @@ export const enum ComponentType {
   TextBox = 'textbox',
   Line = 'line',
   Img = 'img',
+  Circle = 'circle',
 }
 
 export const enum CONTEXT_IDS {

@@ -31,7 +31,7 @@ export const TextCanvasStyle = {
   zoomY: 1,
 }
 export const textBlock = {
-  type: ComponentType.TextBox,
+  type: ComponentType.TextBox as ComponentType.TextBox,
   id: '',
   isLock: false,
   name: 'Text',

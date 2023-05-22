@@ -31,7 +31,7 @@ export const ImageCanvasStyle = {
   zoomY: 1,
 }
 export const imageBlock = {
-  type: ComponentType.Img,
+  type: ComponentType.Img as ComponentType.Img,
   id: '',
   isLock: false,
   name: 'Text',
