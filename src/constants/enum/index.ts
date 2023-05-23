@@ -4,6 +4,10 @@ export const enum ComponentType {
   Line = 'line',
   Img = 'img',
   Circle = 'circle',
+  Rect = 'rect',
+  Triangle = 'triangle',
+  Ellipse = 'ellipse',
+  Canvas = 'canvas',
 }
 
 export const enum CONTEXT_IDS {

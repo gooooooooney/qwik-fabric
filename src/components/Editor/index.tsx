@@ -1,5 +1,6 @@
-import { Slot, component$, noSerialize, useContext, useVisibleTask$ } from "@builder.io/qwik";
+import { $, Slot, component$, noSerialize, useContext, useVisibleTask$ } from "@builder.io/qwik";
 import { CANVAS_EVENT_SELECTED } from "~/constants/enum";
+import { fabric } from "~/element";
 import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
 import type { GlobalState } from "~/store/context";
 import { GLOBAL_CONTEXT } from "~/store/context";
@@ -27,6 +28,56 @@ export default component$(({ parentState }: EditorProps) => {
       }
     })
   })
+  const setCanvasBackgroundColor = $((colors: string[]) => {
+    if (colors.length === 1) {
+      state.canvasStyleData.backgroundColor = colors[0]
+      state.canvas?.set('backgroundColor', colors[0])
+    } else {
+      const gradient = new fabric.Gradient({
+        coords: {
+          x1: 0,
+          y1: 0,
+          x2: state.canvasStyleData.width,
+          y2: 0,
+        },
+        colorStops: colors.map((color, index) => ({
+          offset: index / (colors.length - 1),
+          color,
+        }))
+      })
+      state.canvasStyleData.backgroundColor = colors.join(',')
+      state.canvas?.set('backgroundColor', gradient)
+    }
+  })
+  const setElementColor = $((colors: string[]) => {
+    if (colors.length === 1) {
+      state.currentBlock!.canvasStyle.fill = colors[0]
+      state.activeElements?.forEach((element) => {
+        element.set('fill', colors[0])
+      })
+    } else {
+      let lineWidths = state.activeElements && (state.activeElements![0] as any).__lineWidths
+      if (Array.isArray(lineWidths)) {
+        lineWidths = Math.max(...lineWidths)
+      }
+      if (!lineWidths) {
+        lineWidths = state.activeElements?.[0]?.width || 0
+      }
+      setGradient(state.activeElements?.[0], {
+        coords: {
+          x1: 0,
+          y1: 0,
+          x2: lineWidths,
+          y2: 0,
+        },
+        colorStops: colors.map((color, index) => ({
+          offset: index / (colors.length - 1),
+          color,
+        }))
+      })
+      state.currentBlock && (state.currentBlock.canvasStyle.fill = colors.join(','))
+    }
+  })
   return (
     <div
       id="editor"
@@ -48,42 +99,19 @@ export default component$(({ parentState }: EditorProps) => {
           </Shape>
         ))
       } */}
-      {
-        state.currentBlock?.type ? <CommonAttr
-          fill={state.currentBlock?.canvasStyle.fill.split(',')}
-          onChangeColor$={colors => {
-            if (colors.length === 1) {
-              state.currentBlock!.canvasStyle.fill = colors[0]
-              state.activeElements?.forEach((element) => {
-                element.set('fill', colors[0])
-              })
-            } else {
-              let lineWidths = state.activeElements && (state.activeElements![0] as any).__lineWidths
-              if (Array.isArray(lineWidths)) {
-                lineWidths = Math.max(...lineWidths)
-              }
-              if (!lineWidths) {
-                lineWidths = state.activeElements![0].width
-              }
-              setGradient(state.activeElements![0], {
-                coords: {
-                  x1: 0,
-                  y1: 0,
-                  x2: lineWidths,
-                  y2: 0,
-                },
-                colorStops: colors.map((color, index) => ({
-                  offset: index / (colors.length - 1),
-                  color,
-                }))
-              })
-              state.currentBlock!.canvasStyle.fill = colors.join(',')
-            }
-            state.canvas?.renderAll()
-          }}
-        />
-          : null
-      }
+
+      <CommonAttr
+        fill={state.currentBlock?.canvasStyle.fill!.split(',') || state.canvasStyleData.backgroundColor.split(",")}
+        onChangeColor$={colors => {
+          // currentBlock 不存在时，代表选中的是画布
+          if (!state.currentBlock) {
+            setCanvasBackgroundColor(colors)
+          } else {
+            setElementColor(colors)
+          }
+          state.canvas?.renderAll()
+        }}
+      />
 
       <div class="mt-4 bg-white">
         <Slot />

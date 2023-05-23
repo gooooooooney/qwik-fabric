@@ -11,7 +11,7 @@ export const commonStyle = {
   opacity: 1,
 }
 
-export const blockInfoList: [TextBlock, ImageBlock, CircleBlock] = [
+export const blockInfoList = [
   textBlock,
   imageBlock,
   circleBlock,

@@ -1,4 +1,4 @@
-import { useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { noSerialize, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useSignal } from '@builder.io/qwik';
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
@@ -6,13 +6,14 @@ import Aside from '~/components/Aside';
 import Editor from '~/components/Editor';
 import { blockInfoList } from '~/components/core/components';
 import type { ComponentType } from '~/constants/enum';
+import { CANVAS_EVENT_SELECTED } from '~/constants/enum';
 import type { GlobalState } from '~/store/context';
 import { globalState } from '~/store/context';
 import { GLOBAL_CONTEXT } from '~/store/context';
 import { uid } from '~/utils/common';
 import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
-import { canvasEvent } from '~/utils/event';
+import { canvasEvent, emitter } from '~/utils/event';
 import { changeStyleWithScale } from '~/utils/translate';
 
 export default component$(() => {
@@ -24,10 +25,19 @@ export default component$(() => {
   const height = changeStyleWithScale(state.canvasStyleData.height, state.canvasStyleData.scale)
 
   useVisibleTask$(() => {
-    const canvas = new fabric.Canvas(canvasRef.value!)
+    const canvas = new fabric.Canvas(canvasRef.value!, {
+      backgroundColor: state.canvasStyleData.backgroundColor,
+      fireRightClick: true, // 启用右键，button的数字为3
+      stopContextMenu: true, // 禁止默认右键菜单
+      controlsAboveOverlay: true, // 超出clipPath后仍然展示控制条
+    })
     const { listener, removeListener } = canvasEvent(canvas)
-
     listener()
+    // 没有选中元素 重置currentBlock 和 activeElements
+    emitter.on(CANVAS_EVENT_SELECTED.NONE, () => {
+      state.activeElements = noSerialize([])
+      state.updateCurrentBlock(null)
+    })
     state.updateCanvasContext(canvas)
     return () => {
       state.updateCanvasContext(undefined)
@@ -103,7 +113,10 @@ export default component$(() => {
           </div>
         </div>
         <div class="w-1/6" >
-          <Attr />
+
+
+          <Attr  />
+
         </div>
       </div >
     </div>

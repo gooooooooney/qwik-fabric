@@ -5,7 +5,6 @@ import { fabric } from "."
 interface CircleRenderEleArgs extends RenderEleArgs {
   block: CircleBlock
 }
-
 export const renderCircle = ({ canvas, block}: CircleRenderEleArgs) => {
   const circleElement = new fabric.Circle({
     ...block.canvasStyle,

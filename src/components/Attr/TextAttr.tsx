@@ -16,6 +16,7 @@ interface TextAttrProps {
 }
 
 export default component$(({ block }: TextAttrProps) => {
+
   const state = useContext(GLOBAL_CONTEXT)
   const element = noSerialize(state.canvas?.getActiveObject())
   // const displayColorPicker = useSignal(false)
@@ -25,10 +26,10 @@ export default component$(({ block }: TextAttrProps) => {
   //   element?.set('fill', block.canvasStyle.fill)
   //   state.canvas?.renderAll()
   // })
-
+  
   useVisibleTask$(() => {
     emitter.on(Canvas_Event_Object.TEXT_MODIFIED, (target: fabric.Textbox) => {
-      
+
       block.canvasStyle.top = target.top
       block.canvasStyle.left = target.left
       block.canvasStyle.width = target.width
@@ -61,6 +62,9 @@ export default component$(({ block }: TextAttrProps) => {
     state.canvas?.renderAll()
   })
   const textStyleDefaultValue = useComputed$(() => {
+    if (!block) {
+      return []
+    }
     return [
       block?.canvasStyle.fontWeight,
       block.canvasStyle.underline ? 'underline' : 'none',
@@ -79,7 +83,7 @@ export default component$(({ block }: TextAttrProps) => {
   const strokeWidthRange = Array.from({ length: 10 }, (_, i) => i + 1)
 
 
-  return <div class="w-full relative animate-wobble">
+  return block  ? <div class="w-full relative animate-wobble">
     <Toolbar
       alignmentDefaultValue={block?.canvasStyle.textAlign}
       textStyleDefaultValue={textStyleDefaultValue.value}
@@ -89,11 +93,11 @@ export default component$(({ block }: TextAttrProps) => {
       <div class="flex flex-col ">
         <Label label="Text">
           <input class=" text-base w-full p-1 rounded-md focus:(border-blue) m-0 shadow-radio outline-0 border-gray-3 border-1 border-solid" type="text" onBlur$={(_, el) => {
-            block.props.text = el.value
-            element?.set('text', block.props.text)
+            block && (block.props.text = el.value)
+            element?.set('text', block?.props.text)
             state.canvas?.renderAll()
           }}
-            value={block.props.text} />
+            value={block?.props.text} />
         </Label>
         {/* <Label class="mt-4 relative" label="Fill">
           <div class="flex items-center justify-between">
@@ -125,16 +129,16 @@ export default component$(({ block }: TextAttrProps) => {
             {
               [1, 2, 3, 4, 5].map(size => {
                 return <Fragment key={size}>
-                  <Toggle active={size === block.canvasStyle.strokeWidth}>
+                  <Toggle active={size === block?.canvasStyle.strokeWidth}>
                     <input
                       onChange$={(_, el) => {
-                        block.canvasStyle.strokeWidth = Number(el.value)
-                        element?.set('strokeWidth', block.canvasStyle.strokeWidth)
+                        block && (block.canvasStyle.strokeWidth = Number(el.value))
+                        element?.set('strokeWidth', block?.canvasStyle.strokeWidth)
                         state.canvas?.renderAll()
                       }}
                       class="absolute opacity-0 pointer-events-none"
                       value={size}
-                      checked={block.canvasStyle.strokeWidth === size}
+                      checked={block?.canvasStyle.strokeWidth === size}
                       type="radio"
                       name="Stroke" />
                     <span>{size}
@@ -146,10 +150,10 @@ export default component$(({ block }: TextAttrProps) => {
           </div>
           <NumberSelte
             range={strokeWidthRange}
-            value={block.canvasStyle.strokeWidth.toString()}
+            value={block?.canvasStyle?.strokeWidth?.toString()}
             onValueChange$={size => {
-              block.canvasStyle.strokeWidth = Number(size)
-              element?.set('strokeWidth', block.canvasStyle.strokeWidth)
+              block && (block.canvasStyle.strokeWidth = Number(size))
+              element?.set('strokeWidth', block?.canvasStyle.strokeWidth)
               state.canvas?.renderAll()
             }}
           />
@@ -160,7 +164,7 @@ export default component$(({ block }: TextAttrProps) => {
             <div class=" h-[45px] w-[50px] flex justify-center items-center rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => handleChangeStrokeColor(null)}>reset</div>
             <div class="flex border border-solid border-gray-3 text-xl items-center w-2/5 h-[45px]  rounded-xl shadow-radio">
               <div class="pl-2">#</div>
-              <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={block.canvasStyle.stroke?.slice(1)} onKeyUp$={(e, el) => {
+              <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={block?.canvasStyle.stroke?.slice(1)} onKeyUp$={(e, el) => {
                 if (e.key == KEY_CODE.ENTER) {
                   handleChangeStrokeColor("#" + el.value)
                 }
@@ -173,7 +177,7 @@ export default component$(({ block }: TextAttrProps) => {
               <div class="absolute z-2 top-full left-1/2 -translate-x-[50%]">
                 <ColorPicker
                   onChangeComplete$={({ hex }) => handleChangeStrokeColor(hex)}
-                  color={block.canvasStyle.stroke ?? 'none'} />
+                  color={block?.canvasStyle.stroke ?? 'none'} />
               </div>
 
             </div> : null
@@ -185,16 +189,16 @@ export default component$(({ block }: TextAttrProps) => {
             {
               textSizes.map(size => {
                 return <Fragment key={size.value}>
-                  <Toggle active={size.value === block.canvasStyle.fontSize}>
+                  <Toggle active={size.value === block?.canvasStyle.fontSize}>
                     <input
                       onChange$={(_, el) => {
-                        block.canvasStyle.fontSize = Number(el.value)
-                        element?.set('fontSize', block.canvasStyle.fontSize)
+                        block && (block.canvasStyle.fontSize = Number(el.value))
+                        element?.set('fontSize', block?.canvasStyle.fontSize)
                         state.canvas?.renderAll()
                       }}
                       class="absolute opacity-0 pointer-events-none"
                       value={size.value}
-                      checked={block.canvasStyle.fontSize === size.value}
+                      checked={block?.canvasStyle.fontSize === size.value}
                       type="radio"
                       name="Size" />
                     <span class={size.size}>{size.label}
@@ -206,9 +210,9 @@ export default component$(({ block }: TextAttrProps) => {
           </div>
           <NumberSelte
             range={fontSizeRange}
-            value={block.canvasStyle.fontSize.toString()}
+            value={block?.canvasStyle.fontSize.toString()}
             onValueChange$={size => {
-              block.canvasStyle.fontSize = Number(size)
+              block && (block.canvasStyle.fontSize = Number(size))
               element?.set('fontSize', block.canvasStyle.fontSize)
               state.canvas?.renderAll()
             }} />
@@ -216,9 +220,9 @@ export default component$(({ block }: TextAttrProps) => {
 
         <Label class="mt-4" label="Font family">
           <FontFamilySelect
-            value={block.canvasStyle.fontFamily}
+            value={block?.canvasStyle.fontFamily}
             onValueChange$={fontFamily => {
-              block.canvasStyle.fontFamily = fontFamily
+              block && (block.canvasStyle.fontFamily = fontFamily)
               element?.set('fontFamily', block.canvasStyle.fontFamily)
               state.canvas?.renderAll()
             }}
@@ -230,4 +234,5 @@ export default component$(({ block }: TextAttrProps) => {
 
 
   </div>
+    : null
 })

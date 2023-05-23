@@ -6,7 +6,7 @@ import type { BlockInfo } from "~/components/core/components";
 import { CONTEXT_IDS } from "~/constants/enum";
 import type { fabric } from "~/element";
 export interface GlobalState {
-  canvas: NoSerialize<Canvas | undefined>,
+  canvas: NoSerialize<fabric.Canvas | undefined>,
   blocks: BlockInfo[];
   canvasStyleData: CanvasStyleData,
   currentBlock: BlockInfo | null,
@@ -20,9 +20,9 @@ export interface CanvasStyleData { // 页面全局数据
   width: number,
   height: number,
   scale: number,
-  color: string,
+  backgroundColor: string,
   opacity: number,
-  background: string,
+  backgroundImg: string,
   fontSize: number | string,
 }
 
@@ -37,9 +37,9 @@ export const globalState: GlobalState = {
     width: 750,
     height: 750,
     scale: 100,
-    color: '#000',
+    backgroundColor: '#fff',
     opacity: 1,
-    background: '#fff',
+    backgroundImg: '',
     fontSize: 14,
   },
   updateActiveElements: $(function (this: GlobalState, elements: fabric.Object[]) {
