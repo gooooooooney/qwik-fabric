@@ -101,6 +101,10 @@ export default component$(({ parentState }: EditorProps) => {
       } */}
 
       <CommonAttr
+        shadow={state.currentBlock?.canvasStyle?.shadow || null}
+        onOffsetValueChange$={(offset) => {
+          console.log(offset)
+        }}
         fill={state.currentBlock?.canvasStyle.fill!.split(',') || state.canvasStyleData.backgroundColor.split(",")}
         onChangeColor$={colors => {
           // currentBlock 不存在时，代表选中的是画布
