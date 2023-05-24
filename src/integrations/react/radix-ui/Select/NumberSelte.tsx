@@ -14,7 +14,6 @@ interface SelectProps extends Select.SelectProps {
 }
 const NumberSelect = ({ onValueChange, range = [], ...props }: SelectProps) => {
   props.value = props.value || ""
-  console.log(props)
   return (
     <Select.Root onValueChange={onValueChange} {...props}>
       <Select.Trigger

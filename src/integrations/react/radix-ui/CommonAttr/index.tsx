@@ -21,9 +21,10 @@ interface ShadowProps {
 }
 interface CommonAttrProps {
     fill: string[];
+    isElement: boolean;
     shadow: ShadowProps | null;
     onChangeColor: (value: string[]) => void;
-    onOffsetValueChange: (offset: number) => void
+    onShadowtValueChange: (shadow: ShadowProps) => void
 }
 
 interface TooltipTriggerProps extends PropsWithChildren {
@@ -73,23 +74,28 @@ const DropdownMenuCom = ({ trigger, tip, children, contentClass }: { contentClas
 }
 
 
-const CommonAttr = ({ fill, onChangeColor, shadow = {
-    color: 'rgba(0,0,0,0.3)',
-    blur: 10,
-    offsetX: 10,
-    offsetY: 10,
-}, onOffsetValueChange}: CommonAttrProps) => {
+const CommonAttr = ({ fill, onChangeColor, shadow, onShadowtValueChange, isElement }: CommonAttrProps) => {
+    const defaultShadow = {
+        color: 'rgba(0,0,0,0.3)',
+        blur: 10,
+        offsetX: 10,
+        offsetY: 10,
+    };
     const [displayColorPicker, setDisplayColorPicker] = React.useState(false)
     const [currentColor, setCurrentColor] = React.useState(fill[0])
     const [currentColorIndex, setCurrentColorIndex] = React.useState(0)
     const [colors, setColors] = React.useState(fill)
-    const [offset, setOffset] = React.useState(shadow?.offsetX)
+    const [shadowState, setShadowState] = React.useState(shadow || defaultShadow)
     useEffect(() => {
         onChangeColor(colors)
     }, [colors])
     useEffect(() => {
-        onOffsetValueChange(offset ?? 0)
-    }, [offset])
+        isElement && onShadowtValueChange(shadowState)
+    }, [shadowState])
+
+    useEffect(() => {
+        shadow && setShadowState(shadow)
+    }, [shadow])
 
     return (
         <Toolbar.Root
@@ -348,68 +354,78 @@ const CommonAttr = ({ fill, onChangeColor, shadow = {
             </Toolbar.ToggleGroup>
 
             <Toolbar.Separator className="w-[1px] bg-mauve6 mx-[10px]" />
-            <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
-                <DropdownMenuCom tip="Effects" trigger={
-                    // <ShadowIcon className='h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 ' />
-                    <span
-                        className=" transition h-[25px] bg-[#394c6026] px-2 flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
-                    >
-                        Effects
-                    </span>
-                }>
-                    <div>
-                        <div className='px-4 py-2 relative'>
-                            <div className='flex pb-2 items-center '>
-                                Style
-                            </div>
-                            <div>
-                                <div className="grid gap-x-4 grid-cols-4">
-                                    <div className="flex flex-col items-center ">
-                                        <div className="transition hover:shadow-[0_0_0_2px_#2b3b4a4d] w-[45px]  cursor-pointer shadow-[0_0_0_1px_#2b3b4a4d] text-xl h-[45px] rounded flex items-center justify-center">A</div>
-                                        <p className="mt-2">None</p>
-                                    </div>
-                                    <div className="flex flex-col items-center ">
-                                        <div className="transition hover:shadow-[0_0_0_2px_#2b3b4a4d] w-[45px]  cursor-pointer shadow-[0_0_0_1px_#2b3b4a4d] text-xl h-[45px] rounded flex items-center justify-center">
-                                            <p>A</p>
-                                        </div>
-                                        <p className="mt-2">Shadow</p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="flex mt-4 justify-between">
-                                        <div>Offset</div>
-                                        <input type="number" onChange={e => {
-                                            setOffset(e.target.valueAsNumber)
-                                        }} value={offset} max={100} min={0} />
-                                    </div>
-                                    <form>
-                                        <Slider.Root
-                                            className="relative cursor-pointer flex items-center select-none touch-none w-full h-5"
-                                            value={[offset || 0]}
-                                            onValueChange={(value) => {
-                                                setOffset(value[0])
-                                            }}
-                                            max={100}
-                                            step={1}
-                                        >
-                                            <Slider.Track className="bg-[#a6a6a6] relative grow rounded-full h-[3px]">
-                                                <Slider.Range className="absolute bg-violet rounded-full h-full" />
-                                            </Slider.Track>
-                                            <Slider.Thumb
-                                                className="transition block w-3 h-3 bg-white shadow-[0_0_0_1px_#a6a6a6] rounded-[10px] hover:shadow-[0_0_0_2px_#a6a6a6] "
-                                                aria-label="Offset"
-                                            />
-                                        </Slider.Root>
-                                    </form>
-                                </div>
-                            </div>
-                            <div>
+            {
+                isElement ?
+                    <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
 
+
+                        <DropdownMenuCom tip="Effects" trigger={
+                            // <ShadowIcon className='h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 ' />
+                            <span
+                                className=" transition h-[25px] bg-[#394c6026] px-2 flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                            >
+                                Effects
+                            </span>
+                        }>
+                            <div>
+                                <div className='px-4 py-2 relative'>
+                                    <div className='flex pb-2 items-center '>
+                                        Style
+                                    </div>
+                                    <div>
+                                        <div className="grid gap-x-4 grid-cols-4">
+                                            <div className="flex flex-col items-center ">
+                                                <div className="transition hover:shadow-[0_0_0_2px_#2b3b4a4d] w-[45px]  cursor-pointer shadow-[0_0_0_1px_#2b3b4a4d] text-xl h-[45px] rounded flex items-center justify-center">A</div>
+                                                <p className="mt-2">None</p>
+                                            </div>
+                                            <div className="flex flex-col items-center ">
+                                                <div className="transition hover:shadow-[0_0_0_2px_#2b3b4a4d] w-[45px]  cursor-pointer shadow-[0_0_0_1px_#2b3b4a4d] text-xl h-[45px] rounded flex items-center justify-center">
+                                                    <p style={{
+                                                        textShadow: shadow ? `${shadow.offsetX}px ${shadow.offsetY}px ${shadow.blur}px ${shadow.color}` : ''
+                                                    }}>A</p>
+                                                </div>
+                                                <p className="mt-2">Shadow</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="flex mt-4 justify-between">
+                                                <div>Offset</div>
+                                                <input type="number" onChange={e => {
+                                                    setShadowState({ ...shadowState, offsetX: e.target.valueAsNumber })
+                                                }} value={shadowState.offsetX} max={100} min={0} />
+                                            </div>
+                                            <form>
+                                                <Slider.Root
+                                                    className="relative cursor-pointer flex items-center select-none touch-none w-full h-5"
+                                                    value={[shadowState.offsetX]}
+                                                    onValueChange={([value]) => {
+                                                        setShadowState({ ...shadowState, offsetX: value })
+                                                    }}
+                                                    max={100}
+                                                    step={1}
+                                                >
+                                                    <Slider.Track className="bg-[#a6a6a6] relative grow rounded-full h-[3px]">
+                                                        <Slider.Range className="absolute bg-violet rounded-full h-full" />
+                                                    </Slider.Track>
+                                                    <Slider.Thumb
+                                                        className="transition block w-3 h-3 bg-white shadow-[0_0_0_1px_#a6a6a6] rounded-[10px] hover:shadow-[0_0_0_2px_#a6a6a6] "
+                                                        aria-label="Offset"
+                                                    />
+                                                </Slider.Root>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div>
+
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </DropdownMenuCom>
-            </Toolbar.ToggleGroup>
+                        </DropdownMenuCom>
+
+
+                    </Toolbar.ToggleGroup>
+                    : null
+            }
         </Toolbar.Root>
     )
 };

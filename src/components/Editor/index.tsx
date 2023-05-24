@@ -101,9 +101,17 @@ export default component$(({ parentState }: EditorProps) => {
       } */}
 
       <CommonAttr
+        client:load
+        // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
+        isElement={!!state.currentBlock}
         shadow={state.currentBlock?.canvasStyle?.shadow || null}
-        onOffsetValueChange$={(offset) => {
-          console.log(offset)
+        onShadowtValueChange$={(shadow) => {
+          console.log(shadow)
+          state.currentBlock!.canvasStyle.shadow = shadow
+          state.activeElements?.forEach((element) => {
+            element.set('shadow', shadow)
+          })
+          state.canvas?.renderAll()
         }}
         fill={state.currentBlock?.canvasStyle.fill!.split(',') || state.canvasStyleData.backgroundColor.split(",")}
         onChangeColor$={colors => {
