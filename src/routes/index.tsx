@@ -13,7 +13,7 @@ import { GLOBAL_CONTEXT } from '~/store/context';
 import { uid } from '~/utils/common';
 import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
-import { canvasEvent, emitter } from '~/utils/event';
+import { canvasEvent, emitter } from '~/core/event';
 import { changeStyleWithScale } from '~/utils/translate';
 
 export default component$(() => {
@@ -30,7 +30,11 @@ export default component$(() => {
       fireRightClick: true, // 启用右键，button的数字为3
       stopContextMenu: true, // 禁止默认右键菜单
       controlsAboveOverlay: true, // 超出clipPath后仍然展示控制条
+      includeDefaultValues: false // 指示toObject/toDatalessObject是否应该包含默认值，如果设置为false，则优先于对象值
     })
+
+ 
+    
     const { listener, removeListener } = canvasEvent(canvas)
     listener()
     // 没有选中元素 重置currentBlock 和 activeElements

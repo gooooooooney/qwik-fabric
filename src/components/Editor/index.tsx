@@ -4,7 +4,7 @@ import { fabric } from "~/element";
 import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
 import type { GlobalState } from "~/store/context";
 import { GLOBAL_CONTEXT } from "~/store/context";
-import { emitter } from "~/utils/event";
+import { emitter } from "~/core/event";
 import { setGradient } from "~/utils/fabric";
 // import Block from "./Block";
 // import { getCanvasStyle, getShapeStyle } from "~/utils/style";
@@ -47,6 +47,7 @@ export default component$(({ parentState }: EditorProps) => {
       })
       state.canvasStyleData.backgroundColor = colors.join(',')
       state.canvas?.set('backgroundColor', gradient)
+      state.canvas?.renderAll()
     }
   })
   const setElementColor = $((colors: string[]) => {
@@ -77,6 +78,7 @@ export default component$(({ parentState }: EditorProps) => {
       })
       state.currentBlock && (state.currentBlock.canvasStyle.fill = colors.join(','))
     }
+    state.canvas?.renderAll()
   })
   return (
     <div
@@ -105,8 +107,7 @@ export default component$(({ parentState }: EditorProps) => {
         // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
         isElement={!!state.currentBlock}
         shadow={state.currentBlock?.canvasStyle?.shadow || null}
-        onShadowtValueChange$={(shadow) => {
-          console.log(shadow)
+        onShadowValueChange$={(shadow) => {
           state.currentBlock!.canvasStyle.shadow = shadow
           state.activeElements?.forEach((element) => {
             element.set('shadow', shadow)
@@ -121,7 +122,7 @@ export default component$(({ parentState }: EditorProps) => {
           } else {
             setElementColor(colors)
           }
-          state.canvas?.renderAll()
+          // state.canvas?.renderAll()
         }}
       />
 

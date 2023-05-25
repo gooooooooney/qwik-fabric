@@ -5,6 +5,7 @@ import { ComponentType } from "~/constants/enum"
 import { renderText } from "~/element/TextElement"
 import { renderImage } from "~/element/ImageElement"
 import { renderCircle } from "./Circle"
+import { renderRect } from "./Rect"
 
 export { fabric }
 
@@ -24,6 +25,8 @@ export const renderElement = ({
       return renderImage({ canvas, block })
     case ComponentType.Circle:
       return renderCircle({ canvas, block })
+    case ComponentType.Rect:
+      return renderRect({ canvas, block })
     default:
       return null
   }

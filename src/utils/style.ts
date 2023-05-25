@@ -15,15 +15,11 @@ export function getCanvasStyle(canvasStyleData: CanvasStyleData) {
   return result
 }
 
-// export function getShapeStyle(style: BlockInfo['style']) {
-//   const result: any = {};
-//   ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
-//       if (attr != 'rotate') {
-//           result[attr] = (style as any)[attr] + 'px'
-//       } else {
-//           result.transform = 'rotate(' + style[attr] + 'deg)'
-//       }
-//   })
-
-//   return result as CSSProperties
-// }
+export function hexToRgb(hex: string) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}

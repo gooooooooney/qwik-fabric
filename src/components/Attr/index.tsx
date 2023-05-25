@@ -2,7 +2,7 @@ import { component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/
 import { CANVAS_EVENT_SELECTED, ComponentType } from "~/constants/enum";
 import { GLOBAL_CONTEXT } from "~/store/context";
 import TextAttr from "./TextAttr";
-import { emitter } from "~/utils/event";
+import { emitter } from "~/core/event";
 import { fabric } from "~/element";
 
 export default component$(() => {

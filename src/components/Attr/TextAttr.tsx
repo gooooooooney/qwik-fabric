@@ -10,7 +10,7 @@ import NumberSelte from "~/integrations/react/radix-ui/Select/NumberSelte";
 import FontFamilySelect from "~/integrations/react/radix-ui/Select/FontFamilySelect";
 import Toggle from "../Toggle";
 import type { fabric } from "~/element";
-import { emitter } from "~/utils/event";
+import { emitter } from "~/core/event";
 interface TextAttrProps {
   block: TextBlock,
 }

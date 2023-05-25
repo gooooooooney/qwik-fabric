@@ -1,6 +1,5 @@
 import { ComponentType } from "~/constants/enum"
 import type { FontWeight, TextAlign } from "~/constants/enum/style"
-
 export interface Shadow {
   /**
    * Shadow color
@@ -40,7 +39,7 @@ export const TextCanvasStyle = {
   overline: false,
   linethrough: false,
   // shadow
-  shadow: null as Shadow | null,
+  shadow: null as Shadow | null | undefined,
   // fontStyle
   fontStyle: 'normal',
   fontFamily: 'Arial',

@@ -9,7 +9,8 @@ import {
   FontItalicIcon,
   TextIcon,
   ImageIcon,
-  CircleIcon
+  CircleIcon,
+  SquareIcon
 } from '@radix-ui/react-icons';
 import React from 'react';
 import { ComponentType } from '~/constants/enum';
@@ -26,6 +27,7 @@ const Icons = ({ name,icon}: IconsProps) => {
       {name === ComponentType.TextBox && <TextIcon />}
       {icon === IconName.ImageIcon || name === ComponentType.Img && <ImageIcon />}
       {name === ComponentType.Circle && <CircleIcon />}
+      {name === ComponentType.Rect && <SquareIcon />}
       {icon === IconName.FontBoldIcon && <FontBoldIcon />}
       {icon === IconName.FontItalicIcon && <FontItalicIcon />}
       {icon === IconName.StrikethroughIcon && <StrikethroughIcon />}

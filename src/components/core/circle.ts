@@ -16,7 +16,7 @@ export const CircleCanvasStyle = {
     scaleY: 1,                  // 圆形的垂直缩放比例
     fill: '#181818',                   // 圆形的填充颜色
     opacity: 1,                 // 圆形的不透明度（取值范围为0到1）
-    shadow: null as Shadow | null,               // 圆形的阴影设置
+    shadow: null as Shadow | null | undefined,
     visible: true,              // 圆形的可见性
     selectable: true,           // 圆形是否可选中
     evented: true,              // 圆形是否响应交互事件

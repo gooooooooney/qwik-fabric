@@ -25,7 +25,7 @@ export default defineConfig({
   shortcuts: {
     'border-shape': 'rounded-md shadow-radio border border-solid border-gray-3',
   },
-    transformers: [
+  transformers: [
     transformerVariantGroup() as any
   ],
 })
