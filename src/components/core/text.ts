@@ -26,7 +26,7 @@ export interface Shadow {
   offsetY: number;
 }
 export const TextCanvasStyle = {
-  width: 200,
+  width: 50,
   height: 28,
   fontSize: 16,
   fontWeight: 'normal' as FontWeight,
@@ -53,6 +53,7 @@ export const TextCanvasStyle = {
   textBackgroundColor: 'transparent',
   zoomX: 1,
   zoomY: 1,
+  splitByGrapheme: true, // 自动换行
 }
 export const textBlock = {
   type: ComponentType.TextBox as ComponentType.TextBox,

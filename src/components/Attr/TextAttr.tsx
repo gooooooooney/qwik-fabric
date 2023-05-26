@@ -16,7 +16,7 @@ interface TextAttrProps {
 
 export default component$(({ blocks }: TextAttrProps) => {
   const state = useContext(GLOBAL_CONTEXT)
-  const elements = noSerialize(state.canvas?.getActiveObjects())
+  const elements = noSerialize(state.canvas?.getActiveObjects() as fabric.Textbox[])
 
   // const handleChangeColor = $((color: string) => {
   //   block.canvasStyle.fill = color
@@ -50,6 +50,13 @@ export default component$(({ blocks }: TextAttrProps) => {
     })
     elements?.forEach((element) => {
       const block = blocks[0]
+      // element.setSelectionStyles({ 
+      //   'fontWeight': block.canvasStyle.fontWeight,
+      //   'underline': block.canvasStyle.underline,
+      //   'linethrough': block.canvasStyle.linethrough,
+      //   'fontStyle': block.canvasStyle.fontStyle,
+      //  })
+      
       element?.set('fontWeight', block.canvasStyle.fontWeight)
       element?.set('underline', block.canvasStyle.underline)
       element?.set('linethrough', block.canvasStyle.linethrough)
