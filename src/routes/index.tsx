@@ -15,6 +15,7 @@ import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
 import { canvasEvent, emitter } from '~/core/event';
 import { changeStyleWithScale } from '~/utils/translate';
+import { initCanvas } from '~/core';
 
 export default component$(() => {
   const state = useStore<GlobalState>(globalState)
@@ -25,6 +26,7 @@ export default component$(() => {
   const height = changeStyleWithScale(state.canvasStyleData.height, state.canvasStyleData.scale)
 
   useVisibleTask$(() => {
+
     const canvas = new fabric.Canvas(canvasRef.value!, {
       backgroundColor: state.canvasStyleData.backgroundColor,
       fireRightClick: true, // 启用右键，button的数字为3
@@ -32,8 +34,9 @@ export default component$(() => {
       controlsAboveOverlay: true, // 超出clipPath后仍然展示控制条
       includeDefaultValues: false // 指示toObject/toDatalessObject是否应该包含默认值，如果设置为false，则优先于对象值
     })
-
- 
+    initCanvas()
+    canvas.renderAll()
+     
     
     const { listener, removeListener } = canvasEvent(canvas)
     listener()
@@ -78,7 +81,22 @@ export default component$(() => {
             block: item,
           })
           if (element) {
-            element.set('id', item.id)
+            element.set('id', item.id).set({
+              // 实心 or 空心
+              transparentCorners: false,
+              // 边框颜色
+              borderColor: '#9c6ade',
+               // 
+              cornerColor: '#FFF',
+              // 圆角
+              cornerSize: 10,
+              // 辅助边粗细
+              borderScaleFactor: 1,
+              padding: 2,
+              cornerStyle: 'circle',
+              cornerStrokeColor: '#9c6ade',
+              borderOpacityWhenMoving: .3,
+            })
             state.canvas?.setActiveObject(element)
           }
         }
@@ -119,7 +137,7 @@ export default component$(() => {
         <div class="w-1/6" >
 
 
-          <Attr  />
+          <Attr />
 
         </div>
       </div >
@@ -136,3 +154,5 @@ export const head: DocumentHead = {
     },
   ],
 };
+
+

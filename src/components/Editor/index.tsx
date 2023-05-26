@@ -27,6 +27,11 @@ export default component$(({ parentState }: EditorProps) => {
         state.updateCurrentBlock(block)
       }
     })
+    emitter.on(CANVAS_EVENT_SELECTED.MULTIPLY, () => {
+      const actives = state.canvas!.getActiveObjects()!
+      console.log(actives)
+      state.activeElements = noSerialize(actives)
+    })
   })
   const setCanvasBackgroundColor = $((colors: string[]) => {
     if (colors.length === 1) {
@@ -105,7 +110,7 @@ export default component$(({ parentState }: EditorProps) => {
       <CommonAttr
         client:load
         // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
-        isElement={!!state.currentBlock}
+        isElement={!!state.activeElements?.length}
         shadow={state.currentBlock?.canvasStyle?.shadow || null}
         onShadowValueChange$={(shadow) => {
           state.currentBlock!.canvasStyle.shadow = shadow
@@ -116,8 +121,8 @@ export default component$(({ parentState }: EditorProps) => {
         }}
         fill={state.currentBlock?.canvasStyle.fill!.split(',') || state.canvasStyleData.backgroundColor.split(",")}
         onChangeColor$={colors => {
-          // currentBlock 不存在时，代表选中的是画布
-          if (!state.currentBlock) {
+          // 没有活跃的block 不存在时，代表选中的是画布
+          if (!state.activeElements?.length) {
             setCanvasBackgroundColor(colors)
           } else {
             setElementColor(colors)
