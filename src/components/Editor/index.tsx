@@ -24,13 +24,15 @@ export default component$(({ parentState }: EditorProps) => {
       state.activeElements = noSerialize([active])
       const block = state.blocks.find(block => block.id == active?.get('id'))
       if (block) {
-        state.updateCurrentBlock(block)
+        state.updateCurrentBlock([block])
       }
     })
     emitter.on(CANVAS_EVENT_SELECTED.MULTIPLY, () => {
       const actives = state.canvas!.getActiveObjects()!
-      console.log(actives)
       state.activeElements = noSerialize(actives)
+      // 找出当前选中的所有block
+      const blocks = state.blocks.filter(block => actives.some(active => block.id == active?.get('id')))
+      state.updateCurrentBlock(blocks)
     })
   })
   const setCanvasBackgroundColor = $((colors: string[]) => {
@@ -57,7 +59,9 @@ export default component$(({ parentState }: EditorProps) => {
   })
   const setElementColor = $((colors: string[]) => {
     if (colors.length === 1) {
-      state.currentBlock!.canvasStyle.fill = colors[0]
+      state.currentBlock!.forEach(block => {
+        block.canvasStyle.fill = colors[0]
+      })
       state.activeElements?.forEach((element) => {
         element.set('fill', colors[0])
       })
@@ -69,19 +73,24 @@ export default component$(({ parentState }: EditorProps) => {
       if (!lineWidths) {
         lineWidths = state.activeElements?.[0]?.width || 0
       }
-      setGradient(state.activeElements?.[0], {
-        coords: {
-          x1: 0,
-          y1: 0,
-          x2: lineWidths,
-          y2: 0,
-        },
-        colorStops: colors.map((color, index) => ({
-          offset: index / (colors.length - 1),
-          color,
-        }))
+      state.activeElements?.forEach((element) => {
+        setGradient(element, {
+          coords: {
+            x1: 0,
+            y1: 0,
+            x2: lineWidths,
+            y2: 0,
+          },
+          colorStops: colors.map((color, index) => ({
+            offset: index / (colors.length - 1),
+            color,
+          }))
+        })
       })
-      state.currentBlock && (state.currentBlock.canvasStyle.fill = colors.join(','))
+      
+      state.currentBlock.forEach(block => {
+        block.canvasStyle.fill = colors.join(',')
+      })
     }
     state.canvas?.renderAll()
   })
@@ -111,15 +120,17 @@ export default component$(({ parentState }: EditorProps) => {
         client:load
         // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
         isElement={!!state.activeElements?.length}
-        shadow={state.currentBlock?.canvasStyle?.shadow || null}
+        shadow={state.currentBlock[0]?.canvasStyle?.shadow || null}
         onShadowValueChange$={(shadow) => {
-          state.currentBlock!.canvasStyle.shadow = shadow
+          state.currentBlock!.forEach((block) => {
+            block.canvasStyle.shadow = shadow
+          })
           state.activeElements?.forEach((element) => {
             element.set('shadow', shadow)
           })
           state.canvas?.renderAll()
         }}
-        fill={state.currentBlock?.canvasStyle.fill!.split(',') || state.canvasStyleData.backgroundColor.split(",")}
+        fill={state.currentBlock[0]?.canvasStyle.fill!.split(',') || state.canvasStyleData.backgroundColor.split(",")}
         onChangeColor$={colors => {
           // 没有活跃的block 不存在时，代表选中的是画布
           if (!state.activeElements?.length) {

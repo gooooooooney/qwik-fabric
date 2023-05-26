@@ -11,52 +11,64 @@ import Toggle from "../Toggle";
 import type { fabric } from "~/element";
 import { emitter } from "~/core/event";
 interface TextAttrProps {
-  block: TextBlock,
+  blocks: TextBlock[],
 }
 
-export default component$(({ block }: TextAttrProps) => {
+export default component$(({ blocks }: TextAttrProps) => {
   const state = useContext(GLOBAL_CONTEXT)
-  const element = noSerialize(state.canvas?.getActiveObject())
+  const elements = noSerialize(state.canvas?.getActiveObjects())
 
   // const handleChangeColor = $((color: string) => {
   //   block.canvasStyle.fill = color
   //   element?.set('fill', block.canvasStyle.fill)
   //   state.canvas?.renderAll()
   // })
-  
+
   useVisibleTask$(() => {
     emitter.on(Canvas_Event_Object.TEXT_MODIFIED, (target: fabric.Textbox) => {
 
-      block.canvasStyle.top = target.top
-      block.canvasStyle.left = target.left
-      block.canvasStyle.width = target.width
-      block.canvasStyle.height = target.height
-      block.canvasStyle.zoomX = target.zoomX || 1
-      block.canvasStyle.zoomY = target.zoomY || 1
-      block.props.text = target.text
+      blocks.forEach((b) => {
+        if (b.id == target.get('id')) {
+          b.canvasStyle.top = target.top
+          b.canvasStyle.left = target.left
+          b.canvasStyle.width = target.width
+          b.canvasStyle.height = target.height
+          b.canvasStyle.zoomX = target.zoomX || 1
+          b.canvasStyle.zoomY = target.zoomY || 1
+          b.props.text = target.text
+        }
+      })
     })
   })
 
   const handleChangeFontStyle = $((value: string[]) => {
-    block.canvasStyle.fontWeight = (value.find((item) => item == 'bold') ? 'bold' : 'normal') as FontWeight
-    block.canvasStyle.underline = !!value.find(item => item == 'underline')
-    block.canvasStyle.linethrough = !!value.find(item => item == 'line-through')
-    block.canvasStyle.fontStyle = value.find(item => item == 'italic') ? 'italic' : 'normal'
-    element?.set('fontWeight', block.canvasStyle.fontWeight)
-    element?.set('underline', block.canvasStyle.underline)
-    element?.set('linethrough', block.canvasStyle.linethrough)
-    element?.set('fontStyle', block.canvasStyle.fontStyle)
+    blocks.forEach((block) => {
+      block.canvasStyle.fontWeight = (value.find((item) => item == 'bold') ? 'bold' : 'normal') as FontWeight
+      block.canvasStyle.underline = !!value.find(item => item == 'underline')
+      block.canvasStyle.linethrough = !!value.find(item => item == 'line-through')
+      block.canvasStyle.fontStyle = value.find(item => item == 'italic') ? 'italic' : 'normal'
+    })
+    elements?.forEach((element) => {
+      const block = blocks[0]
+      element?.set('fontWeight', block.canvasStyle.fontWeight)
+      element?.set('underline', block.canvasStyle.underline)
+      element?.set('linethrough', block.canvasStyle.linethrough)
+      element?.set('fontStyle', block.canvasStyle.fontStyle)
+    })
     state.canvas?.renderAll()
   })
   const handleChangeAlignment = $((value: TextAlign) => {
-    block.canvasStyle.textAlign = value
-    element?.set('textAlign', block.canvasStyle.textAlign)
+    blocks.forEach((block) => {
+      block.canvasStyle.textAlign = value
+    })
+    elements?.forEach((element) => {
+      element?.set('textAlign', value)
+    })
     state.canvas?.renderAll()
   })
   const textStyleDefaultValue = useComputed$(() => {
-    if (!block) {
-      return []
-    }
+    if (!blocks.length) return []
+    const block = blocks[0]
     return [
       block?.canvasStyle.fontWeight,
       block.canvasStyle.underline ? 'underline' : 'none',
@@ -75,9 +87,9 @@ export default component$(({ block }: TextAttrProps) => {
 
 
 
-  return block  ? <div class="w-full relative animate-slide-in-right animate- ">
+  return blocks.length ? <div class="w-full relative animate-slide-in-right animate- ">
     <Toolbar
-      alignmentDefaultValue={block?.canvasStyle.textAlign}
+      alignmentDefaultValue={blocks[0]?.canvasStyle.textAlign}
       textStyleDefaultValue={textStyleDefaultValue.value}
       onChangeAlignment$={handleChangeAlignment}
       onChangeTextStyle$={handleChangeFontStyle} />
@@ -85,11 +97,15 @@ export default component$(({ block }: TextAttrProps) => {
       <div class="flex flex-col ">
         <Label label="Text">
           <input class=" text-base w-full p-1 rounded-md focus:(border-blue) m-0 shadow-radio outline-0 border-gray-3 border-1 border-solid" type="text" onBlur$={(_, el) => {
-            block && (block.props.text = el.value)
-            element?.set('text', block?.props.text)
+            blocks.forEach((block) => {
+              block.props.text = el.value
+            })
+            elements?.forEach((element) => {
+              element?.set('text', el.value)
+            })
             state.canvas?.renderAll()
           }}
-            value={block?.props.text} />
+            value={blocks[0]?.props.text} />
         </Label>
         {/* <Label class="mt-4 relative" label="Fill">
           <div class="flex items-center justify-between">
@@ -123,16 +139,20 @@ export default component$(({ block }: TextAttrProps) => {
             {
               textSizes.map(size => {
                 return <Fragment key={size.value}>
-                  <Toggle active={size.value === block?.canvasStyle.fontSize}>
+                  <Toggle active={size.value === blocks[0]?.canvasStyle.fontSize}>
                     <input
                       onChange$={(_, el) => {
-                        block && (block.canvasStyle.fontSize = Number(el.value))
-                        element?.set('fontSize', block?.canvasStyle.fontSize)
+                        blocks.forEach((block) => {
+                          block.canvasStyle.fontSize = Number(el.value)
+                        })
+                        elements?.forEach((element) => {
+                          element?.set('fontSize', el.value)
+                        })
                         state.canvas?.renderAll()
                       }}
                       class="absolute opacity-0 pointer-events-none"
                       value={size.value}
-                      checked={block?.canvasStyle.fontSize === size.value}
+                      checked={blocks[0]?.canvasStyle.fontSize === size.value}
                       type="radio"
                       name="Size" />
                     <span class={size.size}>{size.label}
@@ -144,20 +164,28 @@ export default component$(({ block }: TextAttrProps) => {
           </div>
           <NumberSelte
             range={fontSizeRange}
-            value={block?.canvasStyle?.fontSize?.toString()}
+            value={blocks[0]?.canvasStyle?.fontSize?.toString()}
             onValueChange$={size => {
-              block && (block.canvasStyle.fontSize = Number(size))
-              element?.set('fontSize', block.canvasStyle.fontSize)
+              blocks.forEach((block) => {
+                block.canvasStyle.fontSize = Number(size)
+              })
+              elements?.forEach((element) => {
+                element?.set('fontSize', Number(size))
+              })
               state.canvas?.renderAll()
             }} />
         </Label>
 
         <Label class="mt-4" label="Font family">
           <FontFamilySelect
-            value={block?.canvasStyle.fontFamily}
+            value={blocks[0]?.canvasStyle.fontFamily}
             onValueChange$={fontFamily => {
-              block && (block.canvasStyle.fontFamily = fontFamily)
-              element?.set('fontFamily', block.canvasStyle.fontFamily)
+              blocks.forEach((block) => {
+                block.canvasStyle.fontFamily = fontFamily
+              })
+              elements?.forEach((element) => {
+                element?.set('fontFamily', fontFamily)
+              })
               state.canvas?.renderAll()
             }}
           />

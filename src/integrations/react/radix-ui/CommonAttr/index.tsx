@@ -238,7 +238,7 @@ const GradientColors = () => <>
 const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElement }: CommonAttrProps) => {
     const defaultShadow = {
         color: 'rgba(0,0,0)',
-        blur: 50,
+        blur: 10,
         offsetX: 20,
         offsetY: 20,
     };

@@ -1,6 +1,7 @@
 /** @jsxImportSource react */
 
 import { SketchPicker, ChromePicker } from 'react-color';
+import React from 'react';
 import type { Color, ColorChangeHandler } from 'react-color';
 import { qwikify$ } from '@builder.io/qwik-react';
 
@@ -10,12 +11,16 @@ interface ColorPickerProps {
 }
 
 function ColorSketchPicker({ color, onChangeComplete }: ColorPickerProps) {
+  const [colorState, setColorState] = React.useState(color)
 
   return (
     <div>
       <SketchPicker
-        color={color}
-        onChangeComplete={onChangeComplete}
+        color={colorState}
+        onChangeComplete={(c, e) => {
+          setColorState(c.hex)
+          onChangeComplete(c, e)
+        }}
       />
     </div>
   )
@@ -23,12 +28,15 @@ function ColorSketchPicker({ color, onChangeComplete }: ColorPickerProps) {
 
 
 export const ColorChromePicker = qwikify$(function ColorChromePicker({ color, onChangeComplete }: ColorPickerProps) {
-
+  const [colorState, setColorState] = React.useState(color)
   return (
     <div>
       <ChromePicker
-        color={color}
-        onChangeComplete={onChangeComplete}
+        color={colorState}
+        onChangeComplete={(c, e) => {
+          setColorState(c.hex)
+          onChangeComplete(c, e)
+        }}
       />
     </div>
   )

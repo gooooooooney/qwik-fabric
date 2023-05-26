@@ -43,7 +43,7 @@ export default component$(() => {
     // 没有选中元素 重置currentBlock 和 activeElements
     emitter.on(CANVAS_EVENT_SELECTED.NONE, () => {
       state.activeElements = noSerialize([])
-      state.updateCurrentBlock(null)
+      state.updateCurrentBlock([])
     })
     state.updateCanvasContext(canvas)
     return () => {

@@ -9,9 +9,9 @@ export interface GlobalState {
   canvas: NoSerialize<fabric.Canvas | undefined>,
   blocks: BlockInfo[];
   canvasStyleData: CanvasStyleData,
-  currentBlock: BlockInfo | null,
+  currentBlock: BlockInfo[],
   activeElements: NoSerialize<fabric.Object[]>
-  updateCurrentBlock: QRL<(this: GlobalState, block: BlockInfo | null) => void>
+  updateCurrentBlock: QRL<(this: GlobalState, block: BlockInfo[]) => void>
   updateCanvasContext: QRL<(this: GlobalState, canvas?: Canvas) => void>
   updateActiveElements: QRL<(this: GlobalState, elements: fabric.Object[]) => void>
 }
@@ -31,7 +31,7 @@ export const GLOBAL_CONTEXT = createContextId<GlobalState>(CONTEXT_IDS.GLOBAL_CO
 export const globalState: GlobalState = {
   canvas: noSerialize(undefined),
   blocks: [],
-  currentBlock: null,
+  currentBlock: [],
   activeElements: noSerialize([]),
   canvasStyleData: { // 页面全局数据
     width: 750,
@@ -45,7 +45,7 @@ export const globalState: GlobalState = {
   updateActiveElements: $(function (this: GlobalState, elements: fabric.Object[]) {
     this.activeElements = noSerialize(elements)
   }),
-  updateCurrentBlock: $(function (this: GlobalState, block: BlockInfo | null) {
+  updateCurrentBlock: $(function (this: GlobalState, block: BlockInfo[]) {
     this.currentBlock = block
   }),
   updateCanvasContext: $(function (this: GlobalState, canvas?: Canvas) {
