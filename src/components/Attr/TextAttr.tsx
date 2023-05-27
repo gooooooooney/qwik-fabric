@@ -50,6 +50,7 @@ export default component$(({ blocks }: TextAttrProps) => {
     })
     elements?.forEach((element) => {
       const block = blocks[0]
+      
       // element.setSelectionStyles({ 
       //   'fontWeight': block.canvasStyle.fontWeight,
       //   'underline': block.canvasStyle.underline,

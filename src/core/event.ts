@@ -59,6 +59,16 @@ export function initCanvasEvent(canvas: fabric.Canvas) {
     canvas.renderAll()
   }
 
+
+  const contentMenu = (opt: fabric.TPointerEventInfo<fabric.TPointerEvent>) => {
+    if (opt.button === 3 && opt.target) {
+      opt.e.preventDefault()
+      opt.e.stopPropagation()
+      // 当画布上有选中的元素时，才显示右键菜单
+      emitter.emit(Canvas_Event_Object.CONTENT_MENU, opt.target)
+    }
+  }
+
   const listener = () => {
     if (canvas) {
       canvas.on('selection:created', selected);
@@ -66,6 +76,7 @@ export function initCanvasEvent(canvas: fabric.Canvas) {
       canvas.on('selection:cleared', selected);
       canvas.on('object:modified', modified);
       canvas.on('mouse:up', mouseUp)
+      canvas.on('mouse:down', contentMenu)
     }
   }
   const removeListener = () => {

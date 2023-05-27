@@ -26,7 +26,7 @@ export interface Shadow {
   offsetY: number;
 }
 export const TextCanvasStyle = {
-  width: 50,
+  width: 100,
   height: 28,
   fontSize: 16,
   fontWeight: 'normal' as FontWeight,

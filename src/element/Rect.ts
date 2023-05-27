@@ -9,6 +9,7 @@ export const renderRect = ({ canvas, block}: RectRenderEleArgs) => {
   const rectElement = new fabric.Rect({
     ...block.canvasStyle as any,
   })
+
   canvas.add(rectElement)
   return rectElement
 }
