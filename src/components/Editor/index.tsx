@@ -9,6 +9,7 @@ import { setGradient } from "~/utils/fabric";
 // import Block from "./Block";
 // import { getCanvasStyle, getShapeStyle } from "~/utils/style";
 import { changeStyleWithScale } from "~/utils/translate";
+import AlertDialog from "~/integrations/react/radix-ui/AlertDialog/AlertDialog";
 // import Shape from "./Shape";
 
 interface EditorProps {
@@ -26,7 +27,8 @@ export default component$(({ parentState }: EditorProps) => {
       value: 'bringToFront',
       onClick: $(() => {
         state.activeElements?.forEach((element => {
-          state.canvas.bringToFront(element)
+          // FABRICV6: https://github.com/fabricjs/fabric.js/issues/8299
+          state.canvas?.bringObjectToFront(element)
         }))
       }),
     },
@@ -34,29 +36,43 @@ export default component$(({ parentState }: EditorProps) => {
       name: 'Send to back',
       value: 'sendToBack',
       onClick: $(() => {
-
+        state.activeElements?.forEach((element => {
+          state.canvas?.sendObjectToBack(element)
+        }))
       }),
     },
     {
       name: 'Bring forward',
       value: 'bringForward',
       onClick: $(() => {
-
+        state.activeElements?.forEach((element => {
+          state.canvas?.bringObjectForward(element)
+        }))
       }),
     },
     {
       name: 'Send backward',
       value: 'sendBackwards',
       onClick: $(() => {
-
+        state.activeElements?.forEach((element => {
+          state.canvas?.sendObjectBackwards(element)
+        }))
       }),
     },
     {
       name: 'Delete',
       value: 'delete',
       onClick: $(() => {
-
+        state.activeElements?.forEach((element => {
+          state.canvas?.remove(element)
+        }))
       }),
+    },
+    {
+      name: noSerialize(<AlertDialog onConfirm$={() => {
+        state.canvas?.clear()
+      }} />),
+      value: 'clear',
     },
 
   ]
@@ -235,7 +251,6 @@ export default component$(({ parentState }: EditorProps) => {
       />
       <div class="mt-4 bg-white relative">
         {shouldShowContextMenu.value && <div class="fixed top-0 right-0 left-0 bottom-0" onClick$={() => shouldShowContextMenu.value = false} />}
-
         <div style={{
           display: shouldShowContextMenu.value ? 'block' : 'none',
           left: contextPosition.value.left + 'px',
@@ -246,10 +261,11 @@ export default component$(({ parentState }: EditorProps) => {
             {
               contextMenu.map(menu => (
                 <div
-                  key={menu.name}
+                  key={menu.value}
                   class="listItem  duration-50 hover:(bg-[rgb(110,86,207)] text-white!)"
                   onClick$={() => {
-                    menu.onClick()
+                    menu.onClick?.()
+                    shouldShowContextMenu.value = false
                   }}
                 >
                   {menu.name}

@@ -1,7 +1,7 @@
 import { fabric } from "~/element"
 
 export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, any>) {
-  console.log(`Facrib.js版本：${fabric.version}`)
+  console.log(`Fabric.js版本：${fabric.version}`)
   const canvas = new fabric.Canvas(canvasEl, {
     ...options,
     fireRightClick: true, // 启用右键，button的数字为3

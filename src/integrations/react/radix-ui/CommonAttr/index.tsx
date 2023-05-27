@@ -5,8 +5,8 @@ import { Fragment } from 'react';
 import React from 'react';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import { qwikify$ } from '@builder.io/qwik-react';
+import * as Popover from '@radix-ui/react-popover';
 import { ColorWheelIcon, PlusIcon } from '@radix-ui/react-icons'
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as TooltipCom from '@radix-ui/react-tooltip';
 import { ChromePicker } from 'react-color'
 import "./index.css"
@@ -52,25 +52,25 @@ function TooltipTrigger({ children, tip }: TooltipTriggerProps) {
     );
 }
 
-const DropdownMenuCom = ({ trigger, tip, children, contentClass }: { contentClass?: string, trigger: React.ReactNode, tip: string } & PropsWithChildren<{}>) => {
+const PopoverCom = ({ trigger, tip, children, contentClass }: { contentClass?: string, trigger: React.ReactNode, tip: string } & PropsWithChildren<{}>) => {
     return (
-        <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
+        <Popover.Root>
+            <Popover.Trigger>
                 <TooltipTrigger tip={tip}>
                     {trigger}
                 </TooltipTrigger>
-            </DropdownMenu.Trigger>
+            </Popover.Trigger>
 
-            <DropdownMenu.Portal>
-                <DropdownMenu.Content
+            <Popover.Portal>
+                <Popover.Content
                     side="left"
                     className={cx('min-w-[250px] bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade', contentClass)}
                     sideOffset={5}
                 >
                     {children}
-                </DropdownMenu.Content>
-            </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+                </Popover.Content>
+            </Popover.Portal>
+        </Popover.Root>
     )
 }
 
@@ -276,7 +276,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
             <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
 
-                <DropdownMenuCom tip="Change color" trigger={
+                <PopoverCom tip="Change color" trigger={
                     <span
                         className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
                         style={{ background: fill.length > 1 ? 'linear-gradient(to right,' + fill.join(",") + ')' : fill[0] }}
@@ -369,7 +369,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
                         </div>
                     </div>
-                </DropdownMenuCom>
+                </PopoverCom>
 
             </Toolbar.ToggleGroup>
 
@@ -379,7 +379,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                     <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
 
 
-                        <DropdownMenuCom tip="Effects" trigger={
+                        <PopoverCom tip="Effects" trigger={
                             // <ShadowIcon className='h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 ' />
                             <span
                                 className=" transition h-[25px] bg-[#394c6026] px-2 flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
@@ -511,7 +511,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                             <div className='flex items-center '>
                                                 Shadow Color
                                             </div>
-                                            <DropdownMenuCom tip="Change color" trigger={
+                                            <PopoverCom tip="Change color" trigger={
                                                 <span
                                                     className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
                                                     style={{ background: shadowState.color.replace(rgx, `rgb($1)`) }}
@@ -588,7 +588,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
                                                     </div>
                                                 </div>
-                                            </DropdownMenuCom>
+                                            </PopoverCom>
                                         </div>
                                     </div>
                                         : null
@@ -596,7 +596,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
                                 </div>
                             </div>
-                        </DropdownMenuCom>
+                        </PopoverCom>
 
 
                     </Toolbar.ToggleGroup>

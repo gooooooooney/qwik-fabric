@@ -1,4 +1,4 @@
-import { Fragment, component$, $, noSerialize, useContext, useSignal, useVisibleTask$, useComputed$, useTask$ } from "@builder.io/qwik";
+import { Fragment, component$, $, noSerialize, useContext, useSignal, useVisibleTask$, useComputed$ } from "@builder.io/qwik";
 import { CANVAS_EVENT_SELECTED, ComponentType, KEY_CODE } from "~/constants/enum";
 import { GLOBAL_CONTEXT } from "~/store/context";
 import TextAttr from "./TextAttr";
@@ -20,12 +20,6 @@ export default component$(() => {
   // const displayColorPicker = useSignal(false)
   const displayStrokeColorPicker = useSignal(false)
   const showAttr = useSignal(false)
-  const strokeWidth = useSignal(state.currentBlock[0]?.canvasStyle.strokeWidth || 0)
-  useTask$(({track}) => {
-    track(() => state.activeElements?.length)
-    console.log('state.strokeWidth', state.currentBlock[0]?.canvasStyle.strokeWidth)
-    // strokeWidth.value = state.currentBlock[0]?.canvasStyle.strokeWidth || 0
-  })
   const strokeWidthRange = Array.from({ length: 10 }, (_, i) => i + 1)
   useVisibleTask$(() => {
     emitter.on(CANVAS_EVENT_SELECTED.ONE, () => {
