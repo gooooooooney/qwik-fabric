@@ -2,24 +2,24 @@ import { $, Slot, component$, noSerialize, useContext, useSignal, useVisibleTask
 import { CANVAS_EVENT_SELECTED, Canvas_Event_Object } from "~/constants/enum";
 import { fabric } from "~/element";
 import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
-import type { GlobalState } from "~/store/context";
+// import type { GlobalState } from "~/store/context";
 import { GLOBAL_CONTEXT } from "~/store/context";
 import { emitter } from "~/core/event";
 import { setGradient } from "~/utils/fabric";
-import { changeStyleWithScale } from "~/utils/translate";
+// import { changeStyleWithScale } from "~/utils/translate";
 import AlertDialog from "~/integrations/react/radix-ui/AlertDialog/AlertDialog";
 import "./index.css"
 
-interface EditorProps {
-  parentState: GlobalState
-}
-export default component$(({ parentState }: EditorProps) => {
+// interface EditorProps {
+//   parentState: GlobalState
+// }
+export default component$(() => {
   const state = useContext(GLOBAL_CONTEXT)
   const shouldShowContextMenu = useSignal(false)
   const shouldShowAlertDialog = useSignal(false)
   const contextPosition = useSignal({ left: 0, top: 0 })
-  const width = changeStyleWithScale(parentState.canvasStyleData.width, parentState.canvasStyleData.scale)
-  const height = changeStyleWithScale(parentState.canvasStyleData.height, parentState.canvasStyleData.scale)
+  // const width = changeStyleWithScale(parentState.canvasStyleData.width, parentState.canvasStyleData.scale)
+  // const height = changeStyleWithScale(parentState.canvasStyleData.height, parentState.canvasStyleData.scale)
   const contextMenu = [
     {
       name: 'Bring to front',
@@ -128,8 +128,9 @@ export default component$(({ parentState }: EditorProps) => {
       })
       state.canvasStyleData.backgroundColor = colors.join(',')
       state.canvas?.set('backgroundColor', gradient)
-      state.canvas?.renderAll()
     }
+    state.canvas?.renderAll()
+
   })
   const setElementColor = $((colors: string[]) => {
     if (colors.length === 1) {
@@ -171,24 +172,13 @@ export default component$(({ parentState }: EditorProps) => {
   return (
     <div
       id="editor"
-      style={
-        {
-          width: width + 'px',
-          height: height + 'px',
-        }
-      }
+      // style={
+      //   {
+      //     width: width + 'px',
+      //     height: height + 'px',
+      //   }
+      // }
       class="relative  m-a">
-      {/* {
-        parentState.blocks.map((block) => (
-          <Shape
-            style={{...getShapeStyle(block.style)}}
-            active={block.id == parentState.currentBlock?.id}
-            element={block}
-            key={block.id}>
-            <Block block={block} />
-          </Shape>
-        ))
-      } */}
 
       <CommonAttr
         client:load

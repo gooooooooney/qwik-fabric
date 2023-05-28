@@ -6,6 +6,10 @@ button {
   all: unset;
 }
 
+div[data-color] {
+  margin: 10px 10px 0 0;
+}
+
 .TooltipContent {
   border-radius: 4px;
   padding: 10px 15px;

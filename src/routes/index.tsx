@@ -27,10 +27,10 @@ export default component$(() => {
 
   useVisibleTask$(() => {
 
-    const {canvas} = initCanvas(canvasRef.value!, {
+    const { canvas } = initCanvas(canvasRef.value!, {
       backgroundColor: state.canvasStyleData.backgroundColor,
     })
-    canvas.renderAll()     
+    canvas.renderAll()
     const { listener, removeListener } = initCanvasEvent(canvas)
     listener()
     // 没有选中元素 重置currentBlock 和 activeElements
@@ -79,7 +79,7 @@ export default component$(() => {
               transparentCorners: false,
               // 边框颜色
               borderColor: '#9c6ade',
-               // 
+              // 
               cornerColor: '#FFF',
               // 圆角
               cornerSize: 10,
@@ -106,34 +106,36 @@ export default component$(() => {
 
 
   return (
-    <div >
-      {/* <div class="py-2 m-auto box-border">
-      </div> */}
-      <div class="flex flex-row">
-        <div class="w-1/8">
-          <Aside />
-        </div>
 
-        <div class="px-2 flex-1 flex justify-center items-center flex-col">
-          <div
-            ref={canvasContainerRef}
-            style={{ width: `${width}px`, height: `${height}px` }}
-            class=" bg-[#f5f5f5] h-full mt-3  ">
-            <div class=" w-full h-full">
-              <Editor parentState={state} >
-                <canvas ref={canvasRef} id="canvas" width={width} height={height} />
-              </Editor>
+    <div>
+      <div >
 
+        <div class="flex flex-row">
+          <div class="w-1/8">
+            <Aside />
+          </div>
+
+          <div class="px-2 flex-1 flex justify-center items-center flex-col">
+            <div
+              ref={canvasContainerRef}
+              // style={{ width: `${width}px`, height: `${height}px` }}
+              class=" bg-[#f5f5f5] h-full mt-3  ">
+              <div class=" w-full h-full">
+                <Editor>
+                  <canvas ref={canvasRef} id="canvas" width={width} height={height} />
+                </Editor>
+
+              </div>
             </div>
           </div>
-        </div>
-        <div class="w-1/6" >
+          <div class="w-1/6" >
 
 
-          <Attr />
+            <Attr />
 
-        </div>
-      </div >
+          </div>
+        </div >
+      </div>
     </div>
   );
 });

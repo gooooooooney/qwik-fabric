@@ -9,10 +9,11 @@ export const useServerTimeLoader = routeLoader$(() => {
 
 export default component$(() => {
   return (
-    <>
+    <div>
+    <header>111</header>
       <main>
         <Slot />
       </main>
-    </>
+    </div>
   );
 });

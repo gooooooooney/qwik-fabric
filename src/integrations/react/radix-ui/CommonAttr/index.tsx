@@ -64,7 +64,7 @@ const PopoverCom = ({ trigger, tip, children, contentClass }: { contentClass?: s
             <Popover.Portal>
                 <Popover.Content
                     side="left"
-                    className={cx('min-w-[250px] bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade', contentClass)}
+                    className={cx('w-[250px] max-w-2xl bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade', contentClass)}
                     sideOffset={5}
                 >
                     {children}
@@ -81,9 +81,9 @@ const SolidColors = () => <>
         <label className='text-[#0d1216b3] text-xs'>
             Solid colors
         </label>
-        <div className="grid grid-cols-6 gap-2">
+        <div className="flex flex-wrap ">
 
-            <TooltipTrigger tip='#000000'>
+            <TooltipTrigger tip='#000000' >
                 <div data-color="#000000" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#000000]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#545454'>
@@ -168,7 +168,7 @@ const GradientColors = () => <>
         <label className='text-[#0d1216b3] text-xs'>
             Gradients
         </label>
-        <div className="grid grid-cols-6 gap-2">
+        <div className="flex flex-wrap ">
 
             <TooltipTrigger tip='#000000,#737373'>
                 <div data-color="#000000,#737373" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#000000] to-[#737373]" ></div>
@@ -278,7 +278,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
                 <PopoverCom tip="Change color" trigger={
                     <span
-                        className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                        className=" h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 "
                         style={{ background: fill.length > 1 ? 'linear-gradient(to right,' + fill.join(",") + ')' : fill[0] }}
                     >
                     </span>
