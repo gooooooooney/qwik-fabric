@@ -65,7 +65,7 @@ export function initCanvasEvent(canvas: fabric.Canvas) {
       opt.e.preventDefault()
       opt.e.stopPropagation()
       // 当画布上有选中的元素时，才显示右键菜单
-      emitter.emit(Canvas_Event_Object.CONTENT_MENU, opt.target)
+      emitter.emit(Canvas_Event_Object.CONTEXT_MENU, opt)
     }
   }
 

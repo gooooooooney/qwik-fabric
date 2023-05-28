@@ -22,7 +22,7 @@ export const enum CANVAS_EVENT_SELECTED {
 
 export const enum Canvas_Event_Object {
   TEXT_MODIFIED = 'text:modified',
-  CONTENT_MENU = 'content:menu',
+  CONTEXT_MENU = 'context:menu',
 }
 
 export const enum KEY_CODE {

@@ -1,0 +1,32 @@
+.listItem {
+    font-size: 13px;
+    line-height: 1;
+    color: rgb(87, 70, 175);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    height: 25px;
+    padding: 0px 5px 0px 25px;
+    position: relative;
+    user-select: none;
+    outline: none;
+  }
+  .list {
+    min-width: 120px;
+    background-color: white;
+    border-radius: 6px;
+    padding: 5px;
+    box-shadow: rgba(22, 23, 24, 0.35) 0px 10px 38px -10px, rgba(22, 23, 24, 0.2) 0px 10px 20px -15px;
+    animation-duration: 400ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+  .listWrapper {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    min-width: max-content;
+    will-change: transform;
+    z-index: 999;
+    
+  }
