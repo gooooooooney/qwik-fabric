@@ -21,7 +21,8 @@ interface IconsProps {
 
 }
 
-const Icons = ({ name,icon}: IconsProps) => {
+export const Icons = ({ name,icon}: IconsProps) => {
+  
   return (
     <>
       {name === ComponentType.TextBox && <TextIcon />}

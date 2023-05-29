@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /** @jsxImportSource react */
 import type { PropsWithChildren } from 'react';
 import { useEffect } from 'react';
@@ -6,12 +7,22 @@ import React from 'react';
 import * as Toolbar from '@radix-ui/react-toolbar';
 import { qwikify$ } from '@builder.io/qwik-react';
 import * as Popover from '@radix-ui/react-popover';
-import { ColorWheelIcon, PlusIcon } from '@radix-ui/react-icons'
 import * as TooltipCom from '@radix-ui/react-tooltip';
 import { ChromePicker } from 'react-color'
 import "./index.css"
+import {
+    ColorWheelIcon,
+    PlusIcon,
+    TextIcon,
+    ImageIcon,
+    CircleIcon,
+    SquareIcon
+} from '@radix-ui/react-icons';
 import { cx } from '~/utils/common';
 import { hexToRgb } from '~/utils/style';
+import { ComponentType } from '~/constants/enum';
+import { blockInfoList } from '~/components/core/components';
+import Icons from '../Icons';
 
 interface ShadowProps {
     color: string,
@@ -374,6 +385,29 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
             </Toolbar.ToggleGroup>
 
             <Toolbar.Separator className="w-[1px] bg-#e4e2e4 mx-[10px]" />
+
+
+            {
+                blockInfoList.map((comp) => (
+                    <>
+                        <Toolbar.ToggleGroup onDragStart={(e) => {
+                            const target = e.target;
+                            if (!(target instanceof HTMLDivElement)) return
+                            e.dataTransfer?.setData("type", target.dataset.type ?? ComponentType.Text)
+                        }} type="single" defaultValue="center" aria-label="Text alignment">
+                            <TooltipTrigger tip={comp.name}>
+
+                                <div draggable id={comp.type} key={comp.type} data-type={comp.type} className="active-cursor-grabbing cursor-grab h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 ">
+                                    <comp.icon />
+                                </div>
+                            </TooltipTrigger>
+                        </Toolbar.ToggleGroup>
+                        <Toolbar.Separator className="w-[1px] bg-#e4e2e4 mx-[10px]" />
+                    </>
+
+                ))
+            }
+
             {
                 isElement ?
                     <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
@@ -402,8 +436,8 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                                     onShadowValueChange(null)
                                                 }}
                                                 className="flex flex-col items-center">
-                                                <div 
-                                                className={cx('transition  hover:shadow-[0_0_0_2px_#2b3b4a4d] w-[45px]  cursor-pointer shadow-[0_0_0_1px_#2b3b4a4d] text-xl h-[45px] rounded flex items-center justify-center', {'shadow-[0_0_0_2px_violet]': shadow && !shadowState})}>A</div>
+                                                <div
+                                                    className={cx('transition  hover:shadow-[0_0_0_2px_#2b3b4a4d] w-[45px]  cursor-pointer shadow-[0_0_0_1px_#2b3b4a4d] text-xl h-[45px] rounded flex items-center justify-center', { 'shadow-[0_0_0_2px_violet]': shadow && !shadowState })}>A</div>
                                                 <p className="mt-2">None</p>
                                             </div>
                                             <div
@@ -411,8 +445,8 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                                     setShadowState(defaultShadow)
                                                 }}
                                                 className="flex flex-col items-center ">
-                                                <div 
-                                               className={cx('transition  hover:shadow-[0_0_0_2px_#2b3b4a4d] w-[45px]  cursor-pointer shadow-[0_0_0_1px_#2b3b4a4d] text-xl h-[45px] rounded flex items-center justify-center', {'shadow-[0_0_0_2px_violet]': shadow && !!shadowState})}>
+                                                <div
+                                                    className={cx('transition  hover:shadow-[0_0_0_2px_#2b3b4a4d] w-[45px]  cursor-pointer shadow-[0_0_0_1px_#2b3b4a4d] text-xl h-[45px] rounded flex items-center justify-center', { 'shadow-[0_0_0_2px_violet]': shadow && !!shadowState })}>
                                                     <p style={{ textShadow: 'rgb(0, 0, 0) 9px 8px 3px' }}>A</p>
                                                 </div>
                                                 <p className="mt-2">Shadow</p>
@@ -421,177 +455,177 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
                                     </div>
                                     {
-                                        shadowState ? 
-                                        <div>
-                                        <div>
-                                            <div className="flex mt-4 justify-between">
-                                                <div>OffsetX</div>
-                                                <input type="number" onChange={e => {
-                                                    setShadowState({ ...shadowState, offsetX: e.target.valueAsNumber })
-                                                }} value={shadowState.offsetX} max={50} min={-50} />
-                                            </div>
+                                        shadowState ?
                                             <div>
-                                                <input
-                                                    style={{
-                                                        backgroundSize: `${shadowState.offsetX + 50}% 100%`
-                                                    }}
-                                                    type="range"
-                                                    step={1}
-                                                    value={shadowState.offsetX}
-                                                    onChange={(e) => {
-                                                        setShadowState({ ...shadowState, offsetX: e.target.valueAsNumber })
-                                                    }} max={50} min={-50} name="" id="" />
-                                            </div>
-
-                                        </div>
-                                        <div>
-                                            <div className="flex mt-4 justify-between">
-                                                <div>OffsetY</div>
-                                                <input type="number"
-                                                    onChange={e => {
-                                                        setShadowState({ ...shadowState, offsetY: e.target.valueAsNumber })
-                                                    }} value={shadowState.offsetY} max={50} min={-50} />
-                                            </div>
-
-                                            <input
-                                                style={{
-                                                    backgroundSize: `${shadowState.offsetY + 50}% 100%`
-                                                }}
-                                                type="range"
-                                                step={1}
-                                                value={shadowState.offsetY}
-                                                onChange={(e) => {
-                                                    setShadowState({ ...shadowState, offsetY: e.target.valueAsNumber })
-                                                }} max={50} min={-50} name="" id="" />
-
-                                        </div>
-                                        <div>
-                                            <div className="flex mt-4 justify-between">
-                                                <div>Blur</div>
-                                                <input type="number"
-                                                    onChange={e => {
-                                                        setShadowState({ ...shadowState, blur: e.target.valueAsNumber })
-                                                    }} value={shadowState.blur} max={50} min={-50} />
-                                            </div>
-
-                                            <input
-                                                style={{
-                                                    backgroundSize: `${shadowState.blur}% 100%`
-                                                }}
-                                                type="range"
-                                                step={1}
-                                                value={shadowState.blur}
-                                                onChange={(e) => {
-                                                    setShadowState({ ...shadowState, blur: e.target.valueAsNumber })
-                                                }} max={100} min={0} name="" id="" />
-
-                                        </div>
-                                        <div>
-                                            <div className="flex mt-4 justify-between">
-                                                <div>Transparency</div>
-                                                <input type="number"
-                                                    onChange={e => {
-                                                        setTransparency(e.target.valueAsNumber)
-                                                    }} value={transparency} max={50} min={-50} />
-                                            </div>
-
-                                            <input
-                                                style={{
-                                                    backgroundSize: `${transparency}% 100%`
-                                                }}
-                                                type="range"
-                                                step={1}
-                                                value={transparency}
-                                                onChange={(e) => {
-                                                    setTransparency(e.target.valueAsNumber)
-                                                }} max={100} min={0} name="" id="" />
-
-                                        </div>
-                                        <div className="flex justify-between items-center my-2">
-                                            <div className='flex items-center '>
-                                                Shadow Color
-                                            </div>
-                                            <PopoverCom tip="Change color" trigger={
-                                                <span
-                                                    className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
-                                                    style={{ background: shadowState.color.replace(rgx, `rgb($1)`) }}
-                                                >
-                                                </span>
-                                            }>
-                                                <div className='pb-2' onClick={e => {
-                                                    const color = (e.target as HTMLDivElement).getAttribute('data-color')
-
-                                                    if (color) {
-                                                        if (color.startsWith('#')) {
-                                                            const rgb = hexToRgb(color)
-                                                            if (rgb) {
-                                                                setShadowState({
-                                                                    ...shadowState,
-                                                                    color: `rgba(${rgb.r},${rgb.g},${rgb.b},${transparency / 100})`
-                                                                })
-                                                            }
-                                                        }
-                                                    }
-                                                }}>
+                                                <div>
+                                                    <div className="flex mt-4 justify-between">
+                                                        <div>OffsetX</div>
+                                                        <input type="number" onChange={e => {
+                                                            setShadowState({ ...shadowState, offsetX: e.target.valueAsNumber })
+                                                        }} value={shadowState.offsetX} max={50} min={-50} />
+                                                    </div>
                                                     <div>
-
-
+                                                        <input
+                                                            style={{
+                                                                backgroundSize: `${shadowState.offsetX + 50}% 100%`
+                                                            }}
+                                                            type="range"
+                                                            step={1}
+                                                            value={shadowState.offsetX}
+                                                            onChange={(e) => {
+                                                                setShadowState({ ...shadowState, offsetX: e.target.valueAsNumber })
+                                                            }} max={50} min={-50} name="" id="" />
                                                     </div>
-                                                    <div className='px-4 py-2 relative'>
-                                                        <div className='flex pb-2 items-center '>
-                                                            Current color
-                                                        </div>
 
-                                                        <div className="flex items-center gap-x-2">
-                                                            <TooltipTrigger tip="Change shadow color">
-                                                                <div
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation()
-                                                                        e.preventDefault()
-                                                                        setDisplayShadowColorPicker(true)
-                                                                    }}
-                                                                    data-color={shadowState.color}
-                                                                    style={{ background: shadowState.color }}
-                                                                    className="  h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
-                                                                >
-                                                                </div>
-                                                            </TooltipTrigger>
-                                                        </div>
-                                                        {
-                                                            displayShadowColorPicker ?
-                                                                <div >
-                                                                    <div className="fixed top-0 right-0 left-0 bottom-0" onClick={() => setDisplayShadowColorPicker(false)} />
-                                                                    <div className="absolute z-2 top-full left-1/2 -translate-x-[50%]">
-                                                                        <ChromePicker
-                                                                            onChangeComplete={(color) => {
-                                                                                const rgb = color.rgb
-                                                                                setShadowState({
-                                                                                    ...shadowState,
-                                                                                    color: `rgba(${rgb.r},${rgb.g},${rgb.b},${transparency / 100})`
-                                                                                })
-
-                                                                            }}
-                                                                            color={currentColor} />
-                                                                    </div>
-
-                                                                </div>
-                                                                :
-                                                                null
-                                                        }
-
-                                                    </div>
-                                                    <div >
-                                                        <div className=' px-4 py-2  flex items-center '>
-                                                            <ColorWheelIcon className='mr-2' />
-                                                            Default color</div>
-                                                        <SolidColors />
-
-                                                    </div>
                                                 </div>
-                                            </PopoverCom>
-                                        </div>
-                                    </div>
-                                        : null
+                                                <div>
+                                                    <div className="flex mt-4 justify-between">
+                                                        <div>OffsetY</div>
+                                                        <input type="number"
+                                                            onChange={e => {
+                                                                setShadowState({ ...shadowState, offsetY: e.target.valueAsNumber })
+                                                            }} value={shadowState.offsetY} max={50} min={-50} />
+                                                    </div>
+
+                                                    <input
+                                                        style={{
+                                                            backgroundSize: `${shadowState.offsetY + 50}% 100%`
+                                                        }}
+                                                        type="range"
+                                                        step={1}
+                                                        value={shadowState.offsetY}
+                                                        onChange={(e) => {
+                                                            setShadowState({ ...shadowState, offsetY: e.target.valueAsNumber })
+                                                        }} max={50} min={-50} name="" id="" />
+
+                                                </div>
+                                                <div>
+                                                    <div className="flex mt-4 justify-between">
+                                                        <div>Blur</div>
+                                                        <input type="number"
+                                                            onChange={e => {
+                                                                setShadowState({ ...shadowState, blur: e.target.valueAsNumber })
+                                                            }} value={shadowState.blur} max={50} min={-50} />
+                                                    </div>
+
+                                                    <input
+                                                        style={{
+                                                            backgroundSize: `${shadowState.blur}% 100%`
+                                                        }}
+                                                        type="range"
+                                                        step={1}
+                                                        value={shadowState.blur}
+                                                        onChange={(e) => {
+                                                            setShadowState({ ...shadowState, blur: e.target.valueAsNumber })
+                                                        }} max={100} min={0} name="" id="" />
+
+                                                </div>
+                                                <div>
+                                                    <div className="flex mt-4 justify-between">
+                                                        <div>Transparency</div>
+                                                        <input type="number"
+                                                            onChange={e => {
+                                                                setTransparency(e.target.valueAsNumber)
+                                                            }} value={transparency} max={50} min={-50} />
+                                                    </div>
+
+                                                    <input
+                                                        style={{
+                                                            backgroundSize: `${transparency}% 100%`
+                                                        }}
+                                                        type="range"
+                                                        step={1}
+                                                        value={transparency}
+                                                        onChange={(e) => {
+                                                            setTransparency(e.target.valueAsNumber)
+                                                        }} max={100} min={0} name="" id="" />
+
+                                                </div>
+                                                <div className="flex justify-between items-center my-2">
+                                                    <div className='flex items-center '>
+                                                        Shadow Color
+                                                    </div>
+                                                    <PopoverCom tip="Change color" trigger={
+                                                        <span
+                                                            className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                                            style={{ background: shadowState.color.replace(rgx, `rgb($1)`) }}
+                                                        >
+                                                        </span>
+                                                    }>
+                                                        <div className='pb-2' onClick={e => {
+                                                            const color = (e.target as HTMLDivElement).getAttribute('data-color')
+
+                                                            if (color) {
+                                                                if (color.startsWith('#')) {
+                                                                    const rgb = hexToRgb(color)
+                                                                    if (rgb) {
+                                                                        setShadowState({
+                                                                            ...shadowState,
+                                                                            color: `rgba(${rgb.r},${rgb.g},${rgb.b},${transparency / 100})`
+                                                                        })
+                                                                    }
+                                                                }
+                                                            }
+                                                        }}>
+                                                            <div>
+
+
+                                                            </div>
+                                                            <div className='px-4 py-2 relative'>
+                                                                <div className='flex pb-2 items-center '>
+                                                                    Current color
+                                                                </div>
+
+                                                                <div className="flex items-center gap-x-2">
+                                                                    <TooltipTrigger tip="Change shadow color">
+                                                                        <div
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation()
+                                                                                e.preventDefault()
+                                                                                setDisplayShadowColorPicker(true)
+                                                                            }}
+                                                                            data-color={shadowState.color}
+                                                                            style={{ background: shadowState.color }}
+                                                                            className="  h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                                                        >
+                                                                        </div>
+                                                                    </TooltipTrigger>
+                                                                </div>
+                                                                {
+                                                                    displayShadowColorPicker ?
+                                                                        <div >
+                                                                            <div className="fixed top-0 right-0 left-0 bottom-0" onClick={() => setDisplayShadowColorPicker(false)} />
+                                                                            <div className="absolute z-2 top-full left-1/2 -translate-x-[50%]">
+                                                                                <ChromePicker
+                                                                                    onChangeComplete={(color) => {
+                                                                                        const rgb = color.rgb
+                                                                                        setShadowState({
+                                                                                            ...shadowState,
+                                                                                            color: `rgba(${rgb.r},${rgb.g},${rgb.b},${transparency / 100})`
+                                                                                        })
+
+                                                                                    }}
+                                                                                    color={currentColor} />
+                                                                            </div>
+
+                                                                        </div>
+                                                                        :
+                                                                        null
+                                                                }
+
+                                                            </div>
+                                                            <div >
+                                                                <div className=' px-4 py-2  flex items-center '>
+                                                                    <ColorWheelIcon className='mr-2' />
+                                                                    Default color</div>
+                                                                <SolidColors />
+
+                                                            </div>
+                                                        </div>
+                                                    </PopoverCom>
+                                                </div>
+                                            </div>
+                                            : null
                                     }
 
                                 </div>

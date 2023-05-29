@@ -1,6 +1,7 @@
 import type { TOriginX, TOriginY } from "fabric/*"
 import { ComponentType } from "~/constants/enum"
 import type { Shadow } from "./text"
+import { CircleIcon } from "@radix-ui/react-icons"
 // import type { fabric } from "~/element"
 
 // type Circle = NonNullable<ConstructorParameters<typeof fabric.Circle>[number]>
@@ -44,6 +45,7 @@ export const circleBlock = {
     type: ComponentType.Circle as ComponentType.Circle,
     id: '',
     isLock: false,
+    icon: CircleIcon,
     name: 'Circle',
     style: {
         width: 200,

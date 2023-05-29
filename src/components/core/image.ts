@@ -1,5 +1,6 @@
 import { ComponentType } from "~/constants/enum"
 import type { Shadow } from "./text"
+import { ImageIcon } from "@radix-ui/react-icons"
 
 export const ImageCanvasStyle = {
   width: 200,
@@ -18,7 +19,8 @@ export const imageBlock = {
   type: ComponentType.Img as ComponentType.Img,
   id: '',
   isLock: false,
-  name: 'Text',
+  icon: ImageIcon,
+  name: 'Image',
   props: {
     text: 'Hello World'
   },

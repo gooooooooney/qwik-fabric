@@ -1,4 +1,6 @@
 import { fabric } from "~/element"
+import initAligningGuidelines from "./initAligningGuidelines"
+import { initCenteringGuidelines } from "./initCenteringGuidelines"
 
 export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, any>) {
   console.log(`Fabric.js版本：${fabric.version}`)
@@ -16,6 +18,9 @@ export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, 
     // 元素对象被选中时保持在当前z轴，不会跳到最顶层
     preserveObjectStacking: true // 默认false
   })
+
+  initCenteringGuidelines(canvas)
+  initAligningGuidelines(canvas)
 
 
   return {

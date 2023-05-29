@@ -1,3 +1,4 @@
+import { TextIcon } from "@radix-ui/react-icons";
 import { ComponentType } from "~/constants/enum"
 import type { FontWeight, TextAlign } from "~/constants/enum/style"
 export interface Shadow {
@@ -59,6 +60,7 @@ export const textBlock = {
   type: ComponentType.TextBox as ComponentType.TextBox,
   id: '',
   isLock: false,
+  icon: TextIcon,
   name: 'Text',
   props: {
     text: 'Hello World'
