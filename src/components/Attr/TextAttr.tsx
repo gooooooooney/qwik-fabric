@@ -95,7 +95,7 @@ export default component$(({ blocks }: TextAttrProps) => {
 
 
 
-  return blocks.length ? <div class="w-full relative animate-slide-in-right animate- ">
+  return blocks.length ? <div class="w-full relative ">
     <Toolbar
       alignmentDefaultValue={blocks[0]?.canvasStyle.textAlign}
       textStyleDefaultValue={textStyleDefaultValue.value}

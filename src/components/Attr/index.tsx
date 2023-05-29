@@ -64,7 +64,7 @@ export default component$(() => {
     {elementAttr()}
     {
       state.activeElements?.length ?
-        <div class="p-3 relative  mt-5 shadow-radio transition bg-white rounded-md">
+        <div class="p-3 relative  mt-5 shadow-radio bg-white rounded-md">
           <Label class="mt-4" label="Stroke width">
             <div class="flex items-center relative flex-wrap gap-2">
               {

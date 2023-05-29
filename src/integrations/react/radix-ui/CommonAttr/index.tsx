@@ -16,7 +16,9 @@ import {
     TextIcon,
     ImageIcon,
     CircleIcon,
-    SquareIcon
+    SquareIcon,
+    MixerHorizontalIcon,
+    Cross2Icon
 } from '@radix-ui/react-icons';
 import { cx } from '~/utils/common';
 import { hexToRgb } from '~/utils/style';
@@ -41,6 +43,7 @@ interface CommonAttrProps {
 interface TooltipTriggerProps extends PropsWithChildren {
     tip: string
 }
+
 function TooltipTrigger({ children, tip }: TooltipTriggerProps) {
     return (
         <TooltipCom.Provider>
@@ -62,11 +65,16 @@ function TooltipTrigger({ children, tip }: TooltipTriggerProps) {
         </TooltipCom.Provider>
     );
 }
-
-const PopoverCom = ({ trigger, tip, children, contentClass }: { contentClass?: string, trigger: React.ReactNode, tip: string } & PropsWithChildren<{}>) => {
+interface PopoverProps extends PropsWithChildren, Popover.PopoverContentProps {
+    contentClass?: string,
+    triggerClass?: string,
+    trigger: React.ReactNode,
+    tip: string
+}
+const PopoverCom = React.forwardRef<HTMLDivElement, PopoverProps>(({ trigger, triggerClass, tip, children, contentClass, side = "left" }, forwardedRef) => {
     return (
         <Popover.Root>
-            <Popover.Trigger>
+            <Popover.Trigger className={cx(triggerClass)}>
                 <TooltipTrigger tip={tip}>
                     {trigger}
                 </TooltipTrigger>
@@ -74,8 +82,8 @@ const PopoverCom = ({ trigger, tip, children, contentClass }: { contentClass?: s
 
             <Popover.Portal>
                 <Popover.Content
-                    side="left"
-                    className={cx('w-[250px] max-w-2xl bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade', contentClass)}
+                    side={side}
+                    className={cx('w-[250px] max-w-2xl bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] ', contentClass)}
                     sideOffset={5}
                 >
                     {children}
@@ -83,11 +91,11 @@ const PopoverCom = ({ trigger, tip, children, contentClass }: { contentClass?: s
             </Popover.Portal>
         </Popover.Root>
     )
-}
+})
 
 const SolidColors = () => <>
     <div
-        className="flex px-4 flex-wrap gap-x-4 gap-y-1 flex-col"
+        className="flex flex-wrap gap-x-4 gap-y-1 flex-col"
     >
         <label className='text-[#0d1216b3] text-xs'>
             Solid colors
@@ -174,7 +182,7 @@ const SolidColors = () => <>
 
 const GradientColors = () => <>
     <div
-        className="flex px-4 py-2 flex-wrap gap-x-4 gap-y-1 flex-col"
+        className="flex py-2 flex-wrap gap-x-4 gap-y-1 flex-col"
     >
         <label className='text-[#0d1216b3] text-xs'>
             Gradients
@@ -287,14 +295,14 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
             <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
 
-                <PopoverCom tip="Change color" trigger={
+                <PopoverCom contentClass='PopoverContent' tip="Change color" trigger={
                     <span
                         className=" h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 "
                         style={{ background: fill.length > 1 ? 'linear-gradient(to right,' + fill.join(",") + ')' : fill[0] }}
                     >
                     </span>
                 }>
-                    <div className='pb-2' onClick={e => {
+                    <div onClick={e => {
                         const color = (e.target as HTMLDivElement).getAttribute('data-color')
                         if (color) {
                             setColors(color.split(","))
@@ -304,12 +312,12 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
 
                         </div>
-                        <div className='px-4 py-2 relative'>
+                        <div className=' relative'>
                             <div className='flex pb-2 items-center '>
                                 Current color
                             </div>
 
-                            <div className="flex items-center gap-x-2">
+                            <div className="flex py-2 items-center gap-x-2">
                                 <TooltipTrigger tip='add a new color'>
                                     <div
                                         onClick={() => {
@@ -335,7 +343,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                                 }}
                                                 data-color={color}
                                                 style={{ background: color }}
-                                                className="  h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                                className="mt-0!  h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
                                             >
                                             </div>
                                         </TooltipTrigger>
@@ -372,7 +380,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
                         </div>
                         <div >
-                            <div className=' px-4 py-2  flex items-center '>
+                            <div className=' flex items-center '>
                                 <ColorWheelIcon className='mr-2' />
                                 Default color</div>
                             <SolidColors />
@@ -389,7 +397,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
             {
                 blockInfoList.map((comp) => (
-                    <>
+                    <Fragment key={comp.name}>
                         <Toolbar.ToggleGroup onDragStart={(e) => {
                             const target = e.target;
                             if (!(target instanceof HTMLDivElement)) return
@@ -403,7 +411,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                             </TooltipTrigger>
                         </Toolbar.ToggleGroup>
                         <Toolbar.Separator className="w-[1px] bg-#e4e2e4 mx-[10px]" />
-                    </>
+                    </Fragment>
 
                 ))
             }
@@ -413,7 +421,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                     <Toolbar.ToggleGroup type="single" defaultValue="center" aria-label="Text alignment">
 
 
-                        <PopoverCom tip="Effects" trigger={
+                        <PopoverCom contentClass='PopoverContent' tip="Effects" trigger={
                             // <ShadowIcon className='h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 ' />
                             <span
                                 className=" transition h-[25px] bg-[#394c6026] px-2 flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
@@ -422,7 +430,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                             </span>
                         }>
                             <div>
-                                <div className='px-4 py-2 relative'>
+                                <div className='relative'>
                                     <div className='flex pb-2 items-center '>
                                         Style
                                     </div>
@@ -545,14 +553,14 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                                     <div className='flex items-center '>
                                                         Shadow Color
                                                     </div>
-                                                    <PopoverCom tip="Change color" trigger={
+                                                    <PopoverCom contentClass='PopoverContent' tip="Change color" trigger={
                                                         <span
                                                             className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
                                                             style={{ background: shadowState.color.replace(rgx, `rgb($1)`) }}
                                                         >
                                                         </span>
                                                     }>
-                                                        <div className='pb-2' onClick={e => {
+                                                        <div onClick={e => {
                                                             const color = (e.target as HTMLDivElement).getAttribute('data-color')
 
                                                             if (color) {
@@ -636,6 +644,99 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                     </Toolbar.ToggleGroup>
                     : null
             }
+
+            <Toolbar.Button asChild className='ml-auto'>
+                <PopoverCom
+                    side="right"
+                    triggerClass="ml-auto"
+                    contentClass='PopoverContent'
+                    tip="Canvas dimensions"
+                    trigger={
+                        <span className="h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 " aria-label="Update dimensions">
+                            <MixerHorizontalIcon />
+                        </span>
+                    }>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        <p className="Text" style={{ marginBottom: 10 }}>
+                            Dimensions
+                        </p>
+                        <fieldset className="Fieldset">
+                            <label className="Label" htmlFor="width">
+                                Width
+                            </label>
+                            <input className="Input" id="width" defaultValue="100%" />
+                        </fieldset>
+                        <fieldset className="Fieldset">
+                            <label className="Label" htmlFor="maxWidth">
+                                Max. width
+                            </label>
+                            <input className="Input" id="maxWidth" defaultValue="300px" />
+                        </fieldset>
+                        <fieldset className="Fieldset">
+                            <label className="Label" htmlFor="height">
+                                Height
+                            </label>
+                            <input className="Input" id="height" defaultValue="25px" />
+                        </fieldset>
+                        <fieldset className="Fieldset">
+                            <label className="Label" htmlFor="maxHeight">
+                                Max. height
+                            </label>
+                            <input className="Input" id="maxHeight" defaultValue="none" />
+                        </fieldset>
+                    </div>
+                    <Popover.Close className="PopoverClose" aria-label="Close">
+                        <Cross2Icon />
+                    </Popover.Close>
+                    <Popover.Arrow className="PopoverArrow" />
+                </PopoverCom>
+                {/* <Popover.Root>
+                    <Popover.Trigger asChild>
+                        <TooltipTrigger tip="Canvas dimensions">
+                            <button className="h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 " aria-label="Update dimensions">
+                                <MixerHorizontalIcon />
+                            </button>
+                        </TooltipTrigger>
+                    </Popover.Trigger>
+                    <Popover.Portal>
+                        <Popover.Content className="PopoverContent" sideOffset={5}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                <p className="Text" style={{ marginBottom: 10 }}>
+                                    Dimensions
+                                </p>
+                                <fieldset className="Fieldset">
+                                    <label className="Label" htmlFor="width">
+                                        Width
+                                    </label>
+                                    <input className="Input" id="width" defaultValue="100%" />
+                                </fieldset>
+                                <fieldset className="Fieldset">
+                                    <label className="Label" htmlFor="maxWidth">
+                                        Max. width
+                                    </label>
+                                    <input className="Input" id="maxWidth" defaultValue="300px" />
+                                </fieldset>
+                                <fieldset className="Fieldset">
+                                    <label className="Label" htmlFor="height">
+                                        Height
+                                    </label>
+                                    <input className="Input" id="height" defaultValue="25px" />
+                                </fieldset>
+                                <fieldset className="Fieldset">
+                                    <label className="Label" htmlFor="maxHeight">
+                                        Max. height
+                                    </label>
+                                    <input className="Input" id="maxHeight" defaultValue="none" />
+                                </fieldset>
+                            </div>
+                            <Popover.Close className="PopoverClose" aria-label="Close">
+                                <Cross2Icon />
+                            </Popover.Close>
+                            <Popover.Arrow className="PopoverArrow" />
+                        </Popover.Content>
+                    </Popover.Portal>
+                </Popover.Root> */}
+            </Toolbar.Button>
         </Toolbar.Root>
     )
 };
