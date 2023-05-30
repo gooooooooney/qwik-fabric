@@ -12,7 +12,6 @@ interface ColorPickerProps {
 
 function ColorSketchPicker({ color, onChangeComplete }: ColorPickerProps) {
   const [colorState, setColorState] = React.useState(color)
-
   return (
     <div>
       <SketchPicker

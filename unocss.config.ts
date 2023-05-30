@@ -1,3 +1,4 @@
+/** @unocss-include */
 import { defineConfig, presetUno, presetIcons } from 'unocss'
 import transformerVariantGroup from '@unocss/transformer-variant-group'
 export default defineConfig({
@@ -6,7 +7,7 @@ export default defineConfig({
     presetIcons()
   ],
   rules: [
-    ['shadow-radio', { 'box-shadow': '0 2px 10px hsla(0, 0%, 0%, 0.141)' }],
+    ['shadow-radix', { 'box-shadow': '0 2px 10px hsla(0, 0%, 0%, 0.141)' }],
     ['font-Arial', { 'font-family': 'Arial' }],
     ['font-Times-New-Roman', { 'font-family': 'Times New Roman' }],
     ['font-Hoefler-Text', { 'font-family': 'Hoefler Text' }],

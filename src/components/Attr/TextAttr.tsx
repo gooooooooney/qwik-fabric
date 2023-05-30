@@ -101,10 +101,10 @@ export default component$(({ blocks }: TextAttrProps) => {
       textStyleDefaultValue={textStyleDefaultValue.value}
       onChangeAlignment$={handleChangeAlignment}
       onChangeTextStyle$={handleChangeFontStyle} />
-    <div class="p-3 relative  mt-5 shadow-radio bg-white rounded-md">
+    <div class="p-3 relative  mt-5 shadow-radix bg-white rounded-md">
       <div class="flex flex-col ">
         <Label label="Text">
-          <input class=" text-base w-full p-1 rounded-md focus:(border-blue) m-0 shadow-radio outline-0 border-gray-3 border-1 border-solid" type="text" onBlur$={(_, el) => {
+          <input class=" text-base w-full p-1 rounded-md focus:(border-blue) m-0 shadow-radix outline-0 border-gray-3 border-1 border-solid" type="text" onBlur$={(_, el) => {
             blocks.forEach((block) => {
               block.props.text = el.value
             })
@@ -117,8 +117,8 @@ export default component$(({ blocks }: TextAttrProps) => {
         </Label>
         {/* <Label class="mt-4 relative" label="Fill">
           <div class="flex items-center justify-between">
-            <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayColorPicker.value = true} style={{ 'background-color': block.canvasStyle.fill }}></div>
-            <div class="flex border border-solid border-gray-3 text-xl items-center w-3/5 h-[45px]  rounded-xl shadow-radio">
+            <div class="w-[45px] h-[45px] rounded-xl shadow-radix cursor-pointer hover:opacity-80" onClick$={() => displayColorPicker.value = true} style={{ 'background-color': block.canvasStyle.fill }}></div>
+            <div class="flex border border-solid border-gray-3 text-xl items-center w-3/5 h-[45px]  rounded-xl shadow-radix">
               <div class="pl-2">#</div>
               <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={block.canvasStyle.fill.slice(1)} onKeyUp$={(e, el) => {
                 if (e.key == KEY_CODE.ENTER) {

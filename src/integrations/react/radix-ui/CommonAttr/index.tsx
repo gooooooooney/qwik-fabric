@@ -34,9 +34,12 @@ interface ShadowProps {
 }
 interface CommonAttrProps {
     fill: string[];
+    canvasWidth: number
+    canvasHeight: number
     isElement: boolean;
     shadow: ShadowProps | null;
     onChangeColor: (value: string[]) => void;
+    onChangeCanvasSize: ({ width, height }: { width: number, height: number }) => void
     onShadowValueChange: (shadow: ShadowProps | null) => void
 }
 
@@ -71,6 +74,22 @@ interface PopoverProps extends PropsWithChildren, Popover.PopoverContentProps {
     trigger: React.ReactNode,
     tip: string
 }
+
+const getIcon = (iconName: string) => {
+    switch (iconName) {
+        case 'TextIcon':
+            return <TextIcon />
+        case 'ImageIcon':
+            return <ImageIcon />
+        case 'CircleIcon':
+            return <CircleIcon />
+        case 'SquareIcon':
+            return <SquareIcon />
+
+    }
+
+}
+
 const PopoverCom = React.forwardRef<HTMLDivElement, PopoverProps>(({ trigger, triggerClass, tip, children, contentClass, side = "left" }, forwardedRef) => {
     return (
         <Popover.Root>
@@ -103,75 +122,75 @@ const SolidColors = () => <>
         <div className="flex flex-wrap ">
 
             <TooltipTrigger tip='#000000' >
-                <div data-color="#000000" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#000000]" ></div>
+                <div data-color="#000000" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#000000]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#545454'>
-                <div data-color="#545454" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#545454]" ></div>
+                <div data-color="#545454" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#545454]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#737373'>
-                <div data-color="#737373" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#737373]" ></div>
+                <div data-color="#737373" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#737373]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#a6a6a6'>
-                <div data-color="#a6a6a6" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#a6a6a6]" ></div>
+                <div data-color="#a6a6a6" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#a6a6a6]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#d9d9d9'>
-                <div data-color="#d9d9d9" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#d9d9d9]" ></div>
+                <div data-color="#d9d9d9" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#d9d9d9]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ffffff'>
-                <div data-color="#ffffff" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ffffff]" ></div>
+                <div data-color="#ffffff" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ffffff]" ></div>
             </TooltipTrigger>
 
             <TooltipTrigger tip='#ff3131'>
-                <div data-color="#ff3131" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ff3131]" ></div>
+                <div data-color="#ff3131" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ff3131]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff5757'>
-                <div data-color="#ff5757" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ff5757]" ></div>
+                <div data-color="#ff5757" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ff5757]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff66c4'>
-                <div data-color="#ff66c4" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ff66c4]" ></div>
+                <div data-color="#ff66c4" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ff66c4]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#cb6ce6'>
-                <div data-color="#cb6ce6" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#cb6ce6]" ></div>
+                <div data-color="#cb6ce6" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#cb6ce6]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#9c6ade'>
-                <div data-color="#9c6ade" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#9c6ade]" ></div>
+                <div data-color="#9c6ade" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#9c6ade]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#7367f0'>
-                <div data-color="#7367f0" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#7367f0]" ></div>
+                <div data-color="#7367f0" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#7367f0]" ></div>
             </TooltipTrigger>
 
             <TooltipTrigger tip='#5a86f5'>
-                <div data-color="#5a86f5" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#5a86f5]" ></div>
+                <div data-color="#5a86f5" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#5a86f5]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#4ba0ff'>
-                <div data-color="#4ba0ff" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#4ba0ff]" ></div>
+                <div data-color="#4ba0ff" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#4ba0ff]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#50d2c2'>
-                <div data-color="#50d2c2" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#50d2c2]" ></div>
+                <div data-color="#50d2c2" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#50d2c2]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#2bc4c4'>
-                <div data-color="#2bc4c4" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#2bc4c4]" ></div>
+                <div data-color="#2bc4c4" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#2bc4c4]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#5fc27e'>
-                <div data-color="#5fc27e" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#5fc27e]" ></div>
+                <div data-color="#5fc27e" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#5fc27e]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#82c91e'>
-                <div data-color="#82c91e" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#82c91e]" ></div>
+                <div data-color="#82c91e" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#82c91e]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ffde37'>
-                <div data-color="#ffde37" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ffde37]" ></div>
+                <div data-color="#ffde37" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ffde37]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ffc61e'>
-                <div data-color="#ffc61e" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ffc61e]" ></div>
+                <div data-color="#ffc61e" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ffc61e]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff9f1e'>
-                <div data-color="#ff9f1e" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ff9f1e]" ></div>
+                <div data-color="#ff9f1e" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ff9f1e]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff6f6f'>
-                <div data-color="#ff6f6f" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ff6f6f]" ></div>
+                <div data-color="#ff6f6f" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ff6f6f]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff922b'>
-                <div data-color="#ff922b" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-[#ff922b]" ></div>
+                <div data-color="#ff922b" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-[#ff922b]" ></div>
             </TooltipTrigger>
 
 
@@ -190,58 +209,58 @@ const GradientColors = () => <>
         <div className="flex flex-wrap ">
 
             <TooltipTrigger tip='#000000,#737373'>
-                <div data-color="#000000,#737373" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#000000] to-[#737373]" ></div>
+                <div data-color="#000000,#737373" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#000000] to-[#737373]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#000000,#c89116'>
-                <div data-color="#000000,#c89116" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#000000] to-[#c89116]" ></div>
+                <div data-color="#000000,#c89116" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#000000] to-[#c89116]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#000000,#3533cd'>
-                <div data-color="#000000,#3533cd" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#000000] to-[#3533cd]" ></div>
+                <div data-color="#000000,#3533cd" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#000000] to-[#3533cd]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#a6a6a6,#3533cd'>
-                <div data-color="#a6a6a6,#3533cd" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#a6a6a6] to-[#3533cd]" ></div>
+                <div data-color="#a6a6a6,#3533cd" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#a6a6a6] to-[#3533cd]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ffa7ad,#ffa9f9'>
-                <div data-color="#ffa7ad,#ffa9f9" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ffa7ad] to-[#ffa9f9]" ></div>
+                <div data-color="#ffa7ad,#ffa9f9" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ffa7ad] to-[#ffa9f9]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#cdffd8,#94b9ff'>
-                <div data-color="#cdffd8,#94b9ff" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#cdffd8] to-[#94b9ff]" ></div>
+                <div data-color="#cdffd8,#94b9ff" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#cdffd8] to-[#94b9ff]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff9a9e,#fad0c4'>
-                <div data-color="#ff9a9e,#fad0c4" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff9a9e] to-[#fad0c4]" ></div>
+                <div data-color="#ff9a9e,#fad0c4" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff9a9e] to-[#fad0c4]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff3131,#ff914d'>
-                <div data-color="#ff3131,#ff914d" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff3131] to-[#ff914d]" ></div>
+                <div data-color="#ff3131,#ff914d" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff3131] to-[#ff914d]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff5757,#8c52ff'>
-                <div data-color="#ff5757,#8c52ff" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff5757] to-[#8c52ff]" ></div>
+                <div data-color="#ff5757,#8c52ff" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff5757] to-[#8c52ff]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#5170ff,#ff66c4'>
-                <div data-color="#5170ff,#ff66c4" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#5170ff] to-[#ff66c4]" ></div>
+                <div data-color="#5170ff,#ff66c4" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#5170ff] to-[#ff66c4]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#004aad,#cb6ce6'>
-                <div data-color="#004aad,#cb6ce6" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#004aad] to-[#cb6ce6]" ></div>
+                <div data-color="#004aad,#cb6ce6" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#004aad] to-[#cb6ce6]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#8c52ff,#5ce1e6'>
-                <div data-color="#8c52ff,#5ce1e6" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#8c52ff] to-[#5ce1e6]" ></div>
+                <div data-color="#8c52ff,#5ce1e6" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#8c52ff] to-[#5ce1e6]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff66c4,#ffcbcb'>
-                <div data-color="#ff66c4,#ffcbcb" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff66c4] to-[#ffcbcb]" ></div>
+                <div data-color="#ff66c4,#ffcbcb" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff66c4] to-[#ffcbcb]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#0cc0df,#ffde59'>
-                <div data-color="#0cc0df,#ffde59" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#0cc0df] to-[#ffde59]" ></div>
+                <div data-color="#0cc0df,#ffde59" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#0cc0df] to-[#ffde59]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ffde59,#ff914d'>
-                <div data-color="#ffde59,#ff914d" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ffde59] to-[#ff914d]" ></div>
+                <div data-color="#ffde59,#ff914d" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ffde59] to-[#ff914d]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff914d,#ffcbcb'>
-                <div data-color="#ff914d,#ffcbcb" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff914d] to-[#ffcbcb]" ></div>
+                <div data-color="#ff914d,#ffcbcb" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff914d] to-[#ffcbcb]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#ff66c4,#ffde59'>
-                <div data-color="#ff66c4,#ffde59" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff66c4] to-[#ffde59]" ></div>
+                <div data-color="#ff66c4,#ffde59" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#ff66c4] to-[#ffde59]" ></div>
             </TooltipTrigger>
             <TooltipTrigger tip='#8c52ff,#ff914d'>
-                <div data-color="#8c52ff,#ff914d" className="transition w-[25px] h-[25px] rounded shadow-radio cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#8c52ff] to-[#ff914d]" ></div>
+                <div data-color="#8c52ff,#ff914d" className="transition w-[25px] h-[25px] rounded shadow-radix cursor-pointer hover:opacity-80 bg-gradient-to-r from-[#8c52ff] to-[#ff914d]" ></div>
             </TooltipTrigger>
 
 
@@ -254,7 +273,16 @@ const GradientColors = () => <>
 </>
 
 
-const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElement }: CommonAttrProps) => {
+const CommonAttr = ({
+    fill,
+    onChangeColor,
+    shadow,
+    onShadowValueChange,
+    isElement,
+    canvasWidth,
+    canvasHeight,
+    onChangeCanvasSize
+}: CommonAttrProps) => {
     const defaultShadow = {
         color: 'rgba(0,0,0)',
         blur: 10,
@@ -270,6 +298,15 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
     const [currentColorIndex, setCurrentColorIndex] = React.useState(0)
     const [colors, setColors] = React.useState(fill)
     const [shadowState, setShadowState] = React.useState<ShadowProps | null>(shadow || defaultShadow)
+    const [width, setWidth] = React.useState(canvasWidth)
+    const [height, setHeight] = React.useState(canvasHeight)
+    useEffect(() => {
+        // if (width === canvasWidth && height === canvasHeight) {
+        //     return
+        // }
+        onChangeCanvasSize({ width, height })
+        
+    }, [width, height])
     useEffect(() => {
         shadowState && setShadowState({
             ...shadowState,
@@ -289,7 +326,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
     return (
         <Toolbar.Root
-            className="flex p-2 min-w-max rounded-md bg-white shadow-[0_2px_10px] shadow-radio"
+            className="flex p-2 min-w-max rounded-md bg-white shadow-[0_2px_10px] shadow-radix"
             aria-label="Formatting options"
         >
 
@@ -325,7 +362,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                             setCurrentColorIndex(-1)
                                             setDisplayColorPicker(true)
                                         }}
-                                        className="h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                        className="h-[25px] w-[25px] flex justify-center items-center rounded shadow-radix cursor-pointer hover:opacity-80 "
                                     >
                                         <PlusIcon className='text-black' />
                                     </div>
@@ -343,7 +380,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                                 }}
                                                 data-color={color}
                                                 style={{ background: color }}
-                                                className="mt-0!  h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                                className="mt-0!  h-[25px] w-[25px] flex justify-center items-center rounded shadow-radix cursor-pointer hover:opacity-80 "
                                             >
                                             </div>
                                         </TooltipTrigger>
@@ -406,7 +443,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                             <TooltipTrigger tip={comp.name}>
 
                                 <div draggable id={comp.type} key={comp.type} data-type={comp.type} className="active-cursor-grabbing cursor-grab h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 ">
-                                    <comp.icon />
+                                    {getIcon(comp.icon)}
                                 </div>
                             </TooltipTrigger>
                         </Toolbar.ToggleGroup>
@@ -422,9 +459,9 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
 
 
                         <PopoverCom contentClass='PopoverContent' tip="Effects" trigger={
-                            // <ShadowIcon className='h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 ' />
+                            // <ShadowIcon className='h-[25px] w-[25px] flex justify-center items-center rounded shadow-radix cursor-pointer hover:opacity-80 ' />
                             <span
-                                className=" transition h-[25px] bg-[#394c6026] px-2 flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                className=" transition h-[25px] bg-[#394c6026] px-2 flex justify-center items-center rounded shadow-radix cursor-pointer hover:opacity-80 "
                             >
                                 Effects
                             </span>
@@ -555,7 +592,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                                     </div>
                                                     <PopoverCom contentClass='PopoverContent' tip="Change color" trigger={
                                                         <span
-                                                            className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                                            className=" h-[25px] w-[25px] flex justify-center items-center rounded shadow-radix cursor-pointer hover:opacity-80 "
                                                             style={{ background: shadowState.color.replace(rgx, `rgb($1)`) }}
                                                         >
                                                         </span>
@@ -594,7 +631,7 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                                                                             }}
                                                                             data-color={shadowState.color}
                                                                             style={{ background: shadowState.color }}
-                                                                            className="  h-[25px] w-[25px] flex justify-center items-center rounded shadow-radio cursor-pointer hover:opacity-80 "
+                                                                            className="  h-[25px] w-[25px] flex justify-center items-center rounded shadow-radix cursor-pointer hover:opacity-80 "
                                                                         >
                                                                         </div>
                                                                     </TooltipTrigger>
@@ -664,78 +701,34 @@ const CommonAttr = ({ fill, onChangeColor, shadow, onShadowValueChange, isElemen
                             <label className="Label" htmlFor="width">
                                 Width
                             </label>
-                            <input className="Input" id="width" defaultValue="100%" />
+                            <input className="Input"
+                                onChange={e => {
+                                    setWidth(e.target.valueAsNumber)
+                                }}
+                                type="number"
+                                id="width" value={width} />
                         </fieldset>
-                        <fieldset className="Fieldset">
-                            <label className="Label" htmlFor="maxWidth">
-                                Max. width
-                            </label>
-                            <input className="Input" id="maxWidth" defaultValue="300px" />
-                        </fieldset>
+
                         <fieldset className="Fieldset">
                             <label className="Label" htmlFor="height">
                                 Height
                             </label>
-                            <input className="Input" id="height" defaultValue="25px" />
+                            <input
+                                type="number"
+                                className="Input"
+                                onChange={e => {
+                                    setHeight(e.target.valueAsNumber)
+                                }}
+                                id="height"
+                                value={height} />
                         </fieldset>
-                        <fieldset className="Fieldset">
-                            <label className="Label" htmlFor="maxHeight">
-                                Max. height
-                            </label>
-                            <input className="Input" id="maxHeight" defaultValue="none" />
-                        </fieldset>
+
                     </div>
                     <Popover.Close className="PopoverClose" aria-label="Close">
                         <Cross2Icon />
                     </Popover.Close>
                     <Popover.Arrow className="PopoverArrow" />
                 </PopoverCom>
-                {/* <Popover.Root>
-                    <Popover.Trigger asChild>
-                        <TooltipTrigger tip="Canvas dimensions">
-                            <button className="h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 " aria-label="Update dimensions">
-                                <MixerHorizontalIcon />
-                            </button>
-                        </TooltipTrigger>
-                    </Popover.Trigger>
-                    <Popover.Portal>
-                        <Popover.Content className="PopoverContent" sideOffset={5}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                <p className="Text" style={{ marginBottom: 10 }}>
-                                    Dimensions
-                                </p>
-                                <fieldset className="Fieldset">
-                                    <label className="Label" htmlFor="width">
-                                        Width
-                                    </label>
-                                    <input className="Input" id="width" defaultValue="100%" />
-                                </fieldset>
-                                <fieldset className="Fieldset">
-                                    <label className="Label" htmlFor="maxWidth">
-                                        Max. width
-                                    </label>
-                                    <input className="Input" id="maxWidth" defaultValue="300px" />
-                                </fieldset>
-                                <fieldset className="Fieldset">
-                                    <label className="Label" htmlFor="height">
-                                        Height
-                                    </label>
-                                    <input className="Input" id="height" defaultValue="25px" />
-                                </fieldset>
-                                <fieldset className="Fieldset">
-                                    <label className="Label" htmlFor="maxHeight">
-                                        Max. height
-                                    </label>
-                                    <input className="Input" id="maxHeight" defaultValue="none" />
-                                </fieldset>
-                            </div>
-                            <Popover.Close className="PopoverClose" aria-label="Close">
-                                <Cross2Icon />
-                            </Popover.Close>
-                            <Popover.Arrow className="PopoverArrow" />
-                        </Popover.Content>
-                    </Popover.Portal>
-                </Popover.Root> */}
             </Toolbar.Button>
         </Toolbar.Root>
     )

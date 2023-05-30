@@ -24,7 +24,7 @@ export default component$(() => {
     return (
         <div class="flex ">
             
-            <div ref={draggableRef} class="flex-1 min-h-xl flex p-3  gap-3 flex-wrap shadow-radio bg-white rounded-md">
+            <div ref={draggableRef} class="flex-1 min-h-xl flex p-3  gap-3 flex-wrap shadow-radix bg-white rounded-md">
                 {
                     blockInfoList.map((comp) => (
                         <div draggable id={comp.type} key={comp.type} data-type={comp.type} class="active-cursor-grabbing cursor-grab text-center rounded-md p-3 w-[10px] h-[10px] border border-solid border-coolGray flex justify-center items-center">

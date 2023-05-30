@@ -64,7 +64,7 @@ export default component$(() => {
     {elementAttr()}
     {
       state.activeElements?.length ?
-        <div class="p-3 relative  mt-5 shadow-radio bg-white rounded-md">
+        <div class="p-3 relative  mt-5 shadow-radix bg-white rounded-md">
           <Label class="mt-4" label="Stroke width">
             <div class="flex items-center relative flex-wrap gap-2">
               {
@@ -120,9 +120,9 @@ export default component$(() => {
               </div> : null
             }
             <div class="flex items-center justify-between">
-              <div class="w-[45px] h-[45px] rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': state.currentBlock[0]?.canvasStyle.stroke ?? 'black' }}></div>
-              <div class=" h-[45px] w-[50px] flex justify-center items-center rounded-xl shadow-radio cursor-pointer hover:opacity-80" onClick$={() => handleChangeStrokeColor(null)}>reset</div>
-              <div class="flex border border-solid border-gray-3 text-xl items-center w-2/5 h-[45px]  rounded-xl shadow-radio">
+              <div class="w-[45px] h-[45px] rounded-xl shadow-radix cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': state.currentBlock[0]?.canvasStyle.stroke ?? 'black' }}></div>
+              <div class=" h-[45px] w-[50px] flex justify-center items-center rounded-xl shadow-radix cursor-pointer hover:opacity-80" onClick$={() => handleChangeStrokeColor(null)}>reset</div>
+              <div class="flex border border-solid border-gray-3 text-xl items-center w-2/5 h-[45px]  rounded-xl shadow-radix">
                 <div class="pl-2">#</div>
                 <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={state.currentBlock[0]?.canvasStyle.stroke?.slice(1)} onKeyUp$={(e, el) => {
                   if (e.key == KEY_CODE.ENTER) {

@@ -173,6 +173,17 @@ export default component$(() => {
       <div class="flex flex-col justify-center">
         <div class="w-xl mx-auto">
           <CommonAttr
+           canvasWidth={state.canvasStyleData.width}
+           canvasHeight={state.canvasStyleData.height}
+           onChangeCanvasSize$={({ width, height }) => {
+            //  state.canvasStyleData.width = width
+            //  state.canvasStyleData.height = height
+             state.canvas?.setDimensions({
+               width: changeStyleWithScale(width, state.canvasStyleData.scale),
+               height: changeStyleWithScale(height, state.canvasStyleData.scale),
+             })
+             state.canvas?.renderAll()
+           }}
             client:load
             // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
             isElement={!!state.activeElements?.length}

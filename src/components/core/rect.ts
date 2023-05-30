@@ -1,6 +1,5 @@
 import { ComponentType } from "~/constants/enum"
 import type { Shadow } from "./text"
-import { SquareIcon } from "@radix-ui/react-icons"
 
 export const RectCanvasStyle = {
   /**
@@ -32,7 +31,7 @@ export const rectBlock = {
   type: ComponentType.Rect as ComponentType.Rect,
   id: '',
   isLock: false,
-  icon: SquareIcon,
+  icon: 'SquareIcon',
   name: 'Rect',
   style: {
     width: 100,
