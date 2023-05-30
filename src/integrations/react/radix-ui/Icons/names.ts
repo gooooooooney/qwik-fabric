@@ -6,5 +6,6 @@ export const enum IconName {
     FontBoldIcon,
     FontItalicIcon,
     TextIcon,
-    ImageIcon
+    ImageIcon,
+    MobileIcon
 }

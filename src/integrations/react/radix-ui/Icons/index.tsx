@@ -10,7 +10,8 @@ import {
   TextIcon,
   ImageIcon,
   CircleIcon,
-  SquareIcon
+  SquareIcon,
+  MobileIcon,
 } from '@radix-ui/react-icons';
 import React from 'react';
 import { ComponentType } from '~/constants/enum';
@@ -35,6 +36,7 @@ export const Icons = ({ name,icon}: IconsProps) => {
       {icon === IconName.TextAlignLeftIcon && <TextAlignLeftIcon />}
       {icon === IconName.TextAlignCenterIcon && <TextAlignCenterIcon />}
       {icon === IconName.TextAlignRightIcon && <TextAlignRightIcon />}
+      {icon === IconName.MobileIcon && <MobileIcon />}
 
     </>
   )

@@ -18,13 +18,15 @@ import {
     CircleIcon,
     SquareIcon,
     MixerHorizontalIcon,
-    Cross2Icon
+    Cross2Icon,
+    MobileIcon,
+    DesktopIcon
 } from '@radix-ui/react-icons';
 import { cx } from '~/utils/common';
 import { hexToRgb } from '~/utils/style';
 import { ComponentType } from '~/constants/enum';
 import { blockInfoList } from '~/components/core/components';
-import Icons from '../Icons';
+
 
 interface ShadowProps {
     color: string,
@@ -305,7 +307,7 @@ const CommonAttr = ({
         //     return
         // }
         onChangeCanvasSize({ width, height })
-        
+
     }, [width, height])
     useEffect(() => {
         shadowState && setShadowState({
@@ -697,6 +699,23 @@ const CommonAttr = ({
                         <p className="Text" style={{ marginBottom: 10 }}>
                             Dimensions
                         </p>
+                        <div>
+                            {/* <span onClick={() => {
+                                setWidth(1920)
+                                setHeight(1080)
+                            }} className="block w-15px cursor-pointer h-15px">
+                                <DesktopIcon />
+                            </span> */}
+                            <span onClick={() => {
+                                setWidth(375)
+                                setHeight(750)
+                            }} className="block w-15px cursor-pointer h-15px">
+                                <MobileIcon />
+                            </span>
+                        </div>
+                        <div>
+                            Custom
+                        </div>
                         <fieldset className="Fieldset">
                             <label className="Label" htmlFor="width">
                                 Width

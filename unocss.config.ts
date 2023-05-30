@@ -24,7 +24,7 @@ export default defineConfig({
     ['font-Engagement', { 'font-family': 'Engagement' }],
   ],
   shortcuts: {
-    'border-shape': 'rounded-md shadow-radio border border-solid border-gray-3',
+    'border-shape': 'rounded-md shadow-radix border border-solid border-gray-3',
   },
   transformers: [
     transformerVariantGroup() as any
