@@ -1,6 +1,7 @@
 import { fabric } from "~/element"
 import initAligningGuidelines from "./initAligningGuidelines"
 import { initCenteringGuidelines } from "./initCenteringGuidelines"
+import { initMouseEvent } from "./initMouseEvent"
 
 export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, any>) {
   console.log(`Fabric.js版本：${fabric.version}`)
@@ -16,11 +17,13 @@ export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, 
     selectionColor: 'rgba(15,103,240,0.3)', // 选中背景颜色
     selectionFullyContained: true, // 选中元素是否完全包含在选择区域中
     // 元素对象被选中时保持在当前z轴，不会跳到最顶层
-    preserveObjectStacking: true // 默认false
+    preserveObjectStacking: true,// 默认false
+    backgroundVpt: true, // 背景是否随画布移动
   })
 
   initCenteringGuidelines(canvas)
   initAligningGuidelines(canvas)
+  initMouseEvent(canvas)
 
 
   return {

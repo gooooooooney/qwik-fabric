@@ -16,7 +16,7 @@ import Attr from '~/components/Attr';
 import { initCanvasEvent, emitter } from '~/core/event';
 import { changeStyleWithScale } from '~/utils/translate';
 import { initCanvas } from '~/core';
-import { canvas2Json, setGradient } from "~/utils/fabric";
+import { canvas2DatalessJSON, canvas2Json, canvas2Object, setGradient } from "~/utils/fabric";
 import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
 
 export default component$(() => {
@@ -205,7 +205,7 @@ export default component$(() => {
               } else {
                 setElementColor(colors)
               }
-              const r = canvas2Json(state.canvas!)
+              const r = canvas2Object(state.canvas!)
               console.log(r)
               // state.canvas?.renderAll()
             }}

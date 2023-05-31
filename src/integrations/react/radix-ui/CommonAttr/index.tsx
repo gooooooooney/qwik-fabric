@@ -707,8 +707,8 @@ const CommonAttr = ({
                                 <DesktopIcon />
                             </span> */}
                             <span onClick={() => {
-                                setWidth(375)
-                                setHeight(750)
+                                setWidth(390)
+                                setHeight(844)
                             }} className="block w-15px cursor-pointer h-15px">
                                 <MobileIcon />
                             </span>

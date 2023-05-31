@@ -24,5 +24,22 @@ export function setGradient(element: fabric.Object | undefined, {
 }
 
 export function canvas2Json(canvas: fabric.Canvas) {
-    return canvas.toJSON([])
+    return canvas.toJSON()
+}
+
+export function canvas2DatalessJSON(canvas: fabric.Canvas) {
+    return canvas.toDatalessJSON(['id'])
+}
+
+export function json2Canvas(canvas: fabric.Canvas, json: string) {
+    canvas.loadFromJSON(json)
+    canvas.renderAll()
+}
+
+export function canvas2Image(canvas: fabric.Canvas) {
+    return canvas.toDataURL()
+}
+
+export function canvas2Object(canvas: fabric.Canvas) {
+    return canvas.toObject(['id'])
 }
