@@ -16,7 +16,7 @@ import Attr from '~/components/Attr';
 import { initCanvasEvent, emitter } from '~/core/event';
 import { changeStyleWithScale } from '~/utils/translate';
 import { initCanvas } from '~/core';
-import { canvas2DatalessJSON, canvas2Json, canvas2Object, setGradient } from "~/utils/fabric";
+import { canvas2Object, setGradient } from "~/utils/fabric";
 import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
 
 export default component$(() => {
@@ -28,15 +28,15 @@ export default component$(() => {
   const height = changeStyleWithScale(state.canvasStyleData.height, state.canvasStyleData.scale)
 
 
-  const render = $(({type, rect, clientX, clientY}:{type: ComponentType, rect: DOMRect, clientX: number, clientY: number}) => {
+  const render = $(({ type, rect, clientX, clientY }: { type: ComponentType, rect: DOMRect, clientX: number, clientY: number }) => {
     if (type) {
       const item = blockInfoList.find(block => block.type == type);
       if (item) {
         item.id = uid();
         // const rect = containerRef!.getBoundingClientRect();
         const { top, left } = rect;
-        item.canvasStyle.top = item.style.top = clientY - top;
-        item.canvasStyle.left = item.style.left = clientX - left;
+        item.canvasStyle.top = clientY - top;
+        item.canvasStyle.left = clientX - left;
         state.blocks.push(JSON.parse(JSON.stringify(item)));
         const element = renderElement({
           canvas: state.canvas!,
@@ -70,7 +70,12 @@ export default component$(() => {
     const { canvas } = initCanvas(canvasRef.value!, {
       backgroundColor: state.canvasStyleData.backgroundColor,
     })
-    canvas.renderAll()
+    const json = localStorage.getItem('canvas')
+    if (json) {
+      canvas.loadFromJSON(json, () => {
+        canvas.requestRenderAll()
+      })
+    }
     const { listener, removeListener } = initCanvasEvent(canvas)
     listener()
     // 没有选中元素 重置currentBlock 和 activeElements
@@ -100,7 +105,7 @@ export default component$(() => {
       e.stopPropagation();
       const type = e.dataTransfer?.getData('type') as ComponentType;
       render({
-        type, 
+        type,
         rect: containerRef!.getBoundingClientRect(),
         clientX: e.clientX,
         clientY: e.clientY
@@ -214,8 +219,6 @@ export default component$(() => {
               } else {
                 setElementColor(colors)
               }
-              const r = canvas2Object(state.canvas!)
-              console.log(r)
               // state.canvas?.renderAll()
             }}
           />
@@ -241,7 +244,11 @@ export default component$(() => {
           </div>
           <div class="w-1/6 absolute top-0 right-2%" >
 
-
+            <p onClick$={() => {
+              const r = canvas2Object(state.canvas!)
+              console.log(r)
+              localStorage.setItem('canvas', r)
+            }}>save</p>
             <Attr />
 
           </div>

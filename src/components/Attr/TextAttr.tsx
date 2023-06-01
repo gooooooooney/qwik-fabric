@@ -33,9 +33,9 @@ export default component$(({ blocks }: TextAttrProps) => {
           b.canvasStyle.left = target.left
           b.canvasStyle.width = target.width
           b.canvasStyle.height = target.height
-          b.canvasStyle.zoomX = target.zoomX || 1
-          b.canvasStyle.zoomY = target.zoomY || 1
-          b.props.text = target.text
+          // b.canvasStyle.scaleX = target.zoomX || 1
+          // b.canvasStyle.scaleX = target.zoomY || 1
+          b.canvasStyle.text = target.text
         }
       })
     })
@@ -106,14 +106,14 @@ export default component$(({ blocks }: TextAttrProps) => {
         <Label label="Text">
           <input class=" text-base w-full p-1 rounded-md focus:(border-blue) m-0 shadow-radix outline-0 border-gray-3 border-1 border-solid" type="text" onBlur$={(_, el) => {
             blocks.forEach((block) => {
-              block.props.text = el.value
+              block.canvasStyle.text = el.value
             })
             elements?.forEach((element) => {
               element?.set('text', el.value)
             })
             state.canvas?.renderAll()
           }}
-            value={blocks[0]?.props.text} />
+            value={blocks[0]?.canvasStyle.text} />
         </Label>
         {/* <Label class="mt-4 relative" label="Fill">
           <div class="flex items-center justify-between">

@@ -82,21 +82,6 @@ export const textBlock = {
   isLock: false,
   icon: 'TextIcon',
   name: 'Text',
-  props: {
-    text: 'Hello World'
-  },
-  style: {
-    width: 200,
-    height: 28,
-    fontSize: 16,
-    fontWeight: 400,
-    lineHeight: '',
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '',
-    top: 0,
-    left: 0,
-  },
   canvasStyle: {
     ...TextCanvasStyle,
   },
