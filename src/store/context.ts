@@ -23,7 +23,7 @@ export interface CanvasStyleData { // 页面全局数据
   backgroundColor: string,
   opacity: number,
   backgroundImg: string,
-  fontSize: number | string,
+  // fontSize: number | string,
 }
 
 export const GLOBAL_CONTEXT = createContextId<GlobalState>(CONTEXT_IDS.GLOBAL_CONTEXT);
@@ -40,7 +40,6 @@ export const globalState: GlobalState = {
     backgroundColor: '#fff',
     opacity: 1,
     backgroundImg: '',
-    fontSize: 14,
   },
   updateActiveElements: $(function (this: GlobalState, elements: fabric.Object[]) {
     this.activeElements = noSerialize(elements)

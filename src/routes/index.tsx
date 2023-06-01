@@ -27,6 +27,44 @@ export default component$(() => {
   const width = changeStyleWithScale(state.canvasStyleData.width, state.canvasStyleData.scale)
   const height = changeStyleWithScale(state.canvasStyleData.height, state.canvasStyleData.scale)
 
+
+  const render = $(({type, rect, clientX, clientY}:{type: ComponentType, rect: DOMRect, clientX: number, clientY: number}) => {
+    if (type) {
+      const item = blockInfoList.find(block => block.type == type);
+      if (item) {
+        item.id = uid();
+        // const rect = containerRef!.getBoundingClientRect();
+        const { top, left } = rect;
+        item.canvasStyle.top = item.style.top = clientY - top;
+        item.canvasStyle.left = item.style.left = clientX - left;
+        state.blocks.push(JSON.parse(JSON.stringify(item)));
+        const element = renderElement({
+          canvas: state.canvas!,
+          block: item,
+        });
+        if (element) {
+          element.set('id', item.id).set({
+            // 实心 or 空心
+            transparentCorners: false,
+            // 边框颜色
+            borderColor: '#9c6ade',
+            // 
+            cornerColor: '#FFF',
+            // 圆角
+            cornerSize: 10,
+            // 辅助边粗细
+            borderScaleFactor: 1,
+            padding: 2,
+            cornerStyle: 'circle',
+            cornerStrokeColor: '#9c6ade',
+            borderOpacityWhenMoving: .3,
+          });
+          state.canvas?.setActiveObject(element);
+        }
+      }
+    }
+  })
+
   useVisibleTask$(() => {
 
     const { canvas } = initCanvas(canvasRef.value!, {
@@ -60,42 +98,13 @@ export default component$(() => {
     const handleDrop = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-
       const type = e.dataTransfer?.getData('type') as ComponentType;
-      if (type) {
-        const item = blockInfoList.find(block => block.type == type)
-        if (item) {
-          item.id = uid()
-          const rect = containerRef!.getBoundingClientRect()
-          const { top, left } = rect
-          item.canvasStyle.top = item.style.top = e.clientY - top
-          item.canvasStyle.left = item.style.left = e.clientX - left
-          state.blocks.push(JSON.parse(JSON.stringify(item)))
-          const element = renderElement({
-            canvas: state.canvas!,
-            block: item,
-          })
-          if (element) {
-            element.set('id', item.id).set({
-              // 实心 or 空心
-              transparentCorners: false,
-              // 边框颜色
-              borderColor: '#9c6ade',
-              // 
-              cornerColor: '#FFF',
-              // 圆角
-              cornerSize: 10,
-              // 辅助边粗细
-              borderScaleFactor: 1,
-              padding: 2,
-              cornerStyle: 'circle',
-              cornerStrokeColor: '#9c6ade',
-              borderOpacityWhenMoving: .3,
-            })
-            state.canvas?.setActiveObject(element)
-          }
-        }
-      }
+      render({
+        type, 
+        rect: containerRef!.getBoundingClientRect(),
+        clientX: e.clientX,
+        clientY: e.clientY
+      });
     }
     containerRef?.addEventListener('dragover', handleDragOver)
     containerRef?.addEventListener('drop', handleDrop)
@@ -173,17 +182,17 @@ export default component$(() => {
       <div class="flex flex-col justify-center">
         <div class="w-xl mx-auto">
           <CommonAttr
-           canvasWidth={state.canvasStyleData.width}
-           canvasHeight={state.canvasStyleData.height}
-           onChangeCanvasSize$={({ width, height }) => {
-            //  state.canvasStyleData.width = width
-            //  state.canvasStyleData.height = height
-             state.canvas?.setDimensions({
-               width: changeStyleWithScale(width, state.canvasStyleData.scale),
-               height: changeStyleWithScale(height, state.canvasStyleData.scale),
-             })
-             state.canvas?.renderAll()
-           }}
+            canvasWidth={state.canvasStyleData.width}
+            canvasHeight={state.canvasStyleData.height}
+            onChangeCanvasSize$={({ width, height }) => {
+              //  state.canvasStyleData.width = width
+              //  state.canvasStyleData.height = height
+              state.canvas?.setDimensions({
+                width: changeStyleWithScale(width, state.canvasStyleData.scale),
+                height: changeStyleWithScale(height, state.canvasStyleData.scale),
+              })
+              state.canvas?.renderAll()
+            }}
             client:load
             // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
             isElement={!!state.activeElements?.length}

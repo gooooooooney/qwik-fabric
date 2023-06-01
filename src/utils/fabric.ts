@@ -41,5 +41,5 @@ export function canvas2Image(canvas: fabric.Canvas) {
 }
 
 export function canvas2Object(canvas: fabric.Canvas) {
-    return canvas.toObject(['id'])
+    return JSON.stringify(canvas.toObject(['id']))
 }
