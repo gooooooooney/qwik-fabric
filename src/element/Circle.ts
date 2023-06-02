@@ -7,7 +7,7 @@ interface CircleRenderEleArgs extends RenderEleArgs {
 }
 export const renderCircle = ({ canvas, block}: CircleRenderEleArgs) => {
   const circleElement = new fabric.Circle({
-    ...block.canvasStyle as any,
+    ...block as any,
   })
   canvas.add(circleElement)
   return circleElement

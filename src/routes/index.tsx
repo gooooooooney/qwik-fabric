@@ -1,6 +1,7 @@
-import { noSerialize, useContextProvider, $, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { noSerialize, useContextProvider, $, useStore, useVisibleTask$, useTask$, useComputed$ } from '@builder.io/qwik';
 import { useSignal } from '@builder.io/qwik';
 import { component$ } from '@builder.io/qwik';
+import { isBrowser } from '@builder.io/qwik/build';
 import type { DocumentHead } from '@builder.io/qwik-city';
 // import Aside from '~/components/Aside';
 import Editor from '~/components/Editor';
@@ -27,7 +28,6 @@ export default component$(() => {
   const width = changeStyleWithScale(state.canvasStyleData.width, state.canvasStyleData.scale)
   const height = changeStyleWithScale(state.canvasStyleData.height, state.canvasStyleData.scale)
 
-
   const render = $(({ type, rect, clientX, clientY }: { type: ComponentType, rect: DOMRect, clientX: number, clientY: number }) => {
     if (type) {
       const item = blockInfoList.find(block => block.type == type);
@@ -35,9 +35,9 @@ export default component$(() => {
         item.id = uid();
         // const rect = containerRef!.getBoundingClientRect();
         const { top, left } = rect;
-        item.canvasStyle.top = clientY - top;
-        item.canvasStyle.left = clientX - left;
-        state.blocks.push(JSON.parse(JSON.stringify(item)));
+        item.top = clientY - top;
+        item.left = clientX - left;
+        state.blocks = [...state.blocks, JSON.parse(JSON.stringify(item))];
         const element = renderElement({
           canvas: state.canvas!,
           block: item,
@@ -64,28 +64,43 @@ export default component$(() => {
       }
     }
   })
+  useTask$(({ track }) => {
+    track(() => {
+      state.blocks
+    })
+    track(() => {
+      state.currentBlock
+    })
+
+    isBrowser ? console.log("changed") : null
+
+  })
+  useTask$(({ track }) => {
+    track(() => {
+      state.canvasStyleData.backgroundColor
+    })
+
+    isBrowser ? console.log(state.canvasStyleData.backgroundColor) : console.log(state.canvasStyleData.backgroundColor)
+
+  })
 
   useVisibleTask$(() => {
 
-    const { canvas } = initCanvas(canvasRef.value!, {
+    const { canvas, initLoadFromJson } = initCanvas(canvasRef.value!, {
       backgroundColor: state.canvasStyleData.backgroundColor,
     })
     const json = localStorage.getItem('canvas')
-    if (json) {
-      canvas.loadFromJSON(json, () => {
-        canvas.requestRenderAll()
-      })
-    }
+    initLoadFromJson(json, state);
     const { listener, removeListener } = initCanvasEvent(canvas)
     listener()
     // 没有选中元素 重置currentBlock 和 activeElements
     emitter.on(CANVAS_EVENT_SELECTED.NONE, () => {
       state.activeElements = noSerialize([])
-      state.updateCurrentBlock([])
+      state.currentBlock = []
     })
-    state.updateCanvasContext(canvas)
+    state.canvas = noSerialize(canvas)
     return () => {
-      state.updateCanvasContext(undefined)
+      state.canvas = undefined
       canvas.dispose()
       removeListener()
     }
@@ -120,6 +135,11 @@ export default component$(() => {
 
   })
 
+  const fill = useComputed$(() => {
+    const f = state.activeElements?.length ? (state.currentBlock[0]?.fill as string)?.split(',') : state.canvasStyleData.backgroundColor?.split(",")
+    return f
+  })
+
   const setCanvasBackgroundColor = $((colors: string[]) => {
     if (colors.length === 1) {
       state.canvasStyleData.backgroundColor = colors[0]
@@ -146,7 +166,7 @@ export default component$(() => {
   const setElementColor = $((colors: string[]) => {
     if (colors.length === 1) {
       state.currentBlock!.forEach(block => {
-        block.canvasStyle.fill = colors[0]
+        block.fill = colors[0]
       })
       state.activeElements?.forEach((element) => {
         element.set('fill', colors[0])
@@ -175,7 +195,7 @@ export default component$(() => {
       })
 
       state.currentBlock.forEach(block => {
-        block.canvasStyle.fill = colors.join(',')
+        block.fill = colors.join(',')
       })
     }
     state.canvas?.renderAll()
@@ -201,17 +221,17 @@ export default component$(() => {
             client:load
             // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
             isElement={!!state.activeElements?.length}
-            shadow={state.currentBlock[0]?.canvasStyle?.shadow || null}
+            shadow={state.currentBlock[0]?.shadow || null}
             onShadowValueChange$={(shadow) => {
               state.currentBlock!.forEach((block) => {
-                block.canvasStyle.shadow = shadow
+                block.shadow = shadow as any
               })
               state.activeElements?.forEach((element) => {
                 element.set('shadow', shadow)
               })
               state.canvas?.renderAll()
             }}
-            fill={state.currentBlock[0]?.canvasStyle.fill!.split(',') || state.canvasStyleData.backgroundColor.split(",")}
+            fill={fill.value}
             onChangeColor$={colors => {
               // 没有活跃的block 不存在时，代表选中的是画布
               if (!state.activeElements?.length) {
@@ -267,5 +287,7 @@ export const head: DocumentHead = {
     },
   ],
 };
+
+
 
 

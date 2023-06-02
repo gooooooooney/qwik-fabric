@@ -28,7 +28,7 @@ export default component$(() => {
       if (active instanceof fabric.Textbox) {
         const block = state.blocks.find(block => block.id == active.get('id'))
         if (block) {
-          state.updateCurrentBlock([block])
+          state.currentBlock = [block]
         }
       }
     })
@@ -39,7 +39,7 @@ export default component$(() => {
   const handleChangeStrokeColor = $((color: string | null) => {
     if (currentBlockIsNotEmpty.value) {
       state.currentBlock.forEach(block => {
-        block.canvasStyle.stroke = color
+        block.stroke = color
       })
     }
 
@@ -70,11 +70,11 @@ export default component$(() => {
               {
                 [0, 1, 2, 3, 4, 5].map(size => {
                   return <Fragment key={size}>
-                    <Toggle active={size === state.currentBlock[0]?.canvasStyle.strokeWidth}>
+                    <Toggle active={size === state.currentBlock[0]?.strokeWidth}>
                       <input
                         onChange$={(_, el) => {
                           state.currentBlock.forEach(block => {
-                            block.canvasStyle.strokeWidth = Number(el.value)
+                            block.strokeWidth = Number(el.value)
                           })
                           elements?.forEach((element) => {
                             element?.set('strokeWidth', Number(el.value))
@@ -83,7 +83,7 @@ export default component$(() => {
                         }}
                         class="absolute opacity-0 pointer-events-none"
                         value={size}
-                        checked={state.currentBlock[0]?.canvasStyle.strokeWidth === size}
+                        checked={state.currentBlock[0]?.strokeWidth === size}
                         type="radio"
                         name="Stroke" />
                       <span>{size}
@@ -95,10 +95,10 @@ export default component$(() => {
             </div>
             <NumberSelte
               range={strokeWidthRange}
-              value={state.currentBlock[0]?.canvasStyle?.strokeWidth?.toString()}
+              value={state.currentBlock[0]?.strokeWidth?.toString()}
               onValueChange$={size => {
                 state.currentBlock.forEach(block => {
-                  block.canvasStyle.strokeWidth = Number(size)
+                  block.strokeWidth = Number(size)
                 })
                 elements?.forEach((element) => {
                   element?.set('strokeWidth', Number(size))
@@ -114,17 +114,17 @@ export default component$(() => {
                 <div class="absolute z-2 bottom-3/5 left-1/2 -translate-x-[50%]">
                   <ColorPicker
                     onChangeComplete$={({ hex }) => handleChangeStrokeColor(hex)}
-                    color={state.currentBlock[0]?.canvasStyle.stroke ?? 'none'} />
+                    color={state.currentBlock[0]?.stroke as string ?? 'none'} />
                 </div>
 
               </div> : null
             }
             <div class="flex items-center justify-between">
-              <div class="w-[45px] h-[45px] rounded-xl shadow-radix cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': state.currentBlock[0]?.canvasStyle.stroke ?? 'black' }}></div>
+              <div class="w-[45px] h-[45px] rounded-xl shadow-radix cursor-pointer hover:opacity-80" onClick$={() => displayStrokeColorPicker.value = true} style={{ 'background-color': state.currentBlock[0]?.stroke as string ?? 'black' }}></div>
               <div class=" h-[45px] w-[50px] flex justify-center items-center rounded-xl shadow-radix cursor-pointer hover:opacity-80" onClick$={() => handleChangeStrokeColor(null)}>reset</div>
               <div class="flex border border-solid border-gray-3 text-xl items-center w-2/5 h-[45px]  rounded-xl shadow-radix">
                 <div class="pl-2">#</div>
-                <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={state.currentBlock[0]?.canvasStyle.stroke?.slice(1)} onKeyUp$={(e, el) => {
+                <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={(state.currentBlock[0]?.stroke as string)?.slice(1)} onKeyUp$={(e, el) => {
                   if (e.key == KEY_CODE.ENTER) {
                     handleChangeStrokeColor("#" + el.value)
                   }

@@ -49,6 +49,9 @@ dependencies:
   fabric:
     specifier: 6.0.0-beta7
     version: 6.0.0-beta7
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   mathjs:
     specifier: ^11.8.0
     version: 11.8.0

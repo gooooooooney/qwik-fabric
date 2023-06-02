@@ -8,7 +8,7 @@ import * as Toolbar from '@radix-ui/react-toolbar';
 import { qwikify$ } from '@builder.io/qwik-react';
 import * as Popover from '@radix-ui/react-popover';
 import * as TooltipCom from '@radix-ui/react-tooltip';
-import { ChromePicker } from 'react-color'
+import ColorPicker from 'react-color'
 import "./index.css"
 import {
     ColorWheelIcon,
@@ -77,15 +77,15 @@ interface PopoverProps extends PropsWithChildren, Popover.PopoverContentProps {
     tip: string
 }
 
-const getIcon = (iconName: string) => {
+const getIcon = (iconName: ComponentType) => {
     switch (iconName) {
-        case 'TextIcon':
+        case ComponentType.TextBox:
             return <TextIcon />
-        case 'ImageIcon':
+        case ComponentType.Img:
             return <ImageIcon />
-        case 'CircleIcon':
+        case ComponentType.Circle:
             return <CircleIcon />
-        case 'SquareIcon':
+        case ComponentType.Rect:
             return <SquareIcon />
 
     }
@@ -325,6 +325,9 @@ const CommonAttr = ({
     useEffect(() => {
         shadow && setShadowState(shadow)
     }, [shadow])
+    useEffect(() => {
+        setColors(fill)
+    }, [fill])
 
     return (
         <Toolbar.Root
@@ -395,14 +398,13 @@ const CommonAttr = ({
                                     <div >
                                         <div className="fixed top-0 right-0 left-0 bottom-0" onClick={() => setDisplayColorPicker(false)} />
                                         <div className="absolute z-2 top-full left-1/2 -translate-x-[50%]">
-                                            <ChromePicker
+                                            <ColorPicker.ChromePicker
                                                 onChangeComplete={(color) => {
                                                     const hexColor = color.hex
                                                     setCurrentColor(hexColor)
                                                     if (currentColorIndex == -1) {
                                                         setColors([...colors, hexColor])
                                                         setCurrentColorIndex(colors.length)
-                                                        console.log(colors)
                                                     } else {
                                                         colors[currentColorIndex] = hexColor
                                                         setColors([...colors])
@@ -435,17 +437,17 @@ const CommonAttr = ({
 
 
             {
-                blockInfoList.map((comp) => (
-                    <Fragment key={comp.name}>
+                blockInfoList.map((comp, index) => (
+                    <Fragment key={comp.type + index}>
                         <Toolbar.ToggleGroup onDragStart={(e) => {
                             const target = e.target;
                             if (!(target instanceof HTMLDivElement)) return
                             e.dataTransfer?.setData("type", target.dataset.type ?? ComponentType.Text)
                         }} type="single" defaultValue="center" aria-label="Text alignment">
-                            <TooltipTrigger tip={comp.name}>
+                            <TooltipTrigger tip={comp.type}>
 
-                                <div draggable id={comp.type} key={comp.type} data-type={comp.type} className="active-cursor-grabbing cursor-grab h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 ">
-                                    {getIcon(comp.icon)}
+                                <div data-id={comp.id} draggable id={comp.type} data-type={comp.type} className="active-cursor-grabbing cursor-grab h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 ">
+                                    {getIcon(comp.type)}
                                 </div>
                             </TooltipTrigger>
                         </Toolbar.ToggleGroup>
@@ -643,7 +645,7 @@ const CommonAttr = ({
                                                                         <div >
                                                                             <div className="fixed top-0 right-0 left-0 bottom-0" onClick={() => setDisplayShadowColorPicker(false)} />
                                                                             <div className="absolute z-2 top-full left-1/2 -translate-x-[50%]">
-                                                                                <ChromePicker
+                                                                                <ColorPicker.ChromePicker
                                                                                     onChangeComplete={(color) => {
                                                                                         const rgb = color.rgb
                                                                                         setShadowState({

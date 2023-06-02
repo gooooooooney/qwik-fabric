@@ -6,8 +6,12 @@ interface RectRenderEleArgs extends RenderEleArgs {
   block: RectBlock
 }
 export const renderRect = ({ canvas, block}: RectRenderEleArgs) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {type, ...styles} = block
+
+
   const rectElement = new fabric.Rect({
-    ...block.canvasStyle as any,
+    ...styles,
   })
 
   canvas.add(rectElement)

@@ -3,7 +3,7 @@ import type { Object } from "fabric/dist/src/shapes/Object/FabricObject"
 import type { BlockInfo } from "~/components/core/components"
 import { ComponentType } from "~/constants/enum"
 import { renderText } from "~/element/Text"
-import { renderImage } from "~/element/Image"
+// import { renderImage } from "~/element/Image"
 import { renderCircle } from "./Circle"
 import { renderRect } from "./Rect"
 
@@ -21,8 +21,8 @@ export const renderElement = ({
   switch (block.type) {
     case ComponentType.TextBox:
       return renderText({ canvas, block })
-    case ComponentType.Img:
-      return renderImage({ canvas, block })
+    // case ComponentType.Img:
+    //   return renderImage({ canvas, block })
     case ComponentType.Circle:
       return renderCircle({ canvas, block })
     case ComponentType.Rect:

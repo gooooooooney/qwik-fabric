@@ -1,11 +1,9 @@
-import type { TOriginX, TOriginY } from "fabric/*"
 import { ComponentType } from "~/constants/enum"
-import type { Shadow } from "./text"
-// import type { fabric } from "~/element"
+import type { fabric } from "~/element"
 
-// type Circle = NonNullable<ConstructorParameters<typeof fabric.Circle>[number]>
+export type CircleProps = NonNullable<ConstructorParameters<typeof fabric.Circle>[number]> & {type: ComponentType.Circle, id?: string }
 
-export const CircleCanvasStyle = {
+export const CircleCanvasStyle: CircleProps = {
     radius: 50,
     startAngle: 0,
     endAngle: 360,
@@ -32,12 +30,12 @@ export const CircleCanvasStyle = {
     backgroundColor: "",
     fillRule: "nonzero",
     paintFirst: "fill",
-    globalCompositeOperation: "source-over",
     skewX: 0,
     skewY: 0,
-    shadow: null as Shadow | null | undefined,
-    originX: 'left' as TOriginX,       
-    originY: 'top' as TOriginY,   
+    shadow: null,
+    originX: 'left',       
+    originY: 'top',   
+    type: ComponentType.Circle,
 }
 
 export const circleBlock = {

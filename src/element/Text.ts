@@ -7,10 +7,10 @@ interface TextRenderEleArgs extends RenderEleArgs {
 }
 
 export const renderText = ({ canvas, block }: TextRenderEleArgs) => {
-
-console.log()
-  const textElement = new fabric.Textbox(block.canvasStyle.text, {
-    ...block.canvasStyle,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {type, ...styles} = block
+  const textElement = new fabric.Textbox(block.text!, {
+    ...styles
   })
 
   // 禁止用户垂直缩放

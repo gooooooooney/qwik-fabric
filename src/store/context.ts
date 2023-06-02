@@ -1,7 +1,6 @@
-import type { NoSerialize, QRL} from "@builder.io/qwik";
+import type { NoSerialize} from "@builder.io/qwik";
 import { noSerialize } from "@builder.io/qwik";
-import { $, createContextId } from "@builder.io/qwik";
-import type { Canvas } from "fabric/*";
+import { createContextId } from "@builder.io/qwik";
 import type { BlockInfo } from "~/components/core/components";
 import { CONTEXT_IDS } from "~/constants/enum";
 import type { fabric } from "~/element";
@@ -11,9 +10,9 @@ export interface GlobalState {
   canvasStyleData: CanvasStyleData,
   currentBlock: BlockInfo[],
   activeElements: NoSerialize<fabric.Object[]>
-  updateCurrentBlock: QRL<(this: GlobalState, block: BlockInfo[]) => void>
-  updateCanvasContext: QRL<(this: GlobalState, canvas?: Canvas) => void>
-  updateActiveElements: QRL<(this: GlobalState, elements: fabric.Object[]) => void>
+  // updateCurrentBlock: QRL<(this: GlobalState, block: BlockInfo[]) => void>
+  // updateCanvasContext: QRL<(this: GlobalState, canvas?: Canvas) => void>
+  // updateActiveElements: QRL<(this: GlobalState, elements: fabric.Object[]) => void>
 }
 
 export interface CanvasStyleData { // 页面全局数据
@@ -41,14 +40,14 @@ export const globalState: GlobalState = {
     opacity: 1,
     backgroundImg: '',
   },
-  updateActiveElements: $(function (this: GlobalState, elements: fabric.Object[]) {
-    this.activeElements = noSerialize(elements)
-  }),
-  updateCurrentBlock: $(function (this: GlobalState, block: BlockInfo[]) {
-    this.currentBlock = block
-  }),
-  updateCanvasContext: $(function (this: GlobalState, canvas?: Canvas) {
+  // updateActiveElements: $(function (this: GlobalState, elements: fabric.Object[]) {
+  //   this.activeElements = noSerialize(elements)
+  // }),
+  // updateCurrentBlock: $(function (this: GlobalState, block: BlockInfo[]) {
+  //   this.currentBlock = block
+  // }),
+  // updateCanvasContext: $(function (this: GlobalState, canvas?: Canvas) {
 
-    this.canvas = noSerialize(canvas)
-  }),
+  //   this.canvas = noSerialize(canvas)
+  // }),
 }

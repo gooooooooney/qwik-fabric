@@ -1,8 +1,8 @@
 import { ComponentType } from "~/constants/enum"
-import type { Shadow } from "./text"
+import type { fabric } from "~/element"
+export type RectProps = ConstructorParameters<typeof fabric.Rect>[number] & {type: ComponentType.Rect, id?: string}
 
-export const RectCanvasStyle = {
-
+export const RectCanvasStyle: RectProps = {
   "rx": 5,
   "ry": 5,
   "originX": "left",
@@ -30,10 +30,10 @@ export const RectCanvasStyle = {
   "backgroundColor": "",
   "fillRule": "nonzero",
   "paintFirst": "fill",
-  "globalCompositeOperation": "source-over",
   "skewX": 0,
   "skewY": 0,
-  shadow: null as Shadow | null | undefined,
+  type: ComponentType.Rect,
+  shadow: null,
 }
 
 export const rectBlock = {

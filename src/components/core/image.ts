@@ -1,17 +1,15 @@
 import { ComponentType } from "~/constants/enum"
-import type { Shadow } from "./text"
+import type { fabric } from "~/element"
+export type ImageProps = NonNullable<ConstructorParameters<typeof fabric.Image>[number]>
 
-export const ImageCanvasStyle = {
+export const ImageCanvasStyle: ImageProps = {
   width: 200,
   height: 28,
   fill: '#181818',
   top: 0,
   left: 0,
-  // shadow
-  shadow: null as Shadow | null | undefined,
-  // fontStyle
-  // stroke and strokeWidth
-  stroke: null as string | null,
+  shadow: null,
+  stroke: null,
   strokeWidth: 1,
 }
 export const imageBlock = {

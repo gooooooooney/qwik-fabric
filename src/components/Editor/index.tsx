@@ -1,6 +1,6 @@
 import { $, Slot, component$, noSerialize, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { CANVAS_EVENT_SELECTED, Canvas_Event_Object } from "~/constants/enum";
-import { fabric } from "~/element";
+import type { fabric } from "~/element";
 // import type { GlobalState } from "~/store/context";
 import { GLOBAL_CONTEXT } from "~/store/context";
 import { emitter } from "~/core/event";
@@ -80,7 +80,7 @@ export default component$(() => {
       state.activeElements = noSerialize([active])
       const block = state.blocks.find(block => block.id == active?.get('id'))
       if (block) {
-        state.updateCurrentBlock([block])
+        state.currentBlock = [block]
       }
     })
     emitter.on(CANVAS_EVENT_SELECTED.MULTIPLY, () => {
@@ -88,7 +88,7 @@ export default component$(() => {
       state.activeElements = noSerialize(actives)
       // 找出当前选中的所有block
       const blocks = state.blocks.filter(block => actives.some(active => block.id == active?.get('id')))
-      state.updateCurrentBlock(blocks)
+      state.currentBlock = blocks
     })
 
     emitter.on(CANVAS_EVENT_SELECTED.NONE, () => {

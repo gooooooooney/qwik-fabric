@@ -1,6 +1,7 @@
 {
   "name": "my-qwik-basic-starter",
   "description": "App with Routing built-in (recommended)",
+  "type": "module",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -66,6 +67,7 @@
     "dom-to-image": "^2.6.0",
     "events": "^3.3.0",
     "fabric": "6.0.0-beta7",
+    "lodash": "^4.17.21",
     "mathjs": "^11.8.0",
     "nanoid": "^4.0.2",
     "react-color": "^2.19.3"

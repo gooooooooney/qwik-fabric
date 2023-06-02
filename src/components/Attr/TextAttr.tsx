@@ -19,8 +19,8 @@ export default component$(({ blocks }: TextAttrProps) => {
   const elements = noSerialize(state.canvas?.getActiveObjects() as fabric.Textbox[])
 
   // const handleChangeColor = $((color: string) => {
-  //   block.canvasStyle.fill = color
-  //   element?.set('fill', block.canvasStyle.fill)
+  //   block.fill = color
+  //   element?.set('fill', block.fill)
   //   state.canvas?.renderAll()
   // })
 
@@ -29,13 +29,13 @@ export default component$(({ blocks }: TextAttrProps) => {
 
       blocks.forEach((b) => {
         if (b.id == target.get('id')) {
-          b.canvasStyle.top = target.top
-          b.canvasStyle.left = target.left
-          b.canvasStyle.width = target.width
-          b.canvasStyle.height = target.height
-          // b.canvasStyle.scaleX = target.zoomX || 1
-          // b.canvasStyle.scaleX = target.zoomY || 1
-          b.canvasStyle.text = target.text
+          b.top = target.top
+          b.left = target.left
+          b.width = target.width
+          b.height = target.height
+          // b.scaleX = target.zoomX || 1
+          // b.scaleX = target.zoomY || 1
+          b.text = target.text
         }
       })
     })
@@ -43,31 +43,31 @@ export default component$(({ blocks }: TextAttrProps) => {
 
   const handleChangeFontStyle = $((value: string[]) => {
     blocks.forEach((block) => {
-      block.canvasStyle.fontWeight = (value.find((item) => item == 'bold') ? 'bold' : 'normal') as FontWeight
-      block.canvasStyle.underline = !!value.find(item => item == 'underline')
-      block.canvasStyle.linethrough = !!value.find(item => item == 'line-through')
-      block.canvasStyle.fontStyle = value.find(item => item == 'italic') ? 'italic' : 'normal'
+      block.fontWeight = (value.find((item) => item == 'bold') ? 'bold' : 'normal') as FontWeight
+      block.underline = !!value.find(item => item == 'underline')
+      block.linethrough = !!value.find(item => item == 'line-through')
+      block.fontStyle = value.find(item => item == 'italic') ? 'italic' : 'normal'
     })
     elements?.forEach((element) => {
       const block = blocks[0]
       
       // element.setSelectionStyles({ 
-      //   'fontWeight': block.canvasStyle.fontWeight,
-      //   'underline': block.canvasStyle.underline,
-      //   'linethrough': block.canvasStyle.linethrough,
-      //   'fontStyle': block.canvasStyle.fontStyle,
+      //   'fontWeight': block.fontWeight,
+      //   'underline': block.underline,
+      //   'linethrough': block.linethrough,
+      //   'fontStyle': block.fontStyle,
       //  })
       
-      element?.set('fontWeight', block.canvasStyle.fontWeight)
-      element?.set('underline', block.canvasStyle.underline)
-      element?.set('linethrough', block.canvasStyle.linethrough)
-      element?.set('fontStyle', block.canvasStyle.fontStyle)
+      element?.set('fontWeight', block.fontWeight)
+      element?.set('underline', block.underline)
+      element?.set('linethrough', block.linethrough)
+      element?.set('fontStyle', block.fontStyle)
     })
     state.canvas?.renderAll()
   })
   const handleChangeAlignment = $((value: TextAlign) => {
     blocks.forEach((block) => {
-      block.canvasStyle.textAlign = value
+      block.textAlign = value
     })
     elements?.forEach((element) => {
       element?.set('textAlign', value)
@@ -78,10 +78,10 @@ export default component$(({ blocks }: TextAttrProps) => {
     if (!blocks.length) return []
     const block = blocks[0]
     return [
-      block?.canvasStyle.fontWeight,
-      block.canvasStyle.underline ? 'underline' : 'none',
-      block.canvasStyle.linethrough ? 'line-through' : 'none',
-      block.canvasStyle.fontStyle,
+      block?.fontWeight ?? 'normal',
+      block.underline ? 'underline' : 'none',
+      block.linethrough ? 'line-through' : 'none',
+      block.fontStyle ?? 'normal',
     ]
   })
   const textSizes = [
@@ -97,7 +97,7 @@ export default component$(({ blocks }: TextAttrProps) => {
 
   return blocks.length ? <div class="w-full relative ">
     <Toolbar
-      alignmentDefaultValue={blocks[0]?.canvasStyle.textAlign}
+      alignmentDefaultValue={(blocks?.[0]?.textAlign ?? 'left') as TextAlign}
       textStyleDefaultValue={textStyleDefaultValue.value}
       onChangeAlignment$={handleChangeAlignment}
       onChangeTextStyle$={handleChangeFontStyle} />
@@ -106,21 +106,21 @@ export default component$(({ blocks }: TextAttrProps) => {
         <Label label="Text">
           <input class=" text-base w-full p-1 rounded-md focus:(border-blue) m-0 shadow-radix outline-0 border-gray-3 border-1 border-solid" type="text" onBlur$={(_, el) => {
             blocks.forEach((block) => {
-              block.canvasStyle.text = el.value
+              block.text = el.value
             })
             elements?.forEach((element) => {
               element?.set('text', el.value)
             })
             state.canvas?.renderAll()
           }}
-            value={blocks[0]?.canvasStyle.text} />
+            value={blocks[0]?.text} />
         </Label>
         {/* <Label class="mt-4 relative" label="Fill">
           <div class="flex items-center justify-between">
-            <div class="w-[45px] h-[45px] rounded-xl shadow-radix cursor-pointer hover:opacity-80" onClick$={() => displayColorPicker.value = true} style={{ 'background-color': block.canvasStyle.fill }}></div>
+            <div class="w-[45px] h-[45px] rounded-xl shadow-radix cursor-pointer hover:opacity-80" onClick$={() => displayColorPicker.value = true} style={{ 'background-color': block.fill }}></div>
             <div class="flex border border-solid border-gray-3 text-xl items-center w-3/5 h-[45px]  rounded-xl shadow-radix">
               <div class="pl-2">#</div>
-              <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={block.canvasStyle.fill.slice(1)} onKeyUp$={(e, el) => {
+              <input class="p-2 text-xl w-full pr-1 m-0 outline-0 border-0 rounded-xl " type="text" value={block.fill.slice(1)} onKeyUp$={(e, el) => {
                 if (e.key == KEY_CODE.ENTER) {
                   handleChangeColor("#" + el.value)
                 }
@@ -133,7 +133,7 @@ export default component$(({ blocks }: TextAttrProps) => {
               <div class="absolute z-2 top-full left-1/2 -translate-x-[50%]">
                 <ColorPicker
                   onChangeComplete$={({ hex }) => handleChangeColor(hex)}
-                  color={block.canvasStyle.fill} />
+                  color={block.fill} />
               </div>
 
             </div> : null
@@ -147,11 +147,11 @@ export default component$(({ blocks }: TextAttrProps) => {
             {
               textSizes.map(size => {
                 return <Fragment key={size.value}>
-                  <Toggle active={size.value === blocks[0]?.canvasStyle.fontSize}>
+                  <Toggle active={size.value == blocks[0]?.fontSize}>
                     <input
                       onChange$={(_, el) => {
                         blocks.forEach((block) => {
-                          block.canvasStyle.fontSize = Number(el.value)
+                          block.fontSize = Number(el.value)
                         })
                         elements?.forEach((element) => {
                           element?.set('fontSize', el.value)
@@ -160,7 +160,7 @@ export default component$(({ blocks }: TextAttrProps) => {
                       }}
                       class="absolute opacity-0 pointer-events-none"
                       value={size.value}
-                      checked={blocks[0]?.canvasStyle.fontSize === size.value}
+                      checked={blocks[0]?.fontSize === size.value}
                       type="radio"
                       name="Size" />
                     <span class={size.size}>{size.label}
@@ -172,10 +172,10 @@ export default component$(({ blocks }: TextAttrProps) => {
           </div>
           <NumberSelte
             range={fontSizeRange}
-            value={blocks[0]?.canvasStyle?.fontSize?.toString()}
+            value={blocks[0]?.fontSize?.toString()}
             onValueChange$={size => {
               blocks.forEach((block) => {
-                block.canvasStyle.fontSize = Number(size)
+                block.fontSize = Number(size)
               })
               elements?.forEach((element) => {
                 element?.set('fontSize', Number(size))
@@ -186,10 +186,10 @@ export default component$(({ blocks }: TextAttrProps) => {
 
         <Label class="mt-4" label="Font family">
           <FontFamilySelect
-            value={blocks[0]?.canvasStyle.fontFamily}
+            value={blocks[0]?.fontFamily}
             onValueChange$={fontFamily => {
               blocks.forEach((block) => {
-                block.canvasStyle.fontFamily = fontFamily
+                block.fontFamily = fontFamily
               })
               elements?.forEach((element) => {
                 element?.set('fontFamily', fontFamily)

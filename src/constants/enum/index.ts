@@ -1,10 +1,10 @@
 export const enum ComponentType {
   Text = 'text',
-  TextBox = 'textbox',
+  TextBox = 'Textbox',
   Line = 'line',
   Img = 'img',
-  Circle = 'circle',
-  Rect = 'rect',
+  Circle = 'Circle',
+  Rect = 'Rect',
   Triangle = 'triangle',
   Ellipse = 'ellipse',
   Canvas = 'canvas',

@@ -1,33 +1,11 @@
+import type { TClassProperties, Textbox } from "fabric"
 import { ComponentType } from "~/constants/enum"
 import type { FontWeight, TextAlign } from "~/constants/enum/style"
-export interface Shadow {
-  /**
-   * Shadow color
-   * @type String
-   * @default
-   */
-  color: string;
-  /**
-   * Shadow blur
-   * @type Number
-   */
-  blur: number;
-  /**
-   * Shadow horizontal offset
-   * @type Number
-   * @default
-   */
-  offsetX: number;
-  /**
-   * Shadow vertical offset
-   * @type Number
-   * @default
-   */
-  offsetY: number;
-}
-export const TextCanvasStyle = {
+export type TextboxProps = Partial<TClassProperties<Textbox>> & {type: ComponentType.TextBox, id?: string}
+
+export const TextCanvasStyle: TextboxProps = {
   fontWeight: 'normal' as FontWeight,
-  shadow: null as Shadow | null | undefined,
+  shadow: null,
   textAlign: 'left' as TextAlign,
   fontSize: 16,
   fontFamily: "Arial",
@@ -35,7 +13,7 @@ export const TextCanvasStyle = {
   lineHeight: 1.5,
   text: "Hello World",
   charSpacing: 0,
-  styles: [],
+  // styles: [],
   path: null,
   pathStartOffset: 0,
   pathSide: "left",
@@ -72,9 +50,9 @@ export const TextCanvasStyle = {
   backgroundColor: "",
   fillRule: "nonzero",
   paintFirst: "fill",
-  globalCompositeOperation: "source-over",
   skewX: 0,
-  skewY: 0
+  skewY: 0,
+  type: ComponentType.TextBox,
 }
 export const textBlock = {
   type: ComponentType.TextBox as ComponentType.TextBox,
