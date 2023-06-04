@@ -12,6 +12,7 @@ export const enum ComponentType {
 
 export const enum CONTEXT_IDS {
   GLOBAL_CONTEXT = 'gooney.context.global',
+  TEMPLATE_CONTEXT = 'gooney.context.template',
 }
 
 export const enum CANVAS_EVENT_SELECTED {

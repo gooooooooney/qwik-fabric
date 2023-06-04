@@ -1,15 +1,12 @@
-import { noSerialize, useContextProvider, $, useStore, useVisibleTask$, useTask$, useComputed$ } from '@builder.io/qwik';
+import { noSerialize, $, useVisibleTask$, useComputed$, useContext } from '@builder.io/qwik';
 import { useSignal } from '@builder.io/qwik';
 import { component$ } from '@builder.io/qwik';
-import { isBrowser } from '@builder.io/qwik/build';
 import type { DocumentHead } from '@builder.io/qwik-city';
 // import Aside from '~/components/Aside';
 import Editor from '~/components/Editor';
 import { blockInfoList } from '~/components/core/components';
 import type { ComponentType } from '~/constants/enum';
 import { CANVAS_EVENT_SELECTED } from '~/constants/enum';
-import type { GlobalState } from '~/store/context';
-import { globalState } from '~/store/context';
 import { GLOBAL_CONTEXT } from '~/store/context';
 import { uid } from '~/utils/common';
 import { fabric, renderElement } from '~/element'
@@ -17,17 +14,19 @@ import Attr from '~/components/Attr';
 import { initCanvasEvent, emitter } from '~/core/event';
 import { changeStyleWithScale } from '~/utils/translate';
 import { initCanvas } from '~/core';
-import { canvas2Object, setGradient } from "~/utils/fabric";
+import { canvas2Object, loadFromJSON, setGradient } from "~/utils/fabric";
 import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
+import { elementBorder } from '~/constants/fabric';
+import { environment } from '~/store/db';
+import { useTemplateCtx } from '~/use/useTemplateCtx';
 
 export default component$(() => {
-  const state = useStore<GlobalState>(globalState)
-  useContextProvider(GLOBAL_CONTEXT, state)
+  const state = useContext(GLOBAL_CONTEXT)
+  const tmpState = useTemplateCtx()
   const canvasContainerRef = useSignal<HTMLDivElement>();
   const canvasRef = useSignal<HTMLCanvasElement>()
   const width = changeStyleWithScale(state.canvasStyleData.width, state.canvasStyleData.scale)
   const height = changeStyleWithScale(state.canvasStyleData.height, state.canvasStyleData.scale)
-
   const render = $(({ type, rect, clientX, clientY }: { type: ComponentType, rect: DOMRect, clientX: number, clientY: number }) => {
     if (type) {
       const item = blockInfoList.find(block => block.type == type);
@@ -43,54 +42,50 @@ export default component$(() => {
           block: item,
         });
         if (element) {
-          element.set('id', item.id).set({
-            // 实心 or 空心
-            transparentCorners: false,
-            // 边框颜色
-            borderColor: '#9c6ade',
-            // 
-            cornerColor: '#FFF',
-            // 圆角
-            cornerSize: 10,
-            // 辅助边粗细
-            borderScaleFactor: 1,
-            padding: 2,
-            cornerStyle: 'circle',
-            cornerStrokeColor: '#9c6ade',
-            borderOpacityWhenMoving: .3,
+          element.set({
+            id: item.id,
+            ...elementBorder
           });
           state.canvas?.setActiveObject(element);
         }
       }
     }
   })
-  useTask$(({ track }) => {
-    track(() => {
-      state.blocks
-    })
-    track(() => {
-      state.currentBlock
-    })
 
-    isBrowser ? console.log("changed") : null
+  // useVisibleTask$(({ track }) => {
+  //   track(() => {
+  //     state.blocks
+  //   })
+  //   track(() => {
+  //     state.currentBlock
+  //   })
+  //   track(() => {
+  //     state.canvasStyleData.backgroundColor
+  //   })
 
-  })
-  useTask$(({ track }) => {
-    track(() => {
-      state.canvasStyleData.backgroundColor
-    })
+  //   if (state.canvas) {
+  //     const r = canvas2Object(state.canvas!)
+  //     console.log(r)
+  //     localStorage.setItem('canvas', r)
+  //   }
 
-    isBrowser ? console.log(state.canvasStyleData.backgroundColor) : console.log(state.canvasStyleData.backgroundColor)
-
-  })
+  // })
 
   useVisibleTask$(() => {
 
-    const { canvas, initLoadFromJson } = initCanvas(canvasRef.value!, {
+    const { canvas } = initCanvas(canvasRef.value!, {
       backgroundColor: state.canvasStyleData.backgroundColor,
     })
-    const json = localStorage.getItem('canvas')
-    initLoadFromJson(json, state);
+    environment.loadCanvas().then(res => {
+      // initLoadFromJson(json, state);
+      // console.log(res)
+      if (res.length) {
+        tmpState.tmps = res
+        tmpState.currentTmp = res[0]
+        loadFromJSON(JSON.stringify(res[0]), canvas, state)
+      }
+
+    })
     const { listener, removeListener } = initCanvasEvent(canvas)
     listener()
     // 没有选中元素 重置currentBlock 和 activeElements
@@ -265,9 +260,13 @@ export default component$(() => {
           <div class="w-1/6 absolute top-0 right-2%" >
 
             <p onClick$={() => {
-              const r = canvas2Object(state.canvas!)
-              console.log(r)
-              localStorage.setItem('canvas', r)
+              if (tmpState.currentTmp) {
+                const r = canvas2Object(state.canvas!)
+
+                environment.saveCanvas({...tmpState.currentTmp, ...r})
+
+              }
+              // localStorage.setItem('canvas', r)
             }}>save</p>
             <Attr />
 

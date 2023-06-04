@@ -2,8 +2,6 @@ import { fabric } from "~/element"
 import initAligningGuidelines from "./initAligningGuidelines"
 import { initCenteringGuidelines } from "./initCenteringGuidelines"
 import { initMouseEvent } from "./initMouseEvent"
-import { initLoadFromJson } from "./initDataFromJson"
-import type { GlobalState } from "~/store/context"
 
 export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, any>) {
   console.log(`Fabric.js版本：${fabric.version}`)
@@ -32,6 +30,5 @@ export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, 
 
   return {
     canvas,
-    initLoadFromJson: (json: string | null, state: GlobalState) => initLoadFromJson(json, canvas, state),
   }
 }

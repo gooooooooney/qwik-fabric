@@ -1,6 +1,6 @@
 /** @jsxImportSource react */
 
-import ColorPicker from 'react-color';
+import * as ColorPicker from 'react-color';
 import React from 'react';
 import type { Color, ColorChangeHandler } from 'react-color';
 import { qwikify$ } from '@builder.io/qwik-react';

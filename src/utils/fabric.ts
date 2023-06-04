@@ -1,4 +1,3 @@
-import { fabric } from "~/element";
 type GradientOption = ConstructorParameters<typeof fabric.Gradient>[0]
 
 export function setGradient(element: fabric.Object | undefined, {
@@ -41,5 +40,35 @@ export function canvas2Image(canvas: fabric.Canvas) {
 }
 
 export function canvas2Object(canvas: fabric.Canvas) {
-    return JSON.stringify(canvas.toObject(['id']))
+    return canvas.toObject(['id'])
+}
+
+import { elementBorder } from "~/constants/fabric";
+import { fabric } from "~/element";
+import type { GlobalState } from "~/store/context";
+
+function getColor(color: string | fabric.TFiller | null) {
+  if (typeof color === 'string') {
+    return color;
+  }
+  if (color instanceof fabric.Gradient) {
+    return color.colorStops.map(stop => stop.color).join(',');
+  }
+  // if (color instanceof fabric.Pattern) {
+  //   return color.source;
+  // }
+  return '';
+
+}
+export function loadFromJSON(json: string | null, canvas: fabric.Canvas, state: GlobalState) {
+  if (json) {
+    canvas.loadFromJSON(json, (o, e) => {
+      e.set({ ...elementBorder })
+      state.blocks.push({ ...o, fill: getColor(e.fill) } as any);
+    }).then(c => {
+      const fill = getColor(c.backgroundColor);
+      state.canvasStyleData.backgroundColor = fill
+      c.requestRenderAll()
+    });
+  }
 }
