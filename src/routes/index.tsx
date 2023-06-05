@@ -21,10 +21,8 @@ import { environment } from '~/store/db';
 import { useTemplateCtx } from '~/use/useTemplateCtx';
 import DropdownMenu from '~/integrations/react/radix-ui/DropdownMenu/DropdownMenu';
 import Tooltip from '~/integrations/react/radix-ui/Tooltip/Tooltip';
-import { useToast } from '~/use/useToast';
 
 export default component$(() => {
-  const {toast} = useToast()
   const state = useContext(GLOBAL_CONTEXT)
   const tmpState = useTemplateCtx()
   const canvasContainerRef = useSignal<HTMLDivElement>();
@@ -205,56 +203,53 @@ export default component$(() => {
 
     <div>
       <div class="flex flex-col justify-center">
-        <div class="flex items-center justify-between w-90% mx-auto">
+        <div class="flex items-center justify-between w-full mx-auto">
           <div>
             <DropdownMenu />
           </div>
-          <CommonAttr
-            canvasWidth={state.canvasStyleData.width}
-            canvasHeight={state.canvasStyleData.height}
-            onChangeCanvasSize$={({ width, height }) => {
-              //  state.canvasStyleData.width = width
-              //  state.canvasStyleData.height = height
-              state.canvas?.setDimensions({
-                width: changeStyleWithScale(width, state.canvasStyleData.scale),
-                height: changeStyleWithScale(height, state.canvasStyleData.scale),
-              })
-              state.canvas?.renderAll()
-            }}
-            client:load
-            // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
-            isElement={!!state.activeElements?.length}
-            shadow={state.currentBlock[0]?.shadow || null}
-            onShadowValueChange$={(shadow) => {
-              state.currentBlock!.forEach((block) => {
-                block.shadow = shadow as any
-              })
-              state.activeElements?.forEach((element) => {
-                element.set('shadow', shadow)
-              })
-              state.canvas?.renderAll()
-            }}
-            fill={fill.value}
-            onChangeColor$={colors => {
-              // 没有活跃的block 不存在时，代表选中的是画布
-              if (!state.activeElements?.length) {
-                setCanvasBackgroundColor(colors)
-              } else {
-                setElementColor(colors)
-              }
-              // state.canvas?.renderAll()
-            }}
-          />
+          <div class="w-xl">
+            <CommonAttr
+              canvasWidth={state.canvasStyleData.width}
+              canvasHeight={state.canvasStyleData.height}
+              onChangeCanvasSize$={({ width, height }) => {
+                //  state.canvasStyleData.width = width
+                //  state.canvasStyleData.height = height
+                state.canvas?.setDimensions({
+                  width: changeStyleWithScale(width, state.canvasStyleData.scale),
+                  height: changeStyleWithScale(height, state.canvasStyleData.scale),
+                })
+                state.canvas?.renderAll()
+              }}
+              client:load
+              // is show when currentBlock is not null. when currentBlock is null, it means the canvas is selected
+              isElement={!!state.activeElements?.length}
+              shadow={state.currentBlock[0]?.shadow || null}
+              onShadowValueChange$={(shadow) => {
+                state.currentBlock!.forEach((block) => {
+                  block.shadow = shadow as any
+                })
+                state.activeElements?.forEach((element) => {
+                  element.set('shadow', shadow)
+                })
+                state.canvas?.renderAll()
+              }}
+              fill={fill.value}
+              onChangeColor$={colors => {
+                // 没有活跃的block 不存在时，代表选中的是画布
+                if (!state.activeElements?.length) {
+                  setCanvasBackgroundColor(colors)
+                } else {
+                  setElementColor(colors)
+                }
+                // state.canvas?.renderAll()
+              }}
+            />
+          </div>
           <div>
             <Tooltip tip='Save data to local'>
               <div class="h-[25px] px-4 flex justify-center items-center rounded  shadow-radix cursor-pointer hover:opacity-80 " onClick$={() => {
-
                 const r = canvas2Object(state.canvas!)
                 environment.saveCanvas({ ...(tmpState.currentTmp || {}), ...r })
-                toast({
-                  description: 'Save success',
-                })
-                // localStorage.setItem('canvas', r)
               }}>Save</div>
             </Tooltip>
           </div>
