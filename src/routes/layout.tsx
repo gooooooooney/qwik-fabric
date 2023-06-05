@@ -22,7 +22,7 @@ export default component$(() => {
   useContextProvider(GLOBAL_CONTEXT, state)
   return (
     <div>
-      <main>
+      <main class="mx-5 ">
         <Slot />
       </main>
     </div>

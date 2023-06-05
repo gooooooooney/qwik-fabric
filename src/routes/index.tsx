@@ -19,8 +19,12 @@ import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
 import { elementBorder } from '~/constants/fabric';
 import { environment } from '~/store/db';
 import { useTemplateCtx } from '~/use/useTemplateCtx';
+import DropdownMenu from '~/integrations/react/radix-ui/DropdownMenu/DropdownMenu';
+import Tooltip from '~/integrations/react/radix-ui/Tooltip/Tooltip';
+import { useToast } from '~/use/useToast';
 
 export default component$(() => {
+  const {toast} = useToast()
   const state = useContext(GLOBAL_CONTEXT)
   const tmpState = useTemplateCtx()
   const canvasContainerRef = useSignal<HTMLDivElement>();
@@ -82,6 +86,7 @@ export default component$(() => {
       if (res.length) {
         tmpState.tmps = res
         tmpState.currentTmp = res[0]
+        console.log(res[0])
         loadFromJSON(JSON.stringify(res[0]), canvas, state)
       }
 
@@ -200,7 +205,10 @@ export default component$(() => {
 
     <div>
       <div class="flex flex-col justify-center">
-        <div class="w-xl mx-auto">
+        <div class="flex items-center justify-between w-90% mx-auto">
+          <div>
+            <DropdownMenu />
+          </div>
           <CommonAttr
             canvasWidth={state.canvasStyleData.width}
             canvasHeight={state.canvasStyleData.height}
@@ -237,6 +245,19 @@ export default component$(() => {
               // state.canvas?.renderAll()
             }}
           />
+          <div>
+            <Tooltip tip='Save data to local'>
+              <div class="h-[25px] px-4 flex justify-center items-center rounded  shadow-radix cursor-pointer hover:opacity-80 " onClick$={() => {
+
+                const r = canvas2Object(state.canvas!)
+                environment.saveCanvas({ ...(tmpState.currentTmp || {}), ...r })
+                toast({
+                  description: 'Save success',
+                })
+                // localStorage.setItem('canvas', r)
+              }}>Save</div>
+            </Tooltip>
+          </div>
         </div>
 
         <div class="flex flex-row relative justify-center">
@@ -259,15 +280,7 @@ export default component$(() => {
           </div>
           <div class="w-1/6 absolute top-0 right-2%" >
 
-            <p onClick$={() => {
-              if (tmpState.currentTmp) {
-                const r = canvas2Object(state.canvas!)
 
-                environment.saveCanvas({...tmpState.currentTmp, ...r})
-
-              }
-              // localStorage.setItem('canvas', r)
-            }}>save</p>
             <Attr />
 
           </div>

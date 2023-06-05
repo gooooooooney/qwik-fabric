@@ -1,8 +1,9 @@
 import { component$ } from '@builder.io/qwik';
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
-
+import '@unocss/reset/normalize.css'
 import 'virtual:uno.css'
-import './global.css'
+
+import '~/styles/global.css'
 
 export default component$(() => {
   /**

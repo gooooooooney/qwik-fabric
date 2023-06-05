@@ -9,7 +9,7 @@ import { qwikify$ } from '@builder.io/qwik-react';
 import * as Popover from '@radix-ui/react-popover';
 import * as TooltipCom from '@radix-ui/react-tooltip';
 import * as ColorPicker from 'react-color'
-import "./index.css"
+// import "./index.css"
 import {
     ColorWheelIcon,
     PlusIcon,

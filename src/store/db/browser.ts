@@ -5,8 +5,8 @@ import type { StorageStrategy } from "./strategy";
 class BrowserStore extends Dexie {
     canvasData: Dexie.Table<any, number>; // 表示存储Canvas数据的表
 
-    constructor() {
-        super('BrowserStore');
+    constructor(databaseName = 'canvasTmp') {
+        super(databaseName);
         this.version(1).stores({
             canvasData: '++id',
         });

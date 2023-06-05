@@ -17,6 +17,7 @@ class Environment {
     }
 
     saveCanvas(data: any): void {
+        console.log(data)
         this.storageStrategy.save(data);
     }
 
