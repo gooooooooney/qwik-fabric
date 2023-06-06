@@ -111,17 +111,11 @@ export default component$(() => {
   return (
     <div
       id="editor"
-      // style={
-      //   {
-      //     width: width + 'px',
-      //     height: height + 'px',
-      //   }
-      // }
       class="relative  m-a">
 
 
 
-      <div class="mt-4 bg-white relative">
+      <div class=" bg-white relative">
         {shouldShowContextMenu.value && <div class="fixed top-0 right-0 left-0 bottom-0" onClick$={() => shouldShowContextMenu.value = false} />}
         <div style={{
           display: shouldShowContextMenu.value ? 'block' : 'none',

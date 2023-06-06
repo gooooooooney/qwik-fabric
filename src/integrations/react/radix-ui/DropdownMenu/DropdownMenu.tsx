@@ -10,7 +10,11 @@ import {
 } from '@radix-ui/react-icons';
 import { qwikify$ } from '@builder.io/qwik-react';
 
-const _DropdownMenu = () => {
+interface DropdownMenuProps {
+  onSaveTmp: () => void;
+}
+
+const _DropdownMenu = ({onSaveTmp}: DropdownMenuProps) => {
   const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
   const [urlsChecked, setUrlsChecked] = React.useState(false);
   const [person, setPerson] = React.useState('pedro');
@@ -25,14 +29,14 @@ const _DropdownMenu = () => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content align='start' className="DropdownMenuContent" sideOffset={5}>
-          <DropdownMenu.Item className="DropdownMenuItem">
-            New Tab <div className="RightSlot">⌘+T</div>
+          <DropdownMenu.Item  className="DropdownMenuItem">
+              导入 <div className="RightSlot">⌘+T</div>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item onSelect={() => onSaveTmp()} className="DropdownMenuItem">
+            保存为模板 <div className="RightSlot">⌘+N</div>
           </DropdownMenu.Item>
           <DropdownMenu.Item className="DropdownMenuItem">
-            New Window <div className="RightSlot">⌘+N</div>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item className="DropdownMenuItem" disabled>
-            New Private Window <div className="RightSlot">⇧+⌘+N</div>
+            保存为图片 <div className="RightSlot">⇧+⌘+N</div>
           </DropdownMenu.Item>
           <DropdownMenu.Sub>
             <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">

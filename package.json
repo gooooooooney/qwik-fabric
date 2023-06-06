@@ -65,10 +65,11 @@
     "dexie": "^3.2.4",
     "dom-to-image": "^2.6.0",
     "events": "^3.3.0",
-    "fabric": "6.0.0-beta7",
+    "fabric": "6.0.0-beta8",
     "lodash": "^4.17.21",
     "mathjs": "^11.8.0",
     "nanoid": "^4.0.2",
+    "qwik-image": "^0.0.6",
     "react-color": "^2.19.3"
   }
 }

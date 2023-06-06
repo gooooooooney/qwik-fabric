@@ -24,10 +24,9 @@ export class IndexedDBStrategy implements StorageStrategy {
         this.db = new BrowserStore();
     }
 
-    save(data: any): void {
-        this.db.canvasData.put(data, data.id).then(r => {
-            console.log(r)
-        });
+    save(data: any): Promise<boolean> {
+        return this.db.canvasData.put(data, data.id).then(() => true)
+            .catch(() => false);
 
     }
 

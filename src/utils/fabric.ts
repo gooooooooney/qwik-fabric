@@ -1,51 +1,70 @@
+import type { TDataUrlOptions } from "fabric"
+import { elementBorder } from "~/constants/fabric";
+import { fabric } from "~/element";
+import type { GlobalState } from "~/store/context";
 type GradientOption = ConstructorParameters<typeof fabric.Gradient>[0]
 
 export function setGradient(element: fabric.Object | undefined, {
-    type = 'linear',
-    coords,
-    gradientUnits = 'pixels',
-    colorStops = [
-        { offset: 0, color: 'red', opacity: 1 },
-        { offset: 1, color: 'blue', opacity: 1 }
-    ],
+  type = 'linear',
+  coords,
+  gradientUnits = 'pixels',
+  colorStops = [
+    { offset: 0, color: 'red', opacity: 1 },
+    { offset: 1, color: 'blue', opacity: 1 }
+  ],
 }: GradientOption) {
-    if (element) {
-        const gradientEle = new fabric.Gradient({
-            type,
-            coords: coords || { x1: 0, y1: 0, x2: element.width, y2: 0 },
-            gradientUnits,
-            colorStops
-        })
-        element.set('fill', gradientEle)
+  if (element) {
+    const gradientEle = new fabric.Gradient({
+      type,
+      coords: coords || { x1: 0, y1: 0, x2: element.width, y2: 0 },
+      gradientUnits,
+      colorStops
+    })
+    element.set('fill', gradientEle)
 
-    }
+  }
 
 }
 
 export function canvas2Json(canvas: fabric.Canvas) {
-    return canvas.toJSON()
+  return canvas.toJSON()
 }
 
 export function canvas2DatalessJSON(canvas: fabric.Canvas) {
-    return canvas.toDatalessJSON(['id'])
+  return canvas.toDatalessJSON(['id'])
 }
 
 export function json2Canvas(canvas: fabric.Canvas, json: string) {
-    canvas.loadFromJSON(json)
-    canvas.renderAll()
+  canvas.loadFromJSON(json)
+  canvas.renderAll()
 }
 
-export function canvas2Image(canvas: fabric.Canvas) {
-    return canvas.toDataURL()
+export function canvas2Image(canvas: fabric.Canvas, options: TDataUrlOptions = { multiplier: 1, format: 'png', quality: 1 }) {
+  
+  canvas.getActiveSelection().set('selectable', false)
+  
+  return canvas.toDataURL(options)
+}
+
+export function blobUrl2Base64(url: string): Promise<string> {
+  return fetch(url).then(res => res.blob()).then(blob => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader;
+      reader.onerror = reject;
+      reader.onload = () => {
+        resolve(reader.result! as any);
+      };
+      reader.readAsDataURL(blob);
+    })
+  })
+
 }
 
 export function canvas2Object(canvas: fabric.Canvas) {
-    return canvas.toObject(['id'])
+  return canvas.toObject(['id'])
 }
 
-import { elementBorder } from "~/constants/fabric";
-import { fabric } from "~/element";
-import type { GlobalState } from "~/store/context";
+
 
 function getColor(color: string | fabric.TFiller | null) {
   if (typeof color === 'string') {
@@ -64,11 +83,15 @@ export function loadFromJSON(json: string | null, canvas: fabric.Canvas, state: 
   if (json) {
     canvas.loadFromJSON(json, (o, e) => {
       e.set({ ...elementBorder })
+      console.log(o)
       state.blocks.push({ ...o, fill: getColor(e.fill) } as any);
     }).then(c => {
       const fill = getColor(c.backgroundColor);
       state.canvasStyleData.backgroundColor = fill
+      
       c.requestRenderAll()
-    });
+    }).catch(err => {
+      console.log(err)
+    })
   }
 }

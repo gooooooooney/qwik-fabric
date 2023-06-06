@@ -1,6 +1,9 @@
-import { component$, Slot, useContextProvider, useStore } from '@builder.io/qwik';
+import { component$,$, Slot, useContextProvider, useStore } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
-import type { GlobalState} from '~/store/context';
+import type { ImageTransformerProps} from 'qwik-image';
+import { useImageProvider } from 'qwik-image';
+import ToastProvider from '~/components/ui/Toast/Toast';
+import type { GlobalState } from '~/store/context';
 import { globalState, GLOBAL_CONTEXT } from '~/store/context';
 import type { TemplateState } from '~/store/template';
 import { TEMPLATE_CONTEXT } from '~/store/template';
@@ -18,12 +21,23 @@ export default component$(() => {
     tmps: [],
     currentTmp: null,
   })
+  const imageTransformer$ = $(({ src }: ImageTransformerProps): string => {
+		return src;
+	});
+
+	// Provide your default options
+	useImageProvider({
+		imageTransformer$,
+		resolutions: [1000, 800, 600, 400],
+	});
   useContextProvider(TEMPLATE_CONTEXT, template)
   useContextProvider(GLOBAL_CONTEXT, state)
   return (
     <div>
       <main class="mx-5 ">
-        <Slot />
+      <ToastProvider>
+          <Slot />
+        </ToastProvider>
       </main>
     </div>
   );

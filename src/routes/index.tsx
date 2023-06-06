@@ -14,17 +14,20 @@ import Attr from '~/components/Attr';
 import { initCanvasEvent, emitter } from '~/core/event';
 import { changeStyleWithScale } from '~/utils/translate';
 import { initCanvas } from '~/core';
-import { canvas2Object, loadFromJSON, setGradient } from "~/utils/fabric";
+import { canvas2Image, canvas2Object, loadFromJSON, setGradient } from "~/utils/fabric";
 import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
 import { elementBorder } from '~/constants/fabric';
 import { environment } from '~/store/db';
 import { useTemplateCtx } from '~/use/useTemplateCtx';
 import DropdownMenu from '~/integrations/react/radix-ui/DropdownMenu/DropdownMenu';
 import Tooltip from '~/integrations/react/radix-ui/Tooltip/Tooltip';
+import { useToast } from '~/use/useToast';
+import Aside from '~/components/Aside';
 
 export default component$(() => {
   const state = useContext(GLOBAL_CONTEXT)
   const tmpState = useTemplateCtx()
+  const { toast } = useToast()
   const canvasContainerRef = useSignal<HTMLDivElement>();
   const canvasRef = useSignal<HTMLCanvasElement>()
   const width = changeStyleWithScale(state.canvasStyleData.width, state.canvasStyleData.scale)
@@ -73,22 +76,23 @@ export default component$(() => {
 
   // })
 
-  useVisibleTask$(() => {
-
-    const { canvas } = initCanvas(canvasRef.value!, {
-      backgroundColor: state.canvasStyleData.backgroundColor,
-    })
+  const loadTmpFromDb = $(() => {
     environment.loadCanvas().then(res => {
       // initLoadFromJson(json, state);
       // console.log(res)
       if (res.length) {
         tmpState.tmps = res
-        tmpState.currentTmp = res[0]
-        console.log(res[0])
-        loadFromJSON(JSON.stringify(res[0]), canvas, state)
       }
-
     })
+  })
+
+  useVisibleTask$(() => {
+
+    const { canvas } = initCanvas(canvasRef.value!, {
+      backgroundColor: state.canvasStyleData.backgroundColor,
+    })
+
+    loadTmpFromDb()
     const { listener, removeListener } = initCanvasEvent(canvas)
     listener()
     // 没有选中元素 重置currentBlock 和 activeElements
@@ -199,13 +203,39 @@ export default component$(() => {
     state.canvas?.renderAll()
   })
 
+  const loadTmp = $(() => {
+    if (tmpState.currentTmp) {
+      
+      loadFromJSON(JSON.stringify(tmpState.currentTmp.data), state.canvas!, state)
+    }
+
+  })
+
+  const handleSaveTmp = $(() => {
+    // 重新保存为模板 不需要id 有id表示是更新 不需要id表示是新建
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _, ...data } = canvas2Object(state.canvas!)
+    const url = canvas2Image(state.canvas!)
+    environment.saveCanvas({ src: url, data }).then(() => {
+      loadTmpFromDb()
+      toast({
+        message: 'success',
+      });
+    })
+
+
+
+  })
+
   return (
 
     <div>
       <div class="flex flex-col justify-center">
         <div class="flex items-center justify-between w-full mx-auto">
           <div>
-            <DropdownMenu />
+            <DropdownMenu
+              onSaveTmp$={handleSaveTmp}
+            />
           </div>
           <div class="w-xl">
             <CommonAttr
@@ -247,29 +277,40 @@ export default component$(() => {
           </div>
           <div>
             <Tooltip tip='Save data to local'>
-              <div class="h-[25px] px-4 flex justify-center items-center rounded  shadow-radix cursor-pointer hover:opacity-80 " onClick$={() => {
-                const r = canvas2Object(state.canvas!)
-                environment.saveCanvas({ ...(tmpState.currentTmp || {}), ...r })
-              }}>Save</div>
+              <div
+                class="h-[25px] px-4 flex justify-center items-center rounded  shadow-radix cursor-pointer hover:opacity-80 "
+                onClick$={() => {
+                  const r = canvas2Object(state.canvas!)
+                  environment.saveCanvas({ ...(tmpState.currentTmp || {}), ...r })
+                  toast({
+                    message: 'success',
+                    duration: 3000,
+                    position: 'center-top',
+                  });
+                }}>Save</div>
             </Tooltip>
           </div>
         </div>
 
-        <div class="flex flex-row relative justify-center">
-          {/* <div class="w-1/8">
-            <Aside />
-          </div> */}
+        <div class="flex flex-row relative justify-center mt-8">
+          <div class="w-1/8">
+            <Aside onSelectTmp$={() => {
+              loadTmp()
+            }} />
+          </div>
 
-          <div class="px-2  flex justify-center items-center flex-col">
-            <div
-              ref={canvasContainerRef}
-              // style={{ width: `${width}px`, height: `${height}px` }}
-              class=" bg-[#f5f5f5] h-full mt-3  ">
-              <div class=" w-full h-full">
-                <Editor>
-                  <canvas ref={canvasRef} id="canvas" width={width} height={height} />
-                </Editor>
+          <div class="absolute top-0 left-1/2 -translate-x-1/2">
+            <div class="px-2  flex justify-center items-center flex-col">
+              <div
+                ref={canvasContainerRef}
+                // style={{ width: `${width}px`, height: `${height}px` }}
+                class=" bg-[#f5f5f5] h-full ">
+                <div class=" w-full h-full">
+                  <Editor>
+                    <canvas ref={canvasRef} id="canvas" width={width} height={height} />
+                  </Editor>
 
+                </div>
               </div>
             </div>
           </div>

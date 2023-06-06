@@ -16,9 +16,8 @@ class Environment {
         this.storageStrategy = strategy;
     }
 
-    saveCanvas(data: any): void {
-        console.log(data)
-        this.storageStrategy.save(data);
+    saveCanvas(data: any) {
+        return this.storageStrategy.save(data);
     }
 
     removeCanvas(id: number): void {

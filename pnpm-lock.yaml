@@ -41,8 +41,8 @@ dependencies:
     specifier: ^3.3.0
     version: 3.3.0
   fabric:
-    specifier: 6.0.0-beta7
-    version: 6.0.0-beta7
+    specifier: 6.0.0-beta8
+    version: 6.0.0-beta8
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
@@ -52,6 +52,9 @@ dependencies:
   nanoid:
     specifier: ^4.0.2
     version: 4.0.2
+  qwik-image:
+    specifier: ^0.0.6
+    version: 0.0.6
   react-color:
     specifier: ^2.19.3
     version: 2.19.3(react@18.2.0)
@@ -2885,8 +2888,8 @@ packages:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
     dev: true
 
-  /fabric@6.0.0-beta7:
-    resolution: {integrity: sha512-1SPn71J3Qp7SU9JbKmizc3xEwrUa7DJVq2qyzYyczd/KjuzM9u9/cW40zlCz+0Mu5uE0vCQ0tUsGkYLsecsXzQ==}
+  /fabric@6.0.0-beta8:
+    resolution: {integrity: sha512-cVyfIcLfGhzWI66955fI2QenEer3atMCDWDAKDoDAgImGhB1uSul/cCeOchjaXRer/qyiuIf8N27xT5ar7Vsdg==}
     engines: {node: '>=14.0.0'}
     optionalDependencies:
       canvas: 2.11.2
@@ -3513,11 +3516,11 @@ packages:
       http-proxy-agent: 5.0.0
       https-proxy-agent: 5.0.1
       is-potential-custom-element-name: 1.0.1
-      nwsapi: 2.2.4
+      nwsapi: 2.2.5
       parse5: 7.1.2
       saxes: 6.0.0
       symbol-tree: 3.2.4
-      tough-cookie: 4.1.2
+      tough-cookie: 4.1.3
       w3c-xmlserializer: 4.0.0
       webidl-conversions: 7.0.0
       whatwg-encoding: 2.0.0
@@ -4204,8 +4207,8 @@ packages:
     dev: false
     optional: true
 
-  /nwsapi@2.2.4:
-    resolution: {integrity: sha512-NHj4rzRo0tQdijE9ZqAx6kYDcoRwYwSYzCA8MY3JzfxlrvEU0jhnhJT9BhqhJs7I/dKcrDm6TyulaRqZPIhN5g==}
+  /nwsapi@2.2.5:
+    resolution: {integrity: sha512-6xpotnECFy/og7tKSBVmUNft7J3jyXAka4XvG6AUhFWRz+Q/Ljus7znJAA3bxColfQLdS+XsjoodtJfCgeTEFQ==}
     dev: false
     optional: true
 
@@ -4427,6 +4430,10 @@ packages:
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
+
+  /qwik-image@0.0.6:
+    resolution: {integrity: sha512-fKZH9JxYQeynEGAd5reoR90uVEy7yc3qMbcMkmGwkZBcEAl8+av0LQl8uq2ZW7rQ/Sgs5fJgl50FqqfVFltRLQ==}
+    dev: false
 
   /react-color@2.19.3(react@18.2.0):
     resolution: {integrity: sha512-LEeGE/ZzNLIsFWa1TMe8y5VYqr7bibneWmvJwm1pCn/eNmrabWDh659JSPn9BuaMpEfU83WTOJfnCcjDZwNQTA==}
@@ -4883,8 +4890,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /tough-cookie@4.1.2:
-    resolution: {integrity: sha512-G9fqXWoYFZgTc2z8Q5zaHy/vJMjm+WV0AkAeHxVCQiEB1b+dGvWzFW6QV07cY5jQ5gRkeid2qIkzkxUnmoQZUQ==}
+  /tough-cookie@4.1.3:
+    resolution: {integrity: sha512-aX/y5pVRkfRnfmuX+OdbSdXvPe6ieKX/G2s7e98f4poJHnqH3281gDPm/metm6E/WRamfx7WC4HUqkWHfQHprw==}
     engines: {node: '>=6'}
     dependencies:
       psl: 1.9.0

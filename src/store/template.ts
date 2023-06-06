@@ -3,9 +3,13 @@ import { CONTEXT_IDS } from "~/constants/enum";
 
 export interface TemplateCanvas {
     id: number,
-    version: string,
-    objects: any[],
-    background: string | Record<string, any>,
+    src: string,
+    data: {
+
+        version: string,
+        objects: any[],
+        background: string | Record<string, any>
+    },
 }
 
 export interface TemplateState {
