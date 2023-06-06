@@ -14,7 +14,7 @@ import Attr from '~/components/Attr';
 import { initCanvasEvent, emitter } from '~/core/event';
 import { changeStyleWithScale } from '~/utils/translate';
 import { initCanvas } from '~/core';
-import { canvas2Image, canvas2Object, loadFromJSON, setGradient } from "~/utils/fabric";
+import { canvas2Image, canvas2Object, setGradient } from "~/utils/fabric";
 import CommonAttr from "~/integrations/react/radix-ui/CommonAttr";
 import { elementBorder } from '~/constants/fabric';
 import { environment } from '~/store/db';
@@ -78,8 +78,6 @@ export default component$(() => {
 
   const loadTmpFromDb = $(() => {
     environment.loadCanvas().then(res => {
-      // initLoadFromJson(json, state);
-      // console.log(res)
       if (res.length) {
         tmpState.tmps = res
       }
@@ -151,7 +149,7 @@ export default component$(() => {
         coords: {
           x1: 0,
           y1: 0,
-          x2: state.canvasStyleData.width,
+          x2: state.canvas?.width,
           y2: 0,
         },
         colorStops: colors.map((color, index) => ({
@@ -203,20 +201,20 @@ export default component$(() => {
     state.canvas?.renderAll()
   })
 
-  const loadTmp = $(() => {
-    if (tmpState.currentTmp) {
-      
-      loadFromJSON(JSON.stringify(tmpState.currentTmp.data), state.canvas!, state)
-    }
 
-  })
 
   const handleSaveTmp = $(() => {
     // 重新保存为模板 不需要id 有id表示是更新 不需要id表示是新建
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id: _, ...data } = canvas2Object(state.canvas!)
     const url = canvas2Image(state.canvas!)
-    environment.saveCanvas({ src: url, data }).then(() => {
+
+    environment.saveCanvas({
+      canvasStyle: {
+        width: state.canvas!.width,
+        height: state.canvas!.height,
+      }, src: url, data
+    }).then(() => {
       loadTmpFromDb()
       toast({
         message: 'success',
@@ -239,15 +237,21 @@ export default component$(() => {
           </div>
           <div class="w-xl">
             <CommonAttr
-              canvasWidth={state.canvasStyleData.width}
-              canvasHeight={state.canvasStyleData.height}
+              canvasWidth={state.canvas?.width || state.canvasStyleData.width}
+              canvasHeight={state.canvas?.height || state.canvasStyleData.height}
               onChangeCanvasSize$={({ width, height }) => {
-                //  state.canvasStyleData.width = width
-                //  state.canvasStyleData.height = height
                 state.canvas?.setDimensions({
                   width: changeStyleWithScale(width, state.canvasStyleData.scale),
                   height: changeStyleWithScale(height, state.canvasStyleData.scale),
                 })
+                {
+                  // 改变画布大小时，需要重新设置背景色的渐变, 保证渐变的x2是画布的宽度
+                  const bg = state.canvas?.get('backgroundColor')
+                  if (bg instanceof fabric.Gradient) {
+                    bg.coords.x2 = width
+                  }
+                  state.canvas?.set('backgroundColor', bg)
+                }
                 state.canvas?.renderAll()
               }}
               client:load
@@ -294,9 +298,7 @@ export default component$(() => {
 
         <div class="flex flex-row relative justify-center mt-8">
           <div class="w-1/8">
-            <Aside onSelectTmp$={() => {
-              loadTmp()
-            }} />
+            <Aside />
           </div>
 
           <div class="absolute top-0 left-1/2 -translate-x-1/2">

@@ -16,7 +16,7 @@ export const useServerTimeLoader = routeLoader$(() => {
 
 export default component$(() => {
   // ISSUE: useContextProvider must be declared here, otherwise it will not be able to get the context
-  const state = useStore<GlobalState>(globalState)
+  const state = useStore<GlobalState>(JSON.parse(JSON.stringify(globalState)))
   const template = useStore<TemplateState>({
     tmps: [],
     currentTmp: null,

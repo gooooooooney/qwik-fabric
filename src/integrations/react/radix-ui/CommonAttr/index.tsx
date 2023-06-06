@@ -307,9 +307,10 @@ const CommonAttr = ({
         // if (width === canvasWidth && height === canvasHeight) {
         //     return
         // }
-        onChangeCanvasSize({ width, height })
+        setWidth(canvasWidth)
+        setHeight(canvasHeight)
 
-    }, [width, height])
+    }, [canvasWidth, canvasHeight])
     useEffect(() => {
         shadowState && setShadowState({
             ...shadowState,
@@ -757,7 +758,13 @@ const CommonAttr = ({
                                     id="height"
                                     value={height} />
                             </fieldset>
-
+                            <div className="flex justify-end">
+                                <button onClick={() => {
+                                    onChangeCanvasSize({width, height})
+                                }} className="Button bg-violet-4 cursor-pointer text-white">
+                                    confirm
+                                </button>
+                            </div>
                         </div>
                         <Popover.Close className="PopoverClose" aria-label="Close">
                             <Cross2Icon />

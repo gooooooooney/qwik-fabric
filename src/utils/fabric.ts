@@ -2,6 +2,7 @@ import type { TDataUrlOptions } from "fabric"
 import { elementBorder } from "~/constants/fabric";
 import { fabric } from "~/element";
 import type { GlobalState } from "~/store/context";
+import { TemplateCanvas } from "~/store/template";
 type GradientOption = ConstructorParameters<typeof fabric.Gradient>[0]
 
 export function setGradient(element: fabric.Object | undefined, {
@@ -40,9 +41,9 @@ export function json2Canvas(canvas: fabric.Canvas, json: string) {
 }
 
 export function canvas2Image(canvas: fabric.Canvas, options: TDataUrlOptions = { multiplier: 1, format: 'png', quality: 1 }) {
-  
+
   canvas.getActiveSelection().set('selectable', false)
-  
+
   return canvas.toDataURL(options)
 }
 
@@ -79,19 +80,26 @@ function getColor(color: string | fabric.TFiller | null) {
   return '';
 
 }
-export function loadFromJSON(json: string | null, canvas: fabric.Canvas, state: GlobalState) {
-  if (json) {
-    canvas.loadFromJSON(json, (o, e) => {
-      e.set({ ...elementBorder })
-      console.log(o)
-      state.blocks.push({ ...o, fill: getColor(e.fill) } as any);
-    }).then(c => {
-      const fill = getColor(c.backgroundColor);
-      state.canvasStyleData.backgroundColor = fill
-      
-      c.requestRenderAll()
-    }).catch(err => {
-      console.log(err)
+export function loadFromJSON(tmp: TemplateCanvas, canvas: fabric.Canvas, state: GlobalState) {
+
+  const { data, canvasStyle } = tmp;
+  canvas.loadFromJSON(JSON.stringify(data), (o, e) => {
+    e.set({ ...elementBorder })
+    state.blocks.push({ ...o, fill: getColor(e.fill) } as any);
+  }).then(c => {
+    const fill = getColor(c.backgroundColor);
+    state.canvasStyleData.backgroundColor = fill
+
+    // state.canvasStyleData.width = canvasStyle?.width || 0
+    // state.canvasStyleData.height = canvasStyle?.height || 0
+    c.setDimensions({ 
+      width: canvasStyle?.width, 
+      height: canvasStyle?.height
     })
-  }
+
+    c.requestRenderAll()
+  }).catch(err => {
+    console.log(err)
+  })
+
 }

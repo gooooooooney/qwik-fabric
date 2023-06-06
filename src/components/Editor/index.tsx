@@ -16,8 +16,7 @@ export default component$(() => {
   const shouldShowContextMenu = useSignal(false)
   const shouldShowAlertDialog = useSignal(false)
   const contextPosition = useSignal({ left: 0, top: 0 })
-  // const width = changeStyleWithScale(parentState.canvasStyleData.width, parentState.canvasStyleData.scale)
-  // const height = changeStyleWithScale(parentState.canvasStyleData.height, parentState.canvasStyleData.scale)
+  
   const contextMenu = [
     {
       name: 'Bring to front',

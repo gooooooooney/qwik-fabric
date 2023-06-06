@@ -16,7 +16,7 @@ class Environment {
         this.storageStrategy = strategy;
     }
 
-    saveCanvas(data: any) {
+    saveCanvas(data: TemplateCanvas) {
         return this.storageStrategy.save(data);
     }
 

@@ -2,7 +2,11 @@ import { createContextId } from "@builder.io/qwik";
 import { CONTEXT_IDS } from "~/constants/enum";
 
 export interface TemplateCanvas {
-    id: number,
+    id?: number,
+    canvasStyle?: {
+        width: number,
+        height: number,
+    },
     src: string,
     data: {
 
