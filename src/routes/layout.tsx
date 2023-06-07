@@ -3,6 +3,7 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import type { ImageTransformerProps} from 'qwik-image';
 import { useImageProvider } from 'qwik-image';
 import ToastProvider from '~/components/ui/Toast/Toast';
+import { ATTR_CONTEXT, AttrState } from '~/store/attr';
 import type { GlobalState } from '~/store/context';
 import { globalState, GLOBAL_CONTEXT } from '~/store/context';
 import type { TemplateState } from '~/store/template';
@@ -20,7 +21,12 @@ export default component$(() => {
   const template = useStore<TemplateState>({
     tmps: [],
     currentTmp: null,
+  })
+  const attrState = useStore<AttrState>({
+    shouldShowImage: false,
+    shouldShowText: false,
     shouldShowTemplate: false,
+    shouldShowShape: false,
   })
   const imageTransformer$ = $(({ src }: ImageTransformerProps): string => {
 		return src;
@@ -33,6 +39,7 @@ export default component$(() => {
 	});
   useContextProvider(TEMPLATE_CONTEXT, template)
   useContextProvider(GLOBAL_CONTEXT, state)
+  useContextProvider(ATTR_CONTEXT, attrState)
   return (
     <div>
       <main class="mx-5 ">

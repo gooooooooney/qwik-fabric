@@ -35,15 +35,13 @@ const ContextMenu = component$(({ items, id, onContextMenu$ }: ContextMenuProps)
 
       <div ref={menuRef}
         class="relative "
-        id="context-menu"
         preventdefault:contextmenu
-        onContextMenu$={(event, target) => {
+        onContextMenu$={(event) => {
           isOpen.value = true;
-          const rect = target.getBoundingClientRect();
           position.value = {
             x:
-              event.clientX - rect.left,
-            y: event.clientY - rect.top
+              event.clientX ,
+            y: event.clientY
           };
           onContextMenu$?.(id)
         }} >
@@ -51,7 +49,7 @@ const ContextMenu = component$(({ items, id, onContextMenu$ }: ContextMenuProps)
         {isOpen.value && (
           <div
             style={{ top: position.value.y + 'px', left: position.value.x + 'px' }}
-            class="absolute z-10"
+            class="fixed z-10"
           >
             <Menu onClose$={() => {
               isOpen.value = false

@@ -5,7 +5,7 @@ import type { DocumentHead } from '@builder.io/qwik-city';
 // import Aside from '~/components/Aside';
 import Editor from '~/components/Editor';
 import { blockInfoList } from '~/components/core/components';
-import type { ComponentType } from '~/constants/enum';
+import { ComponentType } from '~/constants/enum';
 import { CANVAS_EVENT_SELECTED } from '~/constants/enum';
 import { GLOBAL_CONTEXT } from '~/store/context';
 import { downloadFile, uid } from '~/utils/common';
@@ -24,11 +24,13 @@ import Tooltip from '~/integrations/react/radix-ui/Tooltip/Tooltip';
 import { useToast } from '~/use/useToast';
 import Aside from '~/components/Aside/';
 import { useLoadTmp } from '~/use/useLoadTmp';
+import { useAttrCtx } from '~/use/useAttrCtx';
 
 export default component$(() => {
   const state = useContext(GLOBAL_CONTEXT)
   const tmpState = useTemplateCtx()
   const { toast } = useToast()
+  const attrState = useAttrCtx()
   const loadTmpFromDb = useLoadTmp()
   const canvasContainerRef = useSignal<HTMLDivElement>();
   const canvasRef = useSignal<HTMLCanvasElement>()
@@ -279,10 +281,23 @@ export default component$(() => {
                 // state.canvas?.renderAll()
               }}
               onTemplateChange$={() => {
-                tmpState.shouldShowTemplate = true
+                attrState.shouldShowTemplate = true
               }}
               onBlockClick$={(type) => {
-                console.log(type)
+                switch (type) {
+                  case ComponentType.Img:
+                    attrState.shouldShowImage = true
+                    break
+                  case ComponentType.TextBox:
+                    attrState.shouldShowText = true
+                    break
+                  case ComponentType.Circle:
+                  case ComponentType.Rect:
+                    attrState.shouldShowShape = true
+                    break
+                  default:
+                    return
+                }
               }}
             />
           </div>

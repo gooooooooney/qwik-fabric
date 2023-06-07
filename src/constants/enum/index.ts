@@ -2,7 +2,7 @@ export const enum ComponentType {
   Text = 'text',
   TextBox = 'Textbox',
   Line = 'line',
-  Img = 'img',
+  Img = 'Image',
   Circle = 'Circle',
   Rect = 'Rect',
   Triangle = 'triangle',
@@ -14,6 +14,7 @@ export const enum CONTEXT_IDS {
   GLOBAL_CONTEXT = 'gooney.context.global',
   TEMPLATE_CONTEXT = 'gooney.context.template',
   TOAST_CONTEXT = 'gooney.context.toast',
+  ATTR_CONTEXT = 'gooney.context.attr',
 }
 
 export const enum CANVAS_EVENT_SELECTED {

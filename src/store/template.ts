@@ -18,7 +18,6 @@ export interface TemplateCanvas {
 
 export interface TemplateState {
     currentTmp: TemplateCanvas | null
-    shouldShowTemplate: boolean
     tmps: TemplateCanvas[]
 }
 
