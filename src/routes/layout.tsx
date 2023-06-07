@@ -20,6 +20,7 @@ export default component$(() => {
   const template = useStore<TemplateState>({
     tmps: [],
     currentTmp: null,
+    shouldShowTemplate: false,
   })
   const imageTransformer$ = $(({ src }: ImageTransformerProps): string => {
 		return src;

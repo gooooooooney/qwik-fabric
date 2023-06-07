@@ -1,6 +1,6 @@
 import type * as CSS from 'csstype';
 import { TextCanvasStyle } from "./text";
-import type { imageBlock } from "./image";
+import { ImageCanvasStyle } from "./image";
 import { CircleCanvasStyle } from './circle';
 import { RectCanvasStyle } from './rect';
 export type BlockInfo = typeof blockInfoList[number];
@@ -14,7 +14,7 @@ export const commonStyle = {
 
 export const blockInfoList = [
   TextCanvasStyle,
-  // imageBlock,
+  ImageCanvasStyle,
   CircleCanvasStyle,
   RectCanvasStyle,
 ]
@@ -24,6 +24,6 @@ export const blockInfoList = [
 // }))
 
 export type TextBlock = typeof TextCanvasStyle;
-export type ImageBlock = typeof imageBlock;
+export type ImageBlock = typeof ImageCanvasStyle;
 export type CircleBlock = typeof CircleCanvasStyle;
 export type RectBlock = typeof RectCanvasStyle;

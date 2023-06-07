@@ -20,8 +20,8 @@ class Environment {
         return this.storageStrategy.save(data);
     }
 
-    removeCanvas(id: number): void {
-        this.storageStrategy.remove(id);
+    removeCanvasTmp(id: number) {
+        return this.storageStrategy.remove(id);
     }
 
     async loadCanvas(): Promise<TemplateCanvas[]> {

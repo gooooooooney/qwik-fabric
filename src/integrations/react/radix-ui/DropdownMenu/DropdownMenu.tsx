@@ -12,9 +12,10 @@ import { qwikify$ } from '@builder.io/qwik-react';
 
 interface DropdownMenuProps {
   onSaveTmp: () => void;
+  onDownload: () => void;
 }
 
-const _DropdownMenu = ({onSaveTmp}: DropdownMenuProps) => {
+const _DropdownMenu = ({onSaveTmp, onDownload}: DropdownMenuProps) => {
   const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
   const [urlsChecked, setUrlsChecked] = React.useState(false);
   const [person, setPerson] = React.useState('pedro');
@@ -35,7 +36,7 @@ const _DropdownMenu = ({onSaveTmp}: DropdownMenuProps) => {
           <DropdownMenu.Item onSelect={() => onSaveTmp()} className="DropdownMenuItem">
             保存为模板 <div className="RightSlot">⌘+N</div>
           </DropdownMenu.Item>
-          <DropdownMenu.Item className="DropdownMenuItem">
+          <DropdownMenu.Item onSelect={() => onDownload()} className="DropdownMenuItem">
             保存为图片 <div className="RightSlot">⇧+⌘+N</div>
           </DropdownMenu.Item>
           <DropdownMenu.Sub>

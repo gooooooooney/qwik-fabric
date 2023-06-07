@@ -9,3 +9,12 @@ export function cx(...args: ClassValue[]) {
 export function uid() {
   return nanoid();
 }
+
+export function downloadFile(data: string, filename: string) {
+  const link = document.createElement("a");
+  link.href = data;
+  link.download = `${uid()}.${filename}.png`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}

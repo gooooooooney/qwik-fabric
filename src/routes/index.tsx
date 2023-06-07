@@ -8,7 +8,7 @@ import { blockInfoList } from '~/components/core/components';
 import type { ComponentType } from '~/constants/enum';
 import { CANVAS_EVENT_SELECTED } from '~/constants/enum';
 import { GLOBAL_CONTEXT } from '~/store/context';
-import { uid } from '~/utils/common';
+import { downloadFile, uid } from '~/utils/common';
 import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
 import { initCanvasEvent, emitter } from '~/core/event';
@@ -22,12 +22,14 @@ import { useTemplateCtx } from '~/use/useTemplateCtx';
 import DropdownMenu from '~/integrations/react/radix-ui/DropdownMenu/DropdownMenu';
 import Tooltip from '~/integrations/react/radix-ui/Tooltip/Tooltip';
 import { useToast } from '~/use/useToast';
-import Aside from '~/components/Aside';
+import Aside from '~/components/Aside/';
+import { useLoadTmp } from '~/use/useLoadTmp';
 
 export default component$(() => {
   const state = useContext(GLOBAL_CONTEXT)
   const tmpState = useTemplateCtx()
   const { toast } = useToast()
+  const loadTmpFromDb = useLoadTmp()
   const canvasContainerRef = useSignal<HTMLDivElement>();
   const canvasRef = useSignal<HTMLCanvasElement>()
   const width = changeStyleWithScale(state.canvasStyleData.width, state.canvasStyleData.scale)
@@ -76,19 +78,14 @@ export default component$(() => {
 
   // })
 
-  const loadTmpFromDb = $(() => {
-    environment.loadCanvas().then(res => {
-      if (res.length) {
-        tmpState.tmps = res
-      }
-    })
-  })
+
 
   useVisibleTask$(() => {
 
     const { canvas } = initCanvas(canvasRef.value!, {
       backgroundColor: state.canvasStyleData.backgroundColor,
     })
+
 
     loadTmpFromDb()
     const { listener, removeListener } = initCanvasEvent(canvas)
@@ -220,9 +217,12 @@ export default component$(() => {
         message: 'success',
       });
     })
+  })
 
+  const handleDownload = $(() => {
+    const url = canvas2Image(state.canvas!)
 
-
+    downloadFile(url, 'image')
   })
 
   return (
@@ -232,6 +232,7 @@ export default component$(() => {
         <div class="flex items-center justify-between w-full mx-auto">
           <div>
             <DropdownMenu
+              onDownload$={handleDownload}
               onSaveTmp$={handleSaveTmp}
             />
           </div>
@@ -276,6 +277,12 @@ export default component$(() => {
                   setElementColor(colors)
                 }
                 // state.canvas?.renderAll()
+              }}
+              onTemplateChange$={() => {
+                tmpState.shouldShowTemplate = true
+              }}
+              onBlockClick$={(type) => {
+                console.log(type)
               }}
             />
           </div>

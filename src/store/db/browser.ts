@@ -30,8 +30,8 @@ export class IndexedDBStrategy implements StorageStrategy {
 
     }
 
-    remove(id: number): void {
-        this.db.canvasData.delete(id);
+    remove(id: number) {
+        return this.db.canvasData.delete(id);
     }
     async load(): Promise<any> {
         return this.db.canvasData.toArray();

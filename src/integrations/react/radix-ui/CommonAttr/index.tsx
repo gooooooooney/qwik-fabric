@@ -44,6 +44,8 @@ interface CommonAttrProps {
     onChangeColor: (value: string[]) => void;
     onChangeCanvasSize: ({ width, height }: { width: number, height: number }) => void
     onShadowValueChange: (shadow: ShadowProps | null) => void
+    onTemplateChange: () => void
+    onBlockClick: (type: ComponentType) => void
 }
 
 interface TooltipTriggerProps extends PropsWithChildren {
@@ -284,7 +286,9 @@ const CommonAttr = ({
     isElement,
     canvasWidth,
     canvasHeight,
-    onChangeCanvasSize
+    onChangeCanvasSize,
+    onTemplateChange,
+    onBlockClick
 }: CommonAttrProps) => {
     const defaultShadow = {
         color: 'rgba(0,0,0)',
@@ -446,7 +450,7 @@ const CommonAttr = ({
                                 const target = e.target;
                                 if (!(target instanceof HTMLDivElement)) return
                                 e.dataTransfer?.setData("type", target.dataset.type ?? ComponentType.Text)
-                            }} type="single" defaultValue="center" aria-label="Text alignment">
+                            }} type="single" onClick={() => onBlockClick(comp.type)}  defaultValue="center" aria-label="Text alignment">
                                 <TooltipTrigger tip={comp.type}>
 
                                     <div data-id={comp.id} draggable id={comp.type} data-type={comp.type} className="active-cursor-grabbing cursor-grab h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 ">
@@ -692,7 +696,7 @@ const CommonAttr = ({
 
 
             <div className="flex">
-                <Toolbar.Button className='ml-auto'>
+                <Toolbar.Button onClick={onTemplateChange} className='ml-auto'>
                     <TooltipTrigger tip="Template">
                         <span className="h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 " aria-label="template">
                             <Component2Icon />

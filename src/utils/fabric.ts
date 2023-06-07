@@ -2,7 +2,7 @@ import type { TDataUrlOptions } from "fabric"
 import { elementBorder } from "~/constants/fabric";
 import { fabric } from "~/element";
 import type { GlobalState } from "~/store/context";
-import { TemplateCanvas } from "~/store/template";
+import type { TemplateCanvas } from "~/store/template";
 type GradientOption = ConstructorParameters<typeof fabric.Gradient>[0]
 
 export function setGradient(element: fabric.Object | undefined, {
@@ -40,7 +40,7 @@ export function json2Canvas(canvas: fabric.Canvas, json: string) {
   canvas.renderAll()
 }
 
-export function canvas2Image(canvas: fabric.Canvas, options: TDataUrlOptions = { multiplier: 1, format: 'png', quality: 1 }) {
+export function canvas2Image(canvas: fabric.Canvas, options: TDataUrlOptions = { multiplier: 2, format: 'png', quality: 1 }) {
 
   canvas.getActiveSelection().set('selectable', false)
 
