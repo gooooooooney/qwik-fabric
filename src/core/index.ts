@@ -2,6 +2,7 @@ import { fabric } from "~/element"
 import initAligningGuidelines from "./initAligningGuidelines"
 import { initCenteringGuidelines } from "./initCenteringGuidelines"
 import { initMouseEvent } from "./initMouseEvent"
+import { guideLines } from "./guidelines"
 
 export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, any>) {
   console.log(`Fabric.js版本：${fabric.version}`)
@@ -24,7 +25,8 @@ export function initCanvas(canvasEl: HTMLCanvasElement, options: Record<string, 
   
 
   initCenteringGuidelines(canvas)
-  initAligningGuidelines(canvas)
+  // initAligningGuidelines(canvas)
+  guideLines(canvas)
   initMouseEvent(canvas)
 
 

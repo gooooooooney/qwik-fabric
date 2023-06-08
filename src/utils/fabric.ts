@@ -35,14 +35,8 @@ export function canvas2DatalessJSON(canvas: fabric.Canvas) {
   return canvas.toDatalessJSON(['id'])
 }
 
-export function json2Canvas(canvas: fabric.Canvas, json: string) {
-  canvas.loadFromJSON(json)
-  canvas.renderAll()
-}
 
 export function canvas2Image(canvas: fabric.Canvas, options: TDataUrlOptions = { multiplier: 2, format: 'png', quality: 1 }) {
-
-  canvas.getActiveSelection().set('selectable', false)
 
   return canvas.toDataURL(options)
 }

@@ -48,16 +48,6 @@ function initAligningGuidelines(canvas: fabric.Canvas) {
 
   function drawLine(x1: number, y1: number, x2: number, y2: number) {
     if (viewportTransform == null) return;
-
-    // ctx.save();
-    // ctx.lineWidth = aligningLineWidth;
-    // ctx.strokeStyle = aligningLineColor;
-    // ctx.setLineDash(aligningLineDash);
-    // ctx.beginPath();
-    // ctx.moveTo(x1 * zoom + viewportTransform[4], y1 * zoom + viewportTransform[5]);
-    // ctx.lineTo(x2 * zoom + viewportTransform[4], y2 * zoom + viewportTransform[5]);
-    // ctx.stroke();
-    // ctx.restore();
     // https://stackoverflow.com/questions/62906060/fabric-js-snapping-guidelines-not-correctly-positioned-when-zoomed
     const originXY = fabric.util.transformPoint(new fabric.Point(x1, y1), canvas.viewportTransform),
       dimensions = fabric.util.transformPoint(new fabric.Point(x2, y2), canvas.viewportTransform);
@@ -153,11 +143,13 @@ function initAligningGuidelines(canvas: fabric.Canvas) {
               ? activeObjectTop + activeObjectHeight / 2 + aligningLineOffset
               : activeObjectTop - activeObjectHeight / 2 - aligningLineOffset,
         });
+
         activeObject.setPositionByOrigin(
           new fabric.Point(objectLeft, activeObjectTop),
           'center',
           'center'
         );
+        
       }
 
       // snap by the left edge
