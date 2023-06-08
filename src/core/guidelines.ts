@@ -193,25 +193,19 @@ export function guideLines(canvas: fabric.Canvas) {
         // v
         // y
         if (isInRange(location.center.x - location.width / 2, movingLocation.center.x - movingLocation.width / 2)) {
-          // cross the whole canvas
-          // const fromPoint = getPoint(movingLocation.x, 0)
-          // const toPoint = getPoint(movingLocation.x, canvas.height)
-          // const fromPoint = movingLocation.y - location.y > 0 ? getPoint(movingLocation.x, location.y) : getPoint(movingLocation.x, movingLocation.y3)
-          const fromPoint = getPoint(location.tl.x, 0)
-          const toPoint = getPoint(location.tl.x, canvas.height)
+          const fromPoint = getPoint(location.tl.x, Math.min(location.bl.y, movingLocation.bl.y))
+          const toPoint = getPoint(location.tl.x, Math.max(location.tl.y, movingLocation.tl.y))
           verticalLines.push({
             from: fromPoint,
             to: toPoint
           })
           const x = location.center.x - location.width / 2 + movingLocation.width / 2
-          const y = location.tl.y + (movingLocation.tl.y - location.tl.y)
           movingTarget.setXY(
             new fabric.Point(x, movingLocation.center.y),
             'center',
             'center')
         }
 
-        // 水平线
         // ------------> x
         // | in this case, movingLocation's y is longer than location's y
         // |        |
@@ -231,23 +225,6 @@ export function guideLines(canvas: fabric.Canvas) {
         // v
         // y
 
-        // if (isInRange(movingLocation.x2, location.x)) {
-        //   const fromPoint = movingLocation.y4 - location.y > 0 ? getPoint(location.x, location.y) : getPoint(movingLocation.x2, movingLocation.y2)
-        //   const toPoint = movingLocation.y - location.y > 0 ? getPoint(movingLocation.x4, movingLocation.y4) : getPoint(location.x3, location.y3)
-        //   // const fromPoint = movingLocation.x2 - location.x2 > 0 ? getPoint(movingLocation.x, 0)
-        //   // const toPoint = getPoint(movingLocation.x, canvas.height)
-        //   // console.log(fromPoint)
-        //   // console.log(toPoint)
-        //   verticalLines.push({
-        //     from: fromPoint,
-        //     to: toPoint
-        //   })
-        //   movingTarget.setPositionByOrigin(
-        //     new fabric.Point(location.x, movingLocation.y2),
-        //     'right',
-        //     "center")
-
-        // }
       }
 
     })
