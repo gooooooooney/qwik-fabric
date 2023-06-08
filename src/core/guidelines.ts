@@ -15,42 +15,41 @@ interface HorizontalLine {
 
 let viewportTransform: number[] | undefined;
 
+const aligningLineWidth = 1;
+const aligningLineColor = 'rgb(80,210,194)';
+const aligningLineDash = [5];
 
 function getLocation(object: fabric.BaseFabricObject) {
   if (viewportTransform == null) return null;
-  const { left, top } = object;
-  // const objectCenter = object.getCenterPoint();
-  // const objectLeft = objectCenter.x;
-  // const objectTop = objectCenter.y;
   const objectBoundingRect = object.getBoundingRect();
   const objectHeight = objectBoundingRect.height / viewportTransform[3];
   const objectWidth = objectBoundingRect.width / viewportTransform[0];
   const center = object.getCenterPoint()
   // 
   // --------------------------------------> x
-  // |  (x=left,y=top)            (x2=x+width, y2=y)
+  // |  (x,y)tl            (x2, y2)tr
   // |  .-----------------------.
   // |  |                       |
-  // |  |           .-----------|--> center (x+width/2, y+height/2)
+  // |  |           .-----------|--> center
   // |  |                       |
   // |  .-----------------------.
-  // |  (x3=x, y3=y+height)       (x4=x+width, y4=y+height)
+  // |  (x3, y3)bl       (x4, y4)br
   // |
   // |
   // v
   // y
   return {
-    x: left,
-    y: top,
-    x2: left + objectWidth,
-    y2: top,
-    x3: left,
-    y3: top + objectHeight,
-    x4: left + objectWidth,
-    y4: top + objectHeight,
+    ...getCoords(object),
+    width: objectWidth,
+    height: objectHeight,
     center
   }
 
+}
+
+function getCoords(obj: fabric.BaseFabricObject) {
+  const [tl, tr, br, bl] = obj.getCoords(true)
+  return { tl, tr, br, bl }
 }
 
 export function guideLines(canvas: fabric.Canvas) {
@@ -58,8 +57,8 @@ export function guideLines(canvas: fabric.Canvas) {
 
   const lines: fabric.Line[] = []
   const threshold = 4
-  const verticalLines: VerticalLine[] = [];
-  const horizontalLines: HorizontalLine[] = [];
+  let verticalLines: VerticalLine[] = [];
+  let horizontalLines: HorizontalLine[] = [];
 
 
 
@@ -81,19 +80,37 @@ export function guideLines(canvas: fabric.Canvas) {
   }
 
   function isInRange(a: number, b: number) {
-    return Math.abs(a - b) <= threshold
+    return Math.abs(Math.round(a) - Math.round(b)) <= threshold
   }
 
-  function drawLine(from: fabric.Point, to: fabric.Point) {
-    const line = new fabric.Line([from.x, from.y, to.x, to.y], {
-      stroke: 'red',
-      strokeWidth: 1,
-      selectable: false,
-      evented: false
-    })
-    lines.push(line)
-    canvas.add(line)
-    canvas.requestRenderAll()
+  // function calcCenterPointByACoords(coords: NonNullable<fabric.BaseFabricObject['aCoords']>) {
+  //   return getPoint((coords.tl.x + coords.br.x) / 2, (coords.tl.y + coords.br.y) / 2)
+  // }
+
+  function drawLine({ x: x1, y: y1 }: fabric.Point, { x: x2, y: y2 }: fabric.Point) {
+    const ctx = canvas.getSelectionContext();
+    if (viewportTransform == null) return;
+    // https://stackoverflow.com/questions/62906060/fabric-js-snapping-guidelines-not-correctly-positioned-when-zoomed
+    const originXY = fabric.util.transformPoint(new fabric.Point(x1, y1), canvas.viewportTransform),
+      dimensions = fabric.util.transformPoint(new fabric.Point(x2, y2), canvas.viewportTransform);
+    ctx.save()
+    ctx.lineWidth = aligningLineWidth
+    ctx.strokeStyle = aligningLineColor
+    ctx.setLineDash(aligningLineDash);
+    ctx.beginPath()
+
+    ctx.moveTo(
+      ((originXY.x)),
+      ((originXY.y))
+    )
+
+
+    ctx.lineTo(
+      ((dimensions.x)),
+      ((dimensions.y))
+    )
+    ctx.stroke()
+    ctx.restore()
   }
 
   function getPoint(x: number, y: number) {
@@ -122,40 +139,76 @@ export function guideLines(canvas: fabric.Canvas) {
     removeLines(canvas)
     locations.forEach(location => {
 
-      // 水平线
       // ------------> x
       // | in this case, movingLocation's y is longer than location's y
       // |   |
       // |   | (x, y)
-      // |   .----
-      // |   |   | location
-      // |   |----  
+      // |   .--------
+      // |   | (2,5) | location
+      // |   |---- --- 
       // |   |movingLocation.x    
       // |   |
       // |   | (x, y)
-      // |   .----
-      // |   |   | movingLocation
-      // |   .----
+      // |   |---------- 
+      // |   |          | movingLocation
+      // |   |----------
       // |   | (x, y3)
       // |   |
       // |   
       // v
       // y
       {
-        if (isInRange(location.x, movingLocation.x)) {
+        if (isInRange(location.center.x, movingLocation.center.x)) {
           // cross the whole canvas
           // const fromPoint = getPoint(movingLocation.x, 0)
           // const toPoint = getPoint(movingLocation.x, canvas.height)
-          const fromPoint = movingLocation.y - location.y > 0 ? getPoint(movingLocation.x, location.y) : getPoint(movingLocation.x, movingLocation.y3)
-          const toPoint = movingLocation.y - location.y > 0 ? getPoint(movingLocation.x, movingLocation.y3) : getPoint(movingLocation.x, location.y3)
+          // const fromPoint = movingLocation.y - location.y > 0 ? getPoint(movingLocation.x, location.y) : getPoint(movingLocation.x, movingLocation.y3)
+          const fromPoint = getPoint(location.center.x, 0)
+          const toPoint = getPoint(location.center.x, canvas.height)
           verticalLines.push({
             from: fromPoint,
             to: toPoint
           })
-          movingTarget.setPositionByOrigin(
-            new fabric.Point(location.x, movingLocation.y),
-            'left',
-            'top')
+          movingTarget.setXY(
+            new fabric.Point(location.center.x, movingLocation.center.y),
+            'center',
+            'center')
+        }
+        // ------------> x
+        // | in this case, movingLocation's y is longer than location's y
+        // |   |
+        // |   | (x, y)
+        // |   .--------
+        // |   | (2,5) | location
+        // |   |---- --- 
+        // |   |movingLocation.x    
+        // |   |
+        // |   | (x, y)
+        // |   |---------- 
+        // |   |          | movingLocation
+        // |   |----------
+        // |   | (x, y3)
+        // |   |
+        // |   
+        // v
+        // y
+        if (isInRange(location.center.x - location.width / 2, movingLocation.center.x - movingLocation.width / 2)) {
+          // cross the whole canvas
+          // const fromPoint = getPoint(movingLocation.x, 0)
+          // const toPoint = getPoint(movingLocation.x, canvas.height)
+          // const fromPoint = movingLocation.y - location.y > 0 ? getPoint(movingLocation.x, location.y) : getPoint(movingLocation.x, movingLocation.y3)
+          const fromPoint = getPoint(location.tl.x, 0)
+          const toPoint = getPoint(location.tl.x, canvas.height)
+          verticalLines.push({
+            from: fromPoint,
+            to: toPoint
+          })
+          const x = location.center.x - location.width / 2 + movingLocation.width / 2
+          const y = location.tl.y + (movingLocation.tl.y - location.tl.y)
+          movingTarget.setXY(
+            new fabric.Point(x, movingLocation.center.y),
+            'center',
+            'center')
         }
 
         // 水平线
@@ -178,23 +231,23 @@ export function guideLines(canvas: fabric.Canvas) {
         // v
         // y
 
-        if (isInRange(movingLocation.x2, location.x)) {
-          const fromPoint = movingLocation.y4 - location.y > 0 ? getPoint(location.x, location.y) : getPoint(movingLocation.x2, movingLocation.y2)
-          const toPoint = movingLocation.y - location.y > 0 ? getPoint(movingLocation.x4, movingLocation.y4) : getPoint(location.x3, location.y3)
-          // const fromPoint = movingLocation.x2 - location.x2 > 0 ? getPoint(movingLocation.x, 0)
-          // const toPoint = getPoint(movingLocation.x, canvas.height)
-          // console.log(fromPoint)
-          // console.log(toPoint)
-          verticalLines.push({
-            from: fromPoint,
-            to: toPoint
-          })
-          movingTarget.setPositionByOrigin(
-            new fabric.Point(location.x, movingLocation.y),
-            'right',
-            "center")
+        // if (isInRange(movingLocation.x2, location.x)) {
+        //   const fromPoint = movingLocation.y4 - location.y > 0 ? getPoint(location.x, location.y) : getPoint(movingLocation.x2, movingLocation.y2)
+        //   const toPoint = movingLocation.y - location.y > 0 ? getPoint(movingLocation.x4, movingLocation.y4) : getPoint(location.x3, location.y3)
+        //   // const fromPoint = movingLocation.x2 - location.x2 > 0 ? getPoint(movingLocation.x, 0)
+        //   // const toPoint = getPoint(movingLocation.x, canvas.height)
+        //   // console.log(fromPoint)
+        //   // console.log(toPoint)
+        //   verticalLines.push({
+        //     from: fromPoint,
+        //     to: toPoint
+        //   })
+        //   movingTarget.setPositionByOrigin(
+        //     new fabric.Point(location.x, movingLocation.y2),
+        //     'right',
+        //     "center")
 
-        }
+        // }
       }
 
     })
@@ -211,4 +264,18 @@ export function guideLines(canvas: fabric.Canvas) {
     verticalLines.length = 0;
     horizontalLines.length = 0;
   });
+
+  canvas.on('before:render', () => {
+    try {
+      canvas.clearContext(canvas.contextTop);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  canvas.on('mouse:up', () => {
+    verticalLines = [] as any;
+    horizontalLines = [] as any;
+    canvas.renderAll();
+  })
 }

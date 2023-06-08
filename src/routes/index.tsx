@@ -55,6 +55,9 @@ export default component$(() => {
             id: item.id,
             ...elementBorder
           });
+          console.log(element.getCenterPoint())
+          console.log(element.left +5, element.top+50)
+          console.log(element.getCoords(true))
           state.canvas?.setActiveObject(element);
         }
       }
