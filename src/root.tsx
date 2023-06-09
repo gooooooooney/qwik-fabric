@@ -20,7 +20,7 @@ export default component$(() => {
         <meta name="google" content="notranslate"></meta>
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body lang="en" class="color-[#181818] bg-[#f5f5f5]">
+      <body lang="en" class="text-[#181818] bg-[#f5f5f5]">
         <RouterOutlet />
         <ServiceWorkerRegister />
       </body>
