@@ -28,7 +28,7 @@ export default component$(() => {
     shouldShowText: false,
     shouldShowTemplate: false,
     shouldShowShape: false,
-    shouldShowColor: true,
+    shouldShowColor: false,
   })
   const imageTransformer$ = $(({ src }: ImageTransformerProps): string => {
 		return src;

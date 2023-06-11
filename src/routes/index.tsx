@@ -26,6 +26,7 @@ import { useLoadTmp } from '~/use/useLoadTmp';
 import { useAttrCtx } from '~/use/useAttrCtx';
 import { SolidColors } from '~/components/Toolbarl/SolidColor';
 import { useCanvasCtx } from '~/use/useCanvasCtx';
+import { Toolbar } from '~/components/Toolbarl/Toolbar';
 
 export default component$(() => {
   const state = useCanvasCtx()
@@ -304,6 +305,7 @@ export default component$(() => {
                 }
               }}
             />
+            <Toolbar />
           </div>
           <div>
             <Tooltip tip='Save data to local'>
