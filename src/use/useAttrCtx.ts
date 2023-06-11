@@ -7,6 +7,7 @@ export function useAttrCtx() {
         const bol = track(() => state.shouldShowImage)
         if (bol) {
             state.shouldShowTemplate = false
+            state.shouldShowColor = false
             state.shouldShowText = false
             state.shouldShowShape = false
         }
@@ -17,6 +18,7 @@ export function useAttrCtx() {
         if (bol) {
             state.shouldShowImage = false
             state.shouldShowText = false
+            state.shouldShowColor = false
             state.shouldShowShape = false
         }
 
@@ -27,6 +29,7 @@ export function useAttrCtx() {
             state.shouldShowTemplate = false
             state.shouldShowImage = false
             state.shouldShowShape = false
+            state.shouldShowColor = false
         }
 
     })
@@ -36,6 +39,18 @@ export function useAttrCtx() {
             state.shouldShowTemplate = false
             state.shouldShowImage = false
             state.shouldShowText = false
+            state.shouldShowColor = false
+        }
+
+    })
+    useVisibleTask$(({track}) => {
+        const bol = track(() => state.shouldShowColor)
+        if (bol) {
+            state.shouldShowTemplate = false
+            state.shouldShowImage = false
+            state.shouldShowText = false
+            state.shouldShowShape = false
+
         }
 
     })

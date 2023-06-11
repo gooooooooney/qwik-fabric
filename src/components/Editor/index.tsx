@@ -1,18 +1,18 @@
-import { $, Slot, component$, noSerialize, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { $, Slot, component$, noSerialize, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { CANVAS_EVENT_SELECTED, Canvas_Event_Object } from "~/constants/enum";
 import type { fabric } from "~/element";
 // import type { GlobalState } from "~/store/context";
-import { GLOBAL_CONTEXT } from "~/store/context";
 import { emitter } from "~/core/event";
 // import { changeStyleWithScale } from "~/utils/translate";
 import AlertDialog from "~/integrations/react/radix-ui/AlertDialog/AlertDialog";
 import "./index.css"
+import { useCanvasCtx } from "~/use/useCanvasCtx";
 
 // interface EditorProps {
 //   parentState: GlobalState
 // }
 export default component$(() => {
-  const state = useContext(GLOBAL_CONTEXT)
+  const state = useCanvasCtx()
   const shouldShowContextMenu = useSignal(false)
   const shouldShowAlertDialog = useSignal(false)
   const contextPosition = useSignal({ left: 0, top: 0 })

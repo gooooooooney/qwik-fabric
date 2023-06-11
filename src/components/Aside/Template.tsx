@@ -1,21 +1,22 @@
-import { $, useContext, useSignal } from "@builder.io/qwik";
+import { $, useSignal } from "@builder.io/qwik";
 import { component$ } from "@builder.io/qwik";
 import { useTemplateCtx } from "~/use/useTemplateCtx";
 import { Image } from "qwik-image";
 import { cx } from "~/utils/common";
 import { PlusIcon } from "../ui/Icons/Plus";
-import { GLOBAL_CONTEXT, globalState } from "~/store/context";
+import { globalState } from "~/store/context";
 import { loadFromJSON } from "~/utils/fabric";
 import ContextMenu from "../ui/Context-menu/Context-menu";
 import type { MenuItem } from "../ui/Menu/Menu";
 import { environment } from "~/store/db";
 import { useLoadTmp } from "~/use/useLoadTmp";
+import { useCanvasCtx } from "~/use/useCanvasCtx";
 
 
 export default component$(() => {
     const tmpState = useTemplateCtx();
     const loadTmpFromDb = useLoadTmp()
-    const state = useContext(GLOBAL_CONTEXT)
+    const state = useCanvasCtx()
     const tmpId = useSignal<number | undefined>()
     const resetCanvas = $(() => {
         //重置画布

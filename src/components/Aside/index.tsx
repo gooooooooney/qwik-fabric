@@ -4,6 +4,7 @@ import { useAttrCtx } from "~/use/useAttrCtx";
 import ImageAside from "./ImageAside";
 import TextAside from "./TextAside";
 import ShapeAside from "./ShapeAside";
+import { ColorAside } from "./Color";
 
 export default component$(() => {
 
@@ -18,6 +19,8 @@ export default component$(() => {
             return <TextAside />
         case attrState.shouldShowShape:
             return <ShapeAside />
+        case attrState.shouldShowColor:
+            return <ColorAside />
         default:
             return null
     }

@@ -1,4 +1,4 @@
-import { noSerialize, $, useVisibleTask$, useComputed$, useContext } from '@builder.io/qwik';
+import { noSerialize, $, useVisibleTask$, useComputed$ } from '@builder.io/qwik';
 import { useSignal } from '@builder.io/qwik';
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
@@ -7,7 +7,6 @@ import Editor from '~/components/Editor';
 import { blockInfoList } from '~/components/core/components';
 import { ComponentType } from '~/constants/enum';
 import { CANVAS_EVENT_SELECTED } from '~/constants/enum';
-import { GLOBAL_CONTEXT } from '~/store/context';
 import { downloadFile, uid } from '~/utils/common';
 import { fabric, renderElement } from '~/element'
 import Attr from '~/components/Attr';
@@ -25,9 +24,11 @@ import { useToast } from '~/use/useToast';
 import Aside from '~/components/Aside/';
 import { useLoadTmp } from '~/use/useLoadTmp';
 import { useAttrCtx } from '~/use/useAttrCtx';
+import { SolidColors } from '~/components/Toolbarl/SolidColor';
+import { useCanvasCtx } from '~/use/useCanvasCtx';
 
 export default component$(() => {
-  const state = useContext(GLOBAL_CONTEXT)
+  const state = useCanvasCtx()
   const tmpState = useTemplateCtx()
   const { toast } = useToast()
   const attrState = useAttrCtx()
@@ -345,6 +346,7 @@ export default component$(() => {
 
 
             <Attr />
+            <SolidColors />
 
           </div>
         </div >

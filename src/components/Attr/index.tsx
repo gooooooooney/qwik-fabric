@@ -1,6 +1,6 @@
-import { Fragment, component$, $, noSerialize, useContext, useSignal, useVisibleTask$, useComputed$ } from "@builder.io/qwik";
+import { Fragment, component$, $, noSerialize, useSignal, useVisibleTask$, useComputed$ } from "@builder.io/qwik";
 import { CANVAS_EVENT_SELECTED, ComponentType, KEY_CODE } from "~/constants/enum";
-import { GLOBAL_CONTEXT } from "~/store/context";
+
 import TextAttr from "./TextAttr";
 import { emitter } from "~/core/event";
 import { fabric } from "~/element";
@@ -9,9 +9,10 @@ import NumberSelte from "~/integrations/react/radix-ui/Select/NumberSelte";
 import Label from "../Label";
 import Toggle from "../Toggle";
 import type { TextBlock } from "../core/components";
+import { useCanvasCtx } from "~/use/useCanvasCtx";
 
 export default component$(() => {
-  const state = useContext(GLOBAL_CONTEXT)
+  const state = useCanvasCtx()
   const currentBlockIsNotEmpty = useComputed$(() => {
     return state.currentBlock.length > 0
   })

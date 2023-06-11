@@ -7,6 +7,7 @@ export interface AttrState {
     shouldShowImage: boolean
     shouldShowText: boolean
     shouldShowShape: boolean
+    shouldShowColor: boolean
 }
 
 export const ATTR_CONTEXT = createContextId<AttrState>(CONTEXT_IDS.ATTR_CONTEXT)

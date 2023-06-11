@@ -1,6 +1,5 @@
-import { $, Fragment, component$, noSerialize, useComputed$, useContext, useVisibleTask$ } from "@builder.io/qwik";
+import { $, Fragment, component$, noSerialize, useComputed$, useVisibleTask$ } from "@builder.io/qwik";
 import type { TextBlock } from "../core/components";
-import { GLOBAL_CONTEXT } from "~/store/context";
 import Label from "../Label";
 import { Canvas_Event_Object } from "~/constants/enum";
 import Toolbar from "~/integrations/react/radix-ui/Toolbar";
@@ -10,12 +9,13 @@ import FontFamilySelect from "~/integrations/react/radix-ui/Select/FontFamilySel
 import Toggle from "../Toggle";
 import type { fabric } from "~/element";
 import { emitter } from "~/core/event";
+import { useCanvasCtx } from "~/use/useCanvasCtx";
 interface TextAttrProps {
   blocks: TextBlock[],
 }
 
 export default component$(({ blocks }: TextAttrProps) => {
-  const state = useContext(GLOBAL_CONTEXT)
+  const state = useCanvasCtx()
   const elements = noSerialize(state.canvas?.getActiveObjects() as fabric.Textbox[])
 
   // const handleChangeColor = $((color: string) => {

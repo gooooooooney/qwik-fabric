@@ -13,7 +13,7 @@ export default extendConfig(baseConfig, () => {
     },
     plugins: [
       staticAdapter({
-        origin: 'qwik-fabric.vercel.app',
+        origin: 'localhost:4173/',
       }),
     ],
   };
