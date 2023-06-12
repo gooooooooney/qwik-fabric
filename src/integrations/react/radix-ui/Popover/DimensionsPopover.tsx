@@ -53,7 +53,7 @@ interface PopoverProps extends PropsWithChildren, Popover.PopoverContentProps {
 
 
 
-export const PopoverCom = React.forwardRef<HTMLDivElement, PopoverProps>(({ trigger, triggerClass, tip, children, contentClass, side = "left" }) => {
+export const PopoverCom = (({ trigger, triggerClass, tip, children, contentClass, side = "left" }: PopoverProps) => {
     return (
         <Popover.Root>
             <Popover.Trigger className={cx(triggerClass)}>
