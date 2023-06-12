@@ -8,6 +8,10 @@ import { TextIcon } from "../ui/Icons/Text";
 import { CircleIcon } from "../ui/Icons/Circle";
 import { ImageIcon } from "../ui/Icons/Image";
 import { SquareIcon } from "../ui/Icons/Squar";
+import { Component2Icon } from "../ui/Icons/Component2";
+import { changeStyleWithScale } from "~/utils/translate";
+import { fabric } from "~/element";
+import { DimensionsPopover } from "~/integrations/react/radix-ui/Popover/DimensionsPopover";
 
 
 const getIcon = (iconName: ComponentType) => {
@@ -37,6 +41,7 @@ export const Toolbar = component$(() => {
         const f = state.activeElements?.length ? (state.currentBlock[0]?.fill as string)?.split(',') : state.canvasStyleData.backgroundColor?.split(",")
         return f
     })
+
 
 
     useVisibleTask$(({ cleanup }) => {
@@ -99,6 +104,38 @@ export const Toolbar = component$(() => {
                 </div>
 
             </div >
+            <div class="flex">
+                <Tooltip tip="preview">
+                    <div onClick$={() => {
+                        attrState.shouldShowTemplate = true
+                    }}>
+                        <span class="h-[25px] w-[25px] flex justify-center items-center rounded  border-shape cursor-pointer hover:opacity-80 " aria-label="template">
+                            <Component2Icon />
+                        </span>
+                    </div>
+
+                </Tooltip>
+                <Separator />
+                <DimensionsPopover
+                    canvasWidth={state.canvas?.width || state.canvasStyleData.width}
+                    canvasHeight={state.canvas?.height || state.canvasStyleData.height}
+                    onChangeCanvasSize$={({ width, height }) => {
+                        state.canvas?.setDimensions({
+                            width: changeStyleWithScale(width, state.canvasStyleData.scale),
+                            height: changeStyleWithScale(height, state.canvasStyleData.scale),
+                        })
+                        {
+                            // 改变画布大小时，需要重新设置背景色的渐变, 保证渐变的x2是画布的宽度
+                            const bg = state.canvas?.get('backgroundColor')
+                            if (bg instanceof fabric.Gradient) {
+                                bg.coords.x2 = width
+                            }
+                            state.canvas?.set('backgroundColor', bg)
+                        }
+                        state.canvas?.renderAll()
+                    }}
+                />
+            </div>
         </div>
     </>
 })

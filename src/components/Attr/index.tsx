@@ -10,6 +10,7 @@ import Label from "../Label";
 import Toggle from "../Toggle";
 import type { TextBlock } from "../core/components";
 import { useCanvasCtx } from "~/use/useCanvasCtx";
+import Shadow from "./Shadow";
 
 export default component$(() => {
   const state = useCanvasCtx()
@@ -137,5 +138,6 @@ export default component$(() => {
         </div>
         : null
     }
+    {!!state.activeElements?.length && <Shadow />}
   </div>
 })

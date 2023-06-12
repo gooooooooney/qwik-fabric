@@ -9,9 +9,7 @@ import { useCanvasCtx } from "~/use/useCanvasCtx";
 import { setGradient } from "~/utils/fabric";
 import { fabric } from "~/element";
 
-interface ColorAsideProps {
-    fill: string[];
-}
+
 
 export const ColorAside = component$(() => {
 
