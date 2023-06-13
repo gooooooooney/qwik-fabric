@@ -8,7 +8,7 @@ import { splitVendorChunkPlugin } from 'vite'
 
 export default defineConfig(() => {
   return {
-    plugins: [UnoCSS(), qwikCity(), qwikVite(), tsconfigPaths(), qwikReact(), splitVendorChunkPlugin()],
+    plugins: [ qwikCity(), qwikVite(), tsconfigPaths(), qwikReact(), splitVendorChunkPlugin(), UnoCSS()],
     preview: {
       headers: {
         "Cache-Control": "public, max-age=600",

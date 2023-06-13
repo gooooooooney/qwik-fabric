@@ -19,9 +19,6 @@ dependencies:
   '@radix-ui/react-select':
     specifier: ^1.2.1
     version: 1.2.1(@types/react@18.0.28)(react-dom@18.2.0)(react@18.2.0)
-  '@radix-ui/react-slot':
-    specifier: ^1.0.2
-    version: 1.0.2(@types/react@18.0.28)(react@18.2.0)
   '@radix-ui/react-toolbar':
     specifier: ^1.0.3
     version: 1.0.3(react-dom@18.2.0)(react@18.2.0)
@@ -34,9 +31,6 @@ dependencies:
   dexie:
     specifier: ^3.2.4
     version: 3.2.4
-  dom-to-image:
-    specifier: ^2.6.0
-    version: 2.6.0
   events:
     specifier: ^3.3.0
     version: 3.3.0
@@ -4833,10 +4827,6 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
-
-  /dom-to-image@2.6.0:
-    resolution: {integrity: sha512-Dt0QdaHmLpjURjU7Tnu3AgYSF2LuOmksSGsUcE6ItvJoCWTBEmiMXcqBdNSAm9+QbbwD7JMoVsuuKX6ZVQv1qA==}
-    dev: false
 
   /domexception@4.0.0:
     resolution: {integrity: sha512-A2is4PLG+eeSfoTMA95/s4pvAoSo2mKtiM5jlHkAVewmiO8ISFTFKZjH7UAM1Atli/OT/7JHOrJRJiMKUZKYBw==}

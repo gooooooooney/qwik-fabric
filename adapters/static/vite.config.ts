@@ -4,7 +4,6 @@ import baseConfig from '../../vite.config';
 
 export default extendConfig(baseConfig, () => {
   return {
-    
     build: {
       ssr: true,
       rollupOptions: {
@@ -13,7 +12,7 @@ export default extendConfig(baseConfig, () => {
     },
     plugins: [
       staticAdapter({
-        origin: 'localhost:4173/',
+        origin: 'https://qwik-fabric.vercel.app',
       }),
     ],
   };
